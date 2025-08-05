@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    /* JavaScript Support */
+    "allowJs": true,
+    /* Interop Constraints */
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "checkJs": true,
+    /* Emit */
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    /* Projects */
+    "incremental": true,
+    "jsx": "react",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    /* Modules */
+    "module": "esnext",
+    "moduleDetection": "force",
+    "moduleResolution": "bundler",
+    "newLine": "lf",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUncheckedSideEffectImports": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "${configDir}/dist",
+    "resolveJsonModule": true,
+    /* Completeness */
+    "skipLibCheck": true,
+    /* Type Checking */
+    "strict": true,
+    "strictNullChecks": true,
+    "stripInternal": true,
+    /* Language and Environment */
+    "target": "esnext",
+    "tsBuildInfoFile": "${configDir}/.tsbuildinfo",
+    "useDefineForClassFields": true
+  }
+}

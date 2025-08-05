@@ -1,0 +1,12 @@
+{
+  "changelog-path": "CHANGELOG.md",
+  "default-branch": "main",
+  "packages": {
+    ".": {
+      "bump-minor-pre-major": true,
+      "package-name": "@rzl-zone/next-kit",
+      "release-type": "node",
+      "versioning-strategy": "default"
+    }
+  }
+}

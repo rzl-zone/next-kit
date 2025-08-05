@@ -1,0 +1,153 @@
+{
+  "name": "@rzl-zone/next-kit",
+  "version": "0.0.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engineStrict": true,
+  "description": "A flexible and extensible Next.js toolkit for modern fullstack app development, featuring utilities, helpers, and conventions tailored for clean code architecture.",
+  "keywords": [
+    "next",
+    "nextjs",
+    "next-kit",
+    "nextjs-kit",
+    "next-utils",
+    "react",
+    "typescript",
+    "javascript",
+    "ts",
+    "js",
+    "utils",
+    "utility",
+    "kit",
+    "kits",
+    "@rzl-zone/next-kit"
+  ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "homepage": "https://github.com/rzl-zone/next-kit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rzl-zone/next-kit.git"
+  },
+  "license": "MIT",
+  "author": "Rizalvin Dwiky <rizalvindwiky1998@gmail.com>",
+  "contributors": [
+    "Rizalvin Dwiky <rizalvindwiky1998@gmail.com>"
+  ],
+  "type": "module",
+  "main": "dist/extra/index.js",
+  "types": "./dist/extra",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./hoc": {
+      "import": {
+        "types": "./dist/hoc/index.d.ts",
+        "default": "./dist/hoc/index.js"
+      },
+      "require": {
+        "types": "./dist/hoc/index.d.ts",
+        "default": "./dist/hoc/index.cjs"
+      }
+    },
+    "./themes": {
+      "import": {
+        "types": "./dist/themes/index.d.ts",
+        "default": "./dist/themes/index.js"
+      },
+      "require": {
+        "types": "./dist/themes/index.d.ts",
+        "default": "./dist/themes/index.cjs"
+      }
+    },
+    "./extra": {
+      "import": {
+        "types": "./dist/extra/index.d.ts",
+        "default": "./dist/extra/index.js"
+      },
+      "require": {
+        "types": "./dist/extra/index.d.ts",
+        "default": "./dist/extra/index.cjs"
+      }
+    },
+    "./extra/context": {
+      "import": {
+        "types": "./dist/extra/context.d.ts",
+        "default": "./dist/extra/context.js"
+      },
+      "require": {
+        "types": "./dist/extra/context.d.ts",
+        "default": "./dist/extra/context.cjs"
+      }
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*"
+      ]
+    }
+  },
+  "files": [
+    "/dist/**/*",
+    "!**/*.test.*"
+  ],
+  "scripts": {
+    "build": "tsup && npm run postbuild",
+    "dev": "tsup --watch",
+    "format": "prettier --write .",
+    "no-newline": "tsx scripts/remove-final-newline.ts",
+    "format:check": "prettier --check .",
+    "lint": "pnpm typecheck && eslint .",
+    "lint:fix": "eslint --fix .",
+    "check-publish": "npm pack --dry-run",
+    "prepublishOnly": "pnpm test && pnpm lint && pnpm build",
+    "test": "mocha \"**/*.test.ts\" --retries 2",
+    "typecheck": "tsc --noEmit",
+    "postbuild": "del-cli \"dist/**/*.d.cts\""
+  },
+  "dependencies": {
+    "deepmerge": "^4.3.1",
+    "p-safe": "^1.0.0"
+  },
+  "devDependencies": {
+    "@edge-runtime/cookies": "^5.0.2",
+    "@eslint/js": "^9.16.0",
+    "@rzl-zone/utils-js": "^1.0.0",
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.16.5",
+    "@types/react": "^18.3.23",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "chai": "^5.2.1",
+    "del-cli": "^6.0.0",
+    "eslint": "^9.32.0",
+    "fast-glob": "^3.3.3",
+    "mocha": "^10.8.2",
+    "next": "^15.4.2",
+    "prettier": "^3.6.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "release-please": "^17.1.1",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.16.0"
+  },
+  "peerDependencies": {
+    "next": "14 || 15",
+    "react": "18 || 19"
+  },
+  "packageManager": "pnpm@10.13.1"
+}
