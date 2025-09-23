@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.1...next-kit-v0.1.2) (2025-09-23)
+
+
+### Bug Fixes
+
+* Fixing React is not defined at build time, because forgot import default react. ([120369f](https://github.com/rzl-zone/next-kit/commit/120369fac7aa630a278adcfc4c0fcac12a2f4ba1))
+
 ## [0.1.1](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.0...next-kit-v0.1.1) (2025-09-23)
 
 
