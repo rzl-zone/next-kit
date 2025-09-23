@@ -93,7 +93,7 @@
 
   // For Top Loader. 
   import { | } from "@rzl-zone/next-kit/top-loader";
-  import { | } from "@rzl-zone/next-kit/top-loader/default.css"; 
+  import { | } from "@rzl-zone/next-kit/top-loader/css"; 
   ```
   #### Place your cursor inside { } or after "@rzl-zone/next-kit/{{ | }}" then press Ctrl+Space to see all available functions/types with full TSDoc hints.
    
