@@ -51,9 +51,7 @@ if (process.env["NODE_ENV"] !== "production") {
  * }
  * ```
  */
-function PageContextProvider<T extends Context = Context>(
-  props: PageContextProps<T>
-): JSX.Element {
+function PageContextProvider<T extends Context = Context>(props: PageContextProps<T>) {
   const { data, children, strategy } = props;
   if (!data || typeof data !== "object" || data == null || Array.isArray(data)) {
     throw new Error(
