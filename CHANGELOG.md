@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.0.1...next-kit-v0.1.0) (2025-09-23)
+
+
+### Features
+
+* add new feature `top-loader`. ([1e11ac0](https://github.com/rzl-zone/next-kit/commit/1e11ac0bd8d0e1ae2150f6f151d0a36bd2f664ed))
+
 ## 0.0.1 (2025-08-05)
 
 
