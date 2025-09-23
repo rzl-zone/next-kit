@@ -1,9 +1,5 @@
 import type { ColorCssNamed, PickStrict, Prettify } from "@rzl-zone/ts-types-plus";
 import type { NProgressEasing, NProgressOptions } from "../utils/progress";
-// import type {
-//   AppRouterInstance,
-//   NavigateOptions as NavigateOptionsNextJs
-// } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export type SpinnerPosition = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
@@ -39,16 +35,16 @@ export type RzlNextTopLoaderProps = {
    *
    * By default, a simple ready-to-use style is provided in:
    * ```ts
-   * import "@rzl-zone/next-kit/top-loader/css";
+   * import "@rzl-zone/next-kit/top-loader/default.css";
    * ```
    * This import can be placed in your global stylesheet entry,
    * for example:
    * 1. At layout.tsx:
    * ```ts
-   * import "@rzl-zone/next-kit/top-loader/css";
+   * import "@rzl-zone/next-kit/top-loader/default.css";
    * ```
    * 2. At global stylesheet entry (eg: globals.css):
-   * **`@import "@rzl-zone/next-kit/top-loader/css";`**
+   * **`@import "@rzl-zone/next-kit/top-loader/default.css";`**
    *
    * Which defines a class named **`on_processing`**.
    *

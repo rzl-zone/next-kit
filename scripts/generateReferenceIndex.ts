@@ -38,6 +38,6 @@ const references = files.map((f) => {
   return `/// <reference path="./${normalized}" />`;
 });
 
-fs.writeFileSync(outFile, references.join("\n") + "\n");
+fs.writeFileSync(outFile, references.sort().join("\n") + "\n");
 
 console.log("✅ Generate reference for dist/index.d.ts finish...");

@@ -98,11 +98,11 @@
 
   1. At layout.tsx:
   ```ts
-  import "@rzl-zone/next-kit/top-loader/css";
+  import "@rzl-zone/next-kit/top-loader/default.css";
   ```
   2. At global stylesheet entry (eg: globals.css):
   ```css 
-  @import "@rzl-zone/next-kit/top-loader/css";
+  @import "@rzl-zone/next-kit/top-loader/default.css";
   ```
   #### Place your cursor inside { } or after "@rzl-zone/next-kit/{{ | }}" then press Ctrl+Space to see all available functions/types with full TSDoc hints.
    

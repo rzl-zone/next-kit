@@ -82,7 +82,7 @@
         "default": "./dist/top-loader/index.cjs"
       }
     },
-    "./top-loader/css": "./dist/top-loader/default.css"
+    "./top-loader/default.css": "./dist/top-loader/default.css"
   },
   "typesVersions": {
     "*": {
