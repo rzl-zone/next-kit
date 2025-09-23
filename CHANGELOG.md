@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.2...next-kit-v0.1.3) (2025-09-23)
+
+
+### Bug Fixes
+
+* Try to fixing bundle build error about  (ecmascript)}["fileURLToPath"] is not a function. ([79f3d61](https://github.com/rzl-zone/next-kit/commit/79f3d61d5554c1fef0a660d97acbd3bbd569ae27))
+
 ## [0.1.2](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.1...next-kit-v0.1.2) (2025-09-23)
 
 
