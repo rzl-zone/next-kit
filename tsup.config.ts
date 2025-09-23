@@ -130,7 +130,7 @@ const configOptions = (options: ExtendedOptions): Options => {
   return {
     dts: true,
     treeshake: true,
-    shims: true,
+    // shims: true,
     minify: false,
     bundle: true,
     splitting: true,
