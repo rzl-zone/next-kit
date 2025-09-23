@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.7...next-kit-v0.1.8) (2025-09-23)
+
+
+### Bug Fixes
+
+* Fixing exports top-loader/default.css path, and docs ([31beb56](https://github.com/rzl-zone/next-kit/commit/31beb56d44c68e175805f94336748c8bc019b466))
+
 ## [0.1.7](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.6...next-kit-v0.1.7) (2025-09-23)
 
 
