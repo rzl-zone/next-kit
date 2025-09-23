@@ -1,5 +1,5 @@
 import { isProdEnv } from "@/_private/nodeEnv";
-import { ComponentType, FC, Suspense, SuspenseProps } from "react";
+import React, { ComponentType, FC, Suspense, SuspenseProps } from "react";
 
 /** ------------------------------------------
  * * ***Higher-Order Component (HOC) to wrap a component with React Suspense.***

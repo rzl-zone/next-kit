@@ -10,7 +10,7 @@
     "moduleResolution": "bundler",
     "noUncheckedIndexedAccess": false,
     "noPropertyAccessFromIndexSignature": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "skipDefaultLibCheck": true,
     "strictNullChecks": true,
     "strict": true,

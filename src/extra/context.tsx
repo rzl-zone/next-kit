@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useMemo } from "react";
+import React, { createContext, ReactNode, useContext, useMemo } from "react";
 import deepmerge from "deepmerge";
 import { RZL_NEXT_EXTRA } from "./utils/constants";
 

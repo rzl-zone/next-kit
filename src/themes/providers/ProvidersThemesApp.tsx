@@ -1,3 +1,5 @@
+import React from "react";
+
 import { CONFIG_THEME } from "../configs";
 import InternalThemeProvider from "./InternalThemeProvider";
 

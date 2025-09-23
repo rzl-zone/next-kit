@@ -33,7 +33,7 @@ import { scriptThemesApp } from "../internals/script-themes-app";
 import type { ThemeMode, ThemeProviderProps, UseTheme } from "../types";
 import { assertIsBoolean } from "@rzl-zone/utils-js/assertions";
 import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
-import {
+import React, {
   memo,
   SetStateAction,
   useCallback,
