@@ -1,7 +1,25 @@
-import { CONFIG_THEME } from "../config";
+import type {
+  DetailedHTMLProps,
+  Dispatch,
+  ReactNode,
+  ScriptHTMLAttributes,
+  SetStateAction
+} from "react";
+import { CONFIG_THEME } from "../configs";
 
 /** * The default themes fetched from the main config. */
 type _DefaultThemes = typeof CONFIG_THEME.themes;
+
+interface ValueObject {
+  [themeName: string]: string;
+}
+type DataAttribute = `data-${string}`;
+export type Attribute = DataAttribute | "class";
+
+export interface ScriptPropsThemesProps
+  extends DetailedHTMLProps<ScriptHTMLAttributes<HTMLScriptElement>, HTMLScriptElement> {
+  [dataAttribute: DataAttribute]: string | undefined;
+}
 
 /** ------------------------------------------------------------
  * * ***An empty interface meant to be augmented to override theme configuration.***
@@ -75,3 +93,145 @@ export type ThemesMode = ThemeOverrideConfig extends { themes: infer T }
  * This can be a string literal type like `"pink" | "blue"`, or `undefined` if `themes` is optional.
  */
 export type ThemeMode = ThemesMode extends readonly (infer T)[] ? T : undefined;
+
+/** ------------------------------------------------------------
+ * * ***Props accepted by `<ProvidersThemesApp />`, used to configure how theming behaves on the page.***
+ * ------------------------------------------------------------
+ * You usually place this provider at the root of your application (e.g. in `app/layout.tsx`).
+ */
+export type ThemeProviderProps = {
+  /** ***Children React Node.***
+   *
+   * - **Default value:** `undefined`.
+   * - ***⚠️ Warning:***
+   *    - **Will throw TypeError if value is `undefined` or `not valid React Children`.**
+   */
+  children: ReactNode;
+  /** ***List of all available theme names.***
+   *
+   * - **Default value:** `["light", "dark"]`.
+   */
+  themes?: string[] | undefined;
+  /** ***Forced theme name for the current page.***
+   *
+   * - **Default value:** `undefined`.
+   * - ***⚠️ Warning:***
+   *    - **Will throw TypeError if value is not `undefined` or `not a string`.**
+   */
+  forcedTheme?: string | undefined;
+  /** ***Whether to switch between dark and light themes based on prefers-color-scheme.***
+   *
+   * - **Default value:** `true`.
+   * - ***⚠️ Warning:***
+   *    - **Will throw TypeError if value is not `undefined` or `not a boolean`.**
+   */
+  enableSystem?: boolean | undefined;
+  /** ***Disable all CSS transitions when switching themes.***
+   *
+   * - **Default value:** `false`.
+   * - ***⚠️ Warning:***
+   *    - **Will throw TypeError if value is not `undefined` or `not a boolean`.**
+   */
+  disableTransitionOnChange?: boolean | undefined;
+  /** ***Whether to indicate to browsers which color scheme is used (dark or light) for built-in UI like inputs and buttons, that style will inject into html or body element.***
+   *
+   * - **Default value:** `"html"`.
+   * - ***⚠️ Warning:***
+   *    - If you using this value on html, you must using `suppressHydrationWarning` on `html` and if you
+   *      choose `"body"` you must use `suppressHydrationWarning` at `body element`.
+   *    - **Will throw TypeError if value is not `undefined`, `false` or not a string with
+   *      valid value: `"html"` or `"body"`.**
+   */
+  enableColorScheme?: "html" | "body" | false | undefined;
+  /** ***Whether to indicate to browsers which color scheme in meta head, is used (dark or light) for built-in UI like inputs and buttons.***
+   *
+   * - **Default value:** `true`.
+   * - ***⚠️ Warning:***
+   *    - **Will throw TypeError if value is not `undefined` or `not a boolean`.**
+   */
+  enableMetaColorScheme?: boolean | undefined;
+  /** ***Key used to store theme setting in localStorage.***
+   *
+   * - **Default value:** `"theme"`
+   * - ***⚠️ Warning:***
+   *    - **Will throw TypeError if value is not `undefined` or `not a string` and value `is empty-string`**
+   */
+  storageKey?: string | undefined;
+  /** ***Default theme.***
+   *
+   * - **Default value:**
+   *    - If `enableSystem` is `true` then `system` otherwise `light`.
+   * - ***⚠️ Warning:***
+   *    - **Will throw TypeError if value is not `undefined` or `not a string`.**
+   */
+  defaultTheme?: string | undefined;
+  /** ***HTML attribute modified based on the active theme.***
+   *
+   * - **Default value:** `"data-theme"`
+   * - **Accepts:**
+   *    - `"class"`.
+   *    - `"data-*"` (any data attribute, e.g., `"data-mode"`, `"data-color"`, etc.).
+   *    - An array including any combination of the above.
+   *
+   * - ⚠️ **Warning:**
+   *      - ***This will throw a `TypeError` if:***
+   *         - The value is not `undefined` **and**
+   *         - The value is not a string **or**
+   *         - The value is an empty string `""` **or**
+   *         - The value is an array that contains elements not matching `"class"` or `"data-*"`.
+   */
+  attribute?: Attribute | Attribute[] | undefined;
+  /** ***Mapping of theme name to HTML attribute value.***
+   *
+   * - **Type:** {@link ValueObject | `ValueObject`} | `undefined`
+   * - **Structure:** An object where each key is a theme name (`string`) and the value is a string representing the attribute value.
+   *
+   * - ⚠️ **Warning:**
+   *      - This will throw a `TypeError` if the value is not `undefined` **and**:
+   *         - It is not a plain object, or
+   *         - Any of the object values is not a string or a empty-string
+   *
+   * @example
+   * // Valid
+   * value = {
+   *   light: "data-light",
+   *   dark: "data-dark"
+   * }
+   *
+   * // Invalid
+   * value = "string"          // TypeError
+   * value = { light: 123 }    // TypeError
+   */
+  value?: ValueObject | undefined;
+  /** ***Nonce string to pass to the inline script and style elements for CSP headers.***
+   *
+   * - **Default value:** `undefined`.
+   * - ***⚠️ Warning:***
+   *    - **Will throw TypeError if value is not `undefined` or `not a string`.**
+   */
+  nonce?: string;
+  /** ***Props to pass the inline script.*** */
+  scriptProps?: ScriptPropsThemesProps;
+};
+
+/** ------------------------------------------------------------
+ * * ***Value returned by {@link useTheme}.***
+ * ------------------------------------------------------------
+ *
+ * Contains the current theme information and helper utilities for manually
+ * updating the active theme, including support for system-based themes.
+ */
+export type UseTheme = {
+  /** ***List of all available theme names.*** */
+  themes: string[];
+  /** ***Forced theme name for the current page.*** */
+  forcedTheme?: string | undefined;
+  /** ***Update the theme.*** */
+  setTheme: Dispatch<SetStateAction<(string & {}) | ThemeMode>>;
+  /** ***Active theme name.*** */
+  theme?: string | undefined;
+  /** ***If `enableSystem` is `true` and the active theme is `"system"`, this returns whether the system preference resolved to` "dark" or "light"`. Otherwise, identical to `theme`.*** */
+  resolvedTheme?: string | undefined;
+  /** ***If enableSystem is true, returns the System theme preference (`"dark"` or `"light"`), regardless what the active theme is.*** */
+  systemTheme?: "dark" | "light" | undefined;
+};

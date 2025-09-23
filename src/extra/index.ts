@@ -18,6 +18,7 @@ export {
   cookies,
   createAction,
   RequestCookies,
-  ResponseCookies,
-  Action
+  ResponseCookies
 } from "./action";
+
+export type { Action } from "./action";

@@ -10,19 +10,33 @@ export default tsEslint.config(
   {
     files: ["**/*.test.ts", "**/*.spec.ts"],
     rules: {
-      "@typescript-eslint/no-unused-expressions": "off"
+      "@typescript-eslint/no-unused-expressions": "off",
+      "@typescript-eslint/no-unused-vars": "warn"
     }
   },
   {
-    files: ["src/**/*.ts", "src/**/*.tsx"],
+    files: ["src/**/*.ts", "scripts/**/*.ts", "src/**/*.tsx", "*.*.*js", "*.*.*ts"],
     rules: {
+      semi: "warn",
+      quotes: "warn",
+      "comma-dangle": [
+        "warn",
+        {
+          arrays: "never",
+          objects: "never",
+          imports: "never",
+          exports: "never",
+          functions: "never"
+        }
+      ],
+      "prefer-const": "warn",
+      "no-unreachable": "warn",
+      "no-unused-vars": "off",
       "@typescript-eslint/semi": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/no-unused-expressions": ["off", { allowShortCircuit: !0 }],
-      "@typescript-eslint/no-unused-vars": [
-        "off",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }
-      ]
+      "@typescript-eslint/no-empty-object-type": "warn",
+      "@typescript-eslint/no-unused-expressions": ["off"]
     }
   }
 );

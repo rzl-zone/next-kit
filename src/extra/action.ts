@@ -6,7 +6,13 @@ import { getExpectedRequestStore } from "@/extra/utils/async-storages";
 import { ActionError, type ActionErrorPlain } from "@/extra/utils/errors";
 import { isIP } from "@/extra/utils/ip";
 import { headers } from "next/headers";
-import { assertIsString, isNil, isPlainObject, isUndefined } from "@rzl-zone/utils-js";
+import { assertIsString } from "@rzl-zone/utils-js/assertions";
+import {
+  hasOwnProp,
+  isNil,
+  isPlainObject,
+  isUndefined
+} from "@rzl-zone/utils-js/predicates";
 
 // -- Types ---------------------------
 
@@ -23,11 +29,17 @@ interface ActionContext<Return> {
 
 // -- Internal ------------------------
 
-class Action<Return> {
-  #fn: AnyFunc<ActionContext<any>>;
+class ActionClass<Return extends AnyFunc<ActionContext<any>>> {
+  #fn: AnyFunc<ActionContext<any>> | undefined;
+  private fn: AnyFunc<ActionContext<any>> | undefined;
 
   constructor(fn: AnyFunc<ActionContext<any>>) {
-    this.#fn = fn;
+    if (typeof globalThis?.Reflect?.ownKeys === "function") {
+      // ES2022+ environment
+      this.#fn = fn;
+    } else {
+      this.fn = fn;
+    }
   }
 
   resolve(result: Return): never {
@@ -39,30 +51,51 @@ class Action<Return> {
   }
 
   /** @internal */
-  async run(...arguments_: any[]) {
+  async run(...args: any[]) {
     try {
-      const result_ = await this.#fn.apply(this, arguments_); // eslint-disable-line prefer-spread
-      if (!isUndefined(result_)) {
-        return { data: result_ };
-      }
-      return { data: void 0 };
+      const fnToCall = this.#fn ?? this.fn;
+      const result_ = await fnToCall?.apply(this, args);
+      return !isUndefined(result_) ? { data: result_ } : { data: void 0 };
     } catch (e) {
-      if (!!e && isPlainObject(e) && "data" in e) {
-        return e;
-      }
-      if (e instanceof ActionError) {
-        return { error: e.toPlain() };
-      }
-      if (!!e && isPlainObject<ActionErrorPlain>(e) && "code" in e && "message" in e) {
+      if (e && isPlainObject(e) && hasOwnProp(e, "data")) return e;
+      if (e instanceof ActionError) return { error: e.toPlain() };
+      if (e && isPlainObject(e) && hasOwnProp(e, "code") && hasOwnProp(e, "message")) {
         return { error: { code: e.code, message: e.message } };
       }
       throw e;
     }
   }
+
+  // ? was deprecated because private `#fn` can be un-supported for old es.
+  // #fn: AnyFunc<ActionContext<any>>;
+  // constructor(fn: AnyFunc<ActionContext<any>>) {
+  //   this.#fn = fn;
+  // }
+  // /** @internal */
+  // async run1(...arguments_: any[]) {
+  //   try {
+  //     // eslint-disable-next-line prefer-spread
+  //     const result_ = await this.#fn.apply(this, arguments_);
+  //     if (!isUndefined(result_)) {
+  //       return { data: result_ };
+  //     }
+  //     return { data: void 0 };
+  //   } catch (e) {
+  //     if (!!e && isPlainObject(e) && hasOwnProp(e, "data")) {
+  //       return e;
+  //     }
+  //     if (e instanceof ActionError) {
+  //       return { error: e.toPlain() };
+  //     }
+  //     if (!!e && isPlainObject(e) && hasOwnProp(e, "code") && hasOwnProp(e, "message")) {
+  //       return { error: { code: e.code, message: e.message } };
+  //     }
+  //     throw e;
+  //   }
+  // }
 }
 
-/**
- * Parses the 'x-forwarded-for' header to extract the client's IP address.
+/** Parses the 'x-forwarded-for' header to extract the client's IP address.
  *
  * This header may contain multiple IP addresses in the format "client IP, proxy 1 IP, proxy 2 IP".
  * This function extracts and returns the first valid IP address.
@@ -109,15 +142,17 @@ function getClientIpFromXForwardedFor(value: null | undefined | string) {
 }
 
 // -- Exported ------------------------
-
+type Action<Return extends AnyFunc<ActionContext<any>>> = InstanceType<
+  typeof ActionClass<Return>
+>;
+// const b:Action = new ActionClass().;
 export type { Action };
 
 /** -------------------------------------------------------------------
  * * ***A helper to simplify creating Next.js Server Actions.***
  * -------------------------------------------------------------------
- * * ***`Currently is not support with turbopack flag !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
  * -------------------------------------------------------------------
- *
  * @example
  * ```tsx
  * // -- actions.ts
@@ -147,7 +182,7 @@ export type { Action };
 export function createAction<T extends AnyFunc<ActionContext<any>>>(
   fn: T
 ): ActionFunc<T> {
-  const action = new Action<T>(fn);
+  const action = new ActionClass<T>(fn);
 
   return new Proxy(fn as any, {
     apply: (_target, _thisArg, argumentsList) => {
@@ -161,7 +196,6 @@ export function createAction<T extends AnyFunc<ActionContext<any>>>(
  * -------------------------------------------------------------------
  * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
  * -------------------------------------------------------------------
- *
  * @example
  * * ***`actions.ts:`***
  * ```ts
@@ -201,7 +235,6 @@ export function actionError(code: string, message: string): never {
  * -------------------------------------------------------------------
  * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
  * -------------------------------------------------------------------
- *
  * This function serves two primary purposes:
  * 1. Reading cookies from an incoming HTTP request when used in a Server Component.
  * 2. Writing cookies to an outgoing HTTP response when used in a Server Component, Server Action, or Route Handler.
@@ -244,10 +277,10 @@ export function cookies(): ResponseCookies {
  * -------------------------------------------------------------------
  * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
  * -------------------------------------------------------------------
- *
  * ***The function checks various headers commonly used by different cloud providers and proxies to find the client's IP address.***
  * ***It prioritizes the 'x-forwarded-for' header, which may contain multiple IP addresses, and extracts the first one.***
- * ***If no valid IP is found, it throws an error.***
+ *
+ * ***If no valid IP is found, it return null.***
  *
  * @returns The client's IP address.
  */
@@ -271,7 +304,7 @@ export async function clientIP(): Promise<string | null> {
     // CF-Connecting-IP - applied to every request to the origin.
     "cf-connecting-ip",
 
-    // Fastly and Firebase hosting header (When forwared to cloud function)
+    // Fastly and Firebase hosting header (When forwarded to cloud function)
     "fastly-client-ip",
 
     // Akamai and Cloudflare: True-Client-IP.

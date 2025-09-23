@@ -1,5 +1,11 @@
-"use client";
+export type {
+  UseTheme,
+  ThemeProviderProps,
+  ThemeMode,
+  ThemeOverrideConfig,
+  ThemesMode
+} from "./types";
 
-export { ProvidersThemesApp, useTheme } from "./main";
-export type { ThemeMode, ThemeOverrideConfig, ThemesMode } from "./types";
-export type { UseTheme, ThemeProviderProps } from "./internal/types";
+export { useTheme } from "./hooks/useTheme";
+export { ThemeContext } from "./contexts/ThemeContext";
+export { ProvidersThemesApp } from "./providers/ProvidersThemesApp";

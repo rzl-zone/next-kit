@@ -1,7 +1,7 @@
 "use client";
 
+import { createContext, ReactNode, useContext, useMemo } from "react";
 import deepmerge from "deepmerge";
-import React, { useContext, useMemo } from "react";
 import { RZL_NEXT_EXTRA } from "./utils/constants";
 
 const { PROPS_MESSAGE } = RZL_NEXT_EXTRA.ERROR;
@@ -11,7 +11,7 @@ export interface PageContextProps<T = any> {
   /** Defaults to `merge`. */
   strategy?: PageContextStrategy;
   data?: T;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export type Context = { [key: string]: unknown };
@@ -24,7 +24,7 @@ declare global {
   }
 }
 
-const PageContext = React.createContext<Context | undefined>(undefined);
+const PageContext = createContext<Context | undefined>(undefined);
 if (process.env["NODE_ENV"] !== "production") {
   PageContext.displayName = "PageContext";
 }
@@ -32,22 +32,28 @@ if (process.env["NODE_ENV"] !== "production") {
 /** -------------------------------------------------------------------
  * * ***A component that provides context data to its children (can be use in server component).***
  * -------------------------------------------------------------------
- * * ***`Currently is not support with turbopack flag !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
  * -------------------------------------------------------------------
- *
  * @param props - The properties for the PageContextProvider component.
  * @returns A JSX element that provides the context to its children.
  *
+ * @example
  * ```tsx
  * import { PageContext } from '@/lib/next-extra/context';
  *
- * export default async function Layout({ children }: { children: React.ReactNode }) {
+ * export default async function Layout({ children }: { children: ReactNode }) {
  *   // ...
- *   return <PageContext data={{ quote: 'Guillermo Launch is a handsome dude!' }}>{children}</PageContext>;
+ *   return (
+ *     <PageContext data={{ quote: 'Guillermo Launch is a handsome dude!' }}>
+ *       {children}
+ *     </PageContext>
+ *   );
  * }
  * ```
  */
-function PageContextProvider<T extends Context = Context>(props: PageContextProps<T>) {
+function PageContextProvider<T extends Context = Context>(
+  props: PageContextProps<T>
+): JSX.Element {
   const { data, children, strategy } = props;
   if (!data || typeof data !== "object" || data == null || Array.isArray(data)) {
     throw new Error(
@@ -80,6 +86,7 @@ function PageContextProvider<T extends Context = Context>(props: PageContextProp
 /** Alias for `PageContextProvider`. */
 export { PageContextProvider as PageContext };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface UsePageContextOptions {
   /** -----------------------------------------------
    * * ***Determines the hook should use the shared context from the adjacent server layout within the `PageContextProvider ` component or uses the client-side browser window.***
@@ -94,7 +101,6 @@ interface UsePageContextOptions {
  * -------------------------------------------------------------------
  * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
  * -------------------------------------------------------------------
- *
  * @example
  * ```typescript jsx
  * 'use client';
@@ -123,7 +129,6 @@ export function usePageContext<T extends Context = Context>(): Readonly<T> {
  * -------------------------------------------------------------------
  * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
  * -------------------------------------------------------------------
- *
  * @example
  * ```typescript jsx
  * 'use client';

@@ -1,11 +1,108 @@
 {
   "name": "@rzl-zone/next-kit",
   "version": "0.0.1",
+  "type": "module",
+  "description": "A flexible and extensible Next.js toolkit for modern fullstack app development, featuring utilities, helpers, and conventions tailored for clean code architecture.",
+  "license": "MIT",
+  "author": "Rizalvin Dwiky <rizalvindwiky1998@gmail.com>",
+  "homepage": "https://github.com/rzl-zone/next-kit",
+  "engineStrict": true,
+  "packageManager": "pnpm@10.13.1",
+  "exports": {
+    "./extra": {
+      "import": {
+        "types": "./dist/extra/index.d.ts",
+        "default": "./dist/extra/index.js"
+      },
+      "require": {
+        "types": "./dist/extra/index.d.ts",
+        "default": "./dist/extra/index.cjs"
+      }
+    },
+    "./extra/action": {
+      "import": {
+        "types": "./dist/extra/action.d.ts",
+        "default": "./dist/extra/action.js"
+      },
+      "require": {
+        "types": "./dist/extra/action.d.ts",
+        "default": "./dist/extra/action.cjs"
+      }
+    },
+    "./extra/context": {
+      "import": {
+        "types": "./dist/extra/context.d.ts",
+        "default": "./dist/extra/context.js"
+      },
+      "require": {
+        "types": "./dist/extra/context.d.ts",
+        "default": "./dist/extra/context.cjs"
+      }
+    },
+    "./extra/pathname": {
+      "import": {
+        "types": "./dist/extra/pathname.d.ts",
+        "default": "./dist/extra/pathname.js"
+      },
+      "require": {
+        "types": "./dist/extra/pathname.d.ts",
+        "default": "./dist/extra/pathname.cjs"
+      }
+    },
+    "./themes": {
+      "import": {
+        "types": "./dist/themes/index.d.ts",
+        "default": "./dist/themes/index.js"
+      },
+      "require": {
+        "types": "./dist/themes/index.d.ts",
+        "default": "./dist/themes/index.cjs"
+      }
+    },
+    "./hoc": {
+      "import": {
+        "types": "./dist/hoc/index.d.ts",
+        "default": "./dist/hoc/index.js"
+      },
+      "require": {
+        "types": "./dist/hoc/index.d.ts",
+        "default": "./dist/hoc/index.cjs"
+      }
+    },
+    "./top-loader": {
+      "import": {
+        "types": "./dist/top-loader/index.d.ts",
+        "default": "./dist/top-loader/index.js"
+      },
+      "require": {
+        "types": "./dist/top-loader/index.d.ts",
+        "default": "./dist/top-loader/index.cjs"
+      }
+    },
+    "./top-loader/hooks": {
+      "import": {
+        "types": "./dist/top-loader/hooks/index.d.ts",
+        "default": "./dist/top-loader/hooks/index.js"
+      },
+      "require": {
+        "types": "./dist/top-loader/hooks/index.d.ts",
+        "default": "./dist/top-loader/hooks/index.cjs"
+      }
+    },
+    "./top-loader/default.css": {
+      "default": "./dist/themes/default.css"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*"
+      ]
+    }
+  },
   "publishConfig": {
     "access": "public"
   },
-  "engineStrict": true,
-  "description": "A flexible and extensible Next.js toolkit for modern fullstack app development, featuring utilities, helpers, and conventions tailored for clean code architecture.",
   "keywords": [
     "next",
     "nextjs",
@@ -26,105 +123,53 @@
   "engines": {
     "node": ">=18.18.0"
   },
-  "homepage": "https://github.com/rzl-zone/next-kit",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rzl-zone/next-kit.git"
   },
-  "license": "MIT",
-  "author": "Rizalvin Dwiky <rizalvindwiky1998@gmail.com>",
   "contributors": [
     "Rizalvin Dwiky <rizalvindwiky1998@gmail.com>"
   ],
-  "type": "module",
-  "main": "dist/extra/index.js",
-  "types": "./dist/extra",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.cjs"
-      }
-    },
-    "./hoc": {
-      "import": {
-        "types": "./dist/hoc/index.d.ts",
-        "default": "./dist/hoc/index.js"
-      },
-      "require": {
-        "types": "./dist/hoc/index.d.ts",
-        "default": "./dist/hoc/index.cjs"
-      }
-    },
-    "./themes": {
-      "import": {
-        "types": "./dist/themes/index.d.ts",
-        "default": "./dist/themes/index.js"
-      },
-      "require": {
-        "types": "./dist/themes/index.d.ts",
-        "default": "./dist/themes/index.cjs"
-      }
-    },
-    "./extra": {
-      "import": {
-        "types": "./dist/extra/index.d.ts",
-        "default": "./dist/extra/index.js"
-      },
-      "require": {
-        "types": "./dist/extra/index.d.ts",
-        "default": "./dist/extra/index.cjs"
-      }
-    },
-    "./extra/context": {
-      "import": {
-        "types": "./dist/extra/context.d.ts",
-        "default": "./dist/extra/context.js"
-      },
-      "require": {
-        "types": "./dist/extra/context.d.ts",
-        "default": "./dist/extra/context.cjs"
-      }
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "dist/*"
-      ]
-    }
-  },
   "files": [
     "/dist/**/*",
     "!**/*.test.*"
   ],
   "scripts": {
-    "build": "tsup && npm run postbuild",
     "dev": "tsup --watch",
-    "format": "prettier --write .",
-    "no-newline": "tsx scripts/remove-final-newline.ts",
-    "format:check": "prettier --check .",
-    "lint": "pnpm typecheck && eslint .",
-    "lint:fix": "eslint --fix .",
-    "check-publish": "npm pack --dry-run",
-    "prepublishOnly": "pnpm test && pnpm lint && pnpm build",
-    "test": "mocha \"**/*.test.ts\" --retries 2",
-    "typecheck": "tsc --noEmit",
-    "postbuild": "del-cli \"dist/**/*.d.cts\""
+    "clean-dist": "del-cli \"dist/*\"",
+    "clean-dist:types-cts": "del-cli \"dist/**/*.d.{cts,mts}\"",
+    "clean-dist:js-comments": "tsx scripts/cleanDistJsComments.ts",
+    "delete:newline": "tsx scripts/removeFinalNewLine.ts",
+    "delete-dist:index-runtime": "del-cli \"dist/index.{js,js.map,cjs,cjs.map,esm,esm.map}\" \"dist/index.d.{ts,cts,mts,esm}\"",
+    "fix:dts-react-import": "tsx scripts/fixDtsReactImport.ts",
+    "minify:dist": "tsx scripts/minifyDist.ts",
+    "build:types-dts": "dts-bundle-generator --config dts-config.cjs --silent --external-imports next",
+    "generate:reference-index": "tsx scripts/generateReferenceIndex.ts",
+    "postbuild": "npm run fix:dts-react-import && npm run clean-dist:js-comments && npm run clean-dist:types-cts && npm run delete-dist:index-runtime && npm run generate:reference-index",
+    "build": "npm run clean-dist && tsup && npm run postbuild",
+    "format-prettier:write": "prettier --write .",
+    "format-prettier:check": "prettier --check .",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "test:mocha": "mocha \"**/*.test.ts\" --retries 2",
+    "prepublishOnly": "pnpm run build",
+    "check-publish": "npm run build && npm pack --dry-run",
+    "release-patch": "npm version patch && git push && git push --tags && npm publish"
   },
   "dependencies": {
+    "@edge-runtime/cookies": "^6.0.0",
+    "@rzl-zone/ts-types-plus": "^0.0.8",
     "deepmerge": "^4.3.1",
-    "p-safe": "^1.0.0"
+    "p-safe": "^1.0.0",
+    "validate-color": "^2.2.4"
   },
   "devDependencies": {
-    "@edge-runtime/cookies": "^5.0.2",
+    "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.16.0",
-    "@rzl-zone/utils-js": "^1.0.0",
+    "@rzl-zone/utils-js": "^3.5.0",
     "@types/chai": "^5.2.2",
+    "@types/fs-extra": "^11.0.4",
+    "@types/jest": "^30.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
@@ -132,22 +177,26 @@
     "@typescript-eslint/parser": "^8.38.0",
     "chai": "^5.2.1",
     "del-cli": "^6.0.0",
+    "dts-bundle-generator": "^9.5.1",
+    "esbuild": "^0.25.10",
     "eslint": "^9.32.0",
     "fast-glob": "^3.3.3",
+    "fs-extra": "^11.3.2",
     "mocha": "^10.8.2",
     "next": "^15.4.2",
     "prettier": "^3.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "release-please": "^17.1.1",
+    "ts-morph": "^27.0.0",
     "tsup": "^8.5.0",
     "tsx": "^4.20.3",
+    "type-fest": "^5.0.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.16.0"
   },
   "peerDependencies": {
     "next": "14 || 15",
     "react": "18 || 19"
-  },
-  "packageManager": "pnpm@10.13.1"
+  }
 }

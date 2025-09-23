@@ -1,4 +1,4 @@
-import type { ThemeProviderProps } from "../internal/types";
+import type { ThemeProviderProps } from "../types";
 
 export const CONFIG_THEME = {
   attribute: "data-theme",

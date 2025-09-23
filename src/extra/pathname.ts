@@ -49,14 +49,14 @@ async function getRequestURL(callingExpression: string): Promise<URL> {
  * -------------------------------------------------------------------
  * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
  * -------------------------------------------------------------------
- *
  * @example
  * ```ts
  * import { pathname } from '@/lib/next-extra';
  *
- * export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+ * type LayoutProps = Readonly<{ children: React.ReactNode }>;
+ * export default async function Layout({ children }: LayoutProps) {
  *    const route = await pathname() // returns "/dashboard" on /dashboard?foo=bar
- *  // ...
+ *    // ...
  * }
  * ```
  */
@@ -72,18 +72,17 @@ export async function getPathname(): Promise<string> {
  * -------------------------------------------------------------------
  * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
  * -------------------------------------------------------------------
- *
- *
  * Learn more about [`URLSearchParams` on MDN](https://developer.mozilla.org/docs/Web/API/URLSearchParams)
  *
  * @example
  * ```ts
  * import { searchParams } from '@/lib/next-extra'
  *
- * export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+ * type LayoutProps = Readonly<{ children: React.ReactNode }>;
+ * export default async function Layout({ children }: LayoutProps) {
  *    const params = await searchParams()
  *    params.get('foo') // returns 'bar' when ?foo=bar
- *  // ...
+ *    // ...
  * }
  * ```
  */

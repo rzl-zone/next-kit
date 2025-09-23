@@ -35,85 +35,102 @@
 
 ---
 
-> ⚠️ **This is a BETA Version release.**  
+> ⚠️ ***This is a BETA Version release.***  
 > APIs, naming, or file structures may still change before v1.0.0.
 
 > Type-safe utilities, opinionated conventions, and clean abstractions — designed to make your Next.js projects faster, cleaner, and more maintainable.
 
 ---
+ 
+<h2 id="features">✨ <strong>Features</strong></h2>
 
-## ✨ Features
-
-- ✅ Type-safe server actions with helpers
-- 🚀 API response formatter for consistent client/server comms
-- 🛠️ Utility functions for common patterns (validation, formatting, etc.)
-- ⚙️ Designed for scalability and convention
+- ✅ Type-safe server actions with helpers.  
+- 🚀 API response formatter for consistent client/server comms.  
+- 🛠️ Utility functions for common patterns (top-loader, hoc, themes, etc.).  
+- ⚙️ Designed for scalability and convention.  
 
 ---
 
-## 📦 Installation
+<h2 id="installation">⚙️ <strong>Installation</strong></h2>
 
-### With NPM
+#### *With NPM*
 
 ```bash
-npm install @rzl-zone/next-kit
+  npm install @rzl-zone/next-kit
 ```
 
-### With Yarn
+#### *With Yarn*
 
 ```bash
-yarn add @rzl-zone/next-kit
+  yarn add @rzl-zone/next-kit
 ```
 
-### With PNPM
+#### *With PNPM*
 
 ```bash
-pnpm add @rzl-zone/next-kit
+  pnpm add @rzl-zone/next-kit
 ```
 
 ---
 
-## 🛠️ Usage Example
+<h2 id="detailed-features">💎 <strong>Detailed Features</strong></h2>
 
-### Kits
+  ### **Full documentation <a href="https://docs-rzl-next-kit.vercel.app" target="_blank" rel="nofollow noreferrer noopener">Rzl Next Kit</a> is **currently under construction** 🏗️.**
+  #### For now, explore the examples or dive into the source — all utilities are documented via **TSDoc** and typed properly.
 
-```ts
-// COMING SOON !!!
-```
+  ```ts
+  // For Extra (eg: getPathname, getSearchParams, etc).
+  import { | } from "@rzl-zone/next-kit/extra"; 
+  import { | } from "@rzl-zone/next-kit/extra/action"; 
+  import { | } from "@rzl-zone/next-kit/extra/context"; 
+  import { | } from "@rzl-zone/next-kit/extra/pathname"; 
+
+  // For Higher-Order Components.
+  import { | } from "@rzl-zone/next-kit/hoc"; 
+
+  // For Themes Mode (eg: dark, light, system).
+  import { | } from "@rzl-zone/next-kit/themes"; 
+
+  // For Top Loader. 
+  import { | } from "@rzl-zone/next-kit/top-loader"; 
+  import { | } from "@rzl-zone/next-kit/top-loader/hooks"; 
+  import { | } from "@rzl-zone/next-kit/top-loader/default.css"; 
+  ```
+  #### Place your cursor inside { } or after "@rzl-zone/next-kit/{{ | }}" then press Ctrl+Space to see all available functions/types with full TSDoc hints.
+
+--- 
+
+<h2 id="type-safety-build-in">🧪 <strong>Type Safety Built In</strong></h2>
+
+All core utilities are written in **TypeScript** with strong generics and inferred types — making your DX smooth and predictable. 
+
+---
+<h2 id="sponsor-this-package">❤️ <strong>Sponsor this package</strong></h2>
+
+**Help support development:**    
+*[👉 **Become a sponsor**](https://github.com/sponsors/rzl-app)*
 
 ---
 
-## 🧪 Type Safety Built In
+<h2 id="changelog">📝 <strong>Changelog</strong></h2>
 
-All core utilities are written in **TypeScript** with strong generics and inferred types — making your DX smooth and predictable.
-
----
-
-## 🧱 Folder Structure Convention
-
-While flexible, `@rzl-zone/next-kit` works best when combined with a clean architecture:
-
-```
-.
-├── app/
-│   └── actions/
-│   └── components/
-│   └── routes/
-├── lib/
-│   └── validators/
-│   └── utils/
-```
+**See [CHANGELOG](CHANGELOG.md).**
 
 ---
 
-## 📚 Documentation
+<h2 id="contributing">🤝 <strong>Contributing</strong></h2>
 
-Full documentation coming soon.  
-For now, explore the examples or dive into the source — all utilities are documented via **JSDoc** and typed properly.
+**See [CONTRIBUTING](CONTRIBUTING.md).**
 
 ---
 
-## 💡 Recommended Stack
+<h2 id="security">🔒 <strong>Security</strong></h2>
+
+**Please report issues to [rizalvindwiky1998@gmail.com](mailto:rizalvindwiky1998@gmail.com).**
+
+---
+
+<h2 id="credits">💡 <strong>Recommended Stack</strong></h2>
 
 - Next.js 14+
 - TypeScript
@@ -122,14 +139,22 @@ For now, explore the examples or dive into the source — all utilities are docu
 
 ---
 
-## 🧑‍💻 Author
+<h2 id="credits">🙌 <strong>Credits</strong></h2>
 
-Developed by [@rzl-app](https://github.com/rzl-app) — built for personal and team use, now open-sourced for others.
+**- [Rzl App](https://github.com/rzl-app)**  
+**- [All Contributors](../../contributors)**
 
 ---
 
-## 🪪 License
+<h2 id="license">📜 <strong>License</strong></h2>
 
-The MIT License (MIT)  
-See [LICENSE.md](https://github.com/rzl-zone/next-kit/blob/main/LICENSE.md) for full details. 
-# @rzl-zone/next-kit
+**The MIT License (MIT).**    
+*Please see **[License File](LICENSE.md)** for more information.*
+
+---
+
+✅ **Enjoy using `@rzl-zone/next-kit`?**  
+*Star this repo [⭐](https://github.com/rzl-zone/next-kit) and share it with other JavaScript developers!*
+
+---
+

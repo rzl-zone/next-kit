@@ -1,10 +1,22 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "./tsconfig.rzl.json",
+  // "extends": "./tsconfig.rzl.json",
   "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "noUnusedLocals": false,
-    "moduleResolution": "node",
-    "module": "esnext",
+    "noUnusedParameters": false,
+    "moduleResolution": "bundler",
+    "noUncheckedIndexedAccess": false,
+    "noPropertyAccessFromIndexSignature": true,
+    "jsx": "preserve",
+    "skipDefaultLibCheck": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "noEmit": true,
+    "target": "es2022",
+    "module": "es2022",
     "baseUrl": ".",
     "paths": {
       "@/*": [

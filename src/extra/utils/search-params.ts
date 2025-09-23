@@ -1,4 +1,4 @@
-import { isURL } from "@rzl-zone/utils-js";
+import { isURL } from "@rzl-zone/utils-js/predicates";
 
 /**
  * @internal
@@ -10,8 +10,7 @@ export class ReadonlyURLSearchParamsError extends Error {
 }
 
 export class ReadonlyURLSearchParams extends URLSearchParams {
-  /**
-   * Creates a ReadonlyURLSearchParams instance from a full pathname.
+  /** Creates a ReadonlyURLSearchParams instance from a full pathname.
    *
    * @param pathname The full pathname
    * @returns

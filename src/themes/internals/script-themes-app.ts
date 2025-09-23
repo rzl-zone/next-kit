@@ -1,4 +1,4 @@
-export const script = (
+export const scriptThemesApp = (
   attribute: string | string[],
   storageKey: string,
   defaultTheme: string,
@@ -41,6 +41,7 @@ export const script = (
     enableMetaColorScheme: boolean | undefined;
   }) => {
     if (document !== undefined && enableMetaColorScheme) {
+      // eslint-disable-next-line quotes
       document.querySelectorAll('meta[name="theme-color"]').forEach((el) => el.remove());
 
       if (theme === "dark") {
@@ -95,6 +96,7 @@ export const script = (
       const isSystem = enableSystem && themeName === "system";
       const theme = isSystem ? getSystemTheme() : themeName;
       updateDOM(theme);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       // mean is not support, so const skip.
     }
