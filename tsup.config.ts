@@ -128,11 +128,7 @@ const configOptions = (options: ExtendedOptions): Options => {
   }
 
   return {
-    dts: {
-      compilerOptions: {
-        isolatedModules: true
-      }
-    },
+    dts: true,
     treeshake: true,
     shims: true,
     minify: false,
@@ -145,7 +141,7 @@ const configOptions = (options: ExtendedOptions): Options => {
     noExternal: nonExternalDefault,
     esbuildOptions(opts) {
       opts.minify = false;
-      opts.keepNames = true;
+      opts.keepNames = false;
       opts.legalComments = "none";
       opts.ignoreAnnotations = true;
     },
