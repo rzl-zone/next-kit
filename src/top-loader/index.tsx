@@ -1,7 +1,10 @@
+"use client";
+
 import type { RzlNextTopLoaderProps } from "./types/types";
 
 import { WithSuspense } from "@/hoc";
 import InitNextTopLoaderComponent from "./components";
+export { useRouter } from "./hooks";
 
 /** ------------------------------------------------------------------
  * * ***Component: `RzlNextTopLoader`.***

@@ -82,16 +82,6 @@
         "default": "./dist/top-loader/index.cjs"
       }
     },
-    "./top-loader/hooks": {
-      "import": {
-        "types": "./dist/top-loader/hooks/index.d.ts",
-        "default": "./dist/top-loader/hooks/index.js"
-      },
-      "require": {
-        "types": "./dist/top-loader/hooks/index.d.ts",
-        "default": "./dist/top-loader/hooks/index.cjs"
-      }
-    },
     "./top-loader/default.css": {
       "default": "./dist/themes/default.css"
     }
@@ -121,9 +111,6 @@
       ],
       "top-loader": [
         "dist/top-loader/index.d.ts"
-      ],
-      "top-loader/hooks": [
-        "dist/top-loader/hooks/index.d.ts"
       ]
     }
   },

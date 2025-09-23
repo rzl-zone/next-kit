@@ -130,7 +130,6 @@ const configOptions = (options: ExtendedOptions): Options => {
   return {
     dts: true,
     treeshake: true,
-    // shims: true,
     minify: false,
     bundle: true,
     splitting: true,
@@ -165,8 +164,7 @@ export default defineConfig((options) => [
       // themes
       "src/themes/index.{ts,tsx}",
       // top-loader
-      "src/top-loader/index.{ts,tsx}",
-      "src/top-loader/hooks/index.{ts,tsx}"
+      "src/top-loader/index.{ts,tsx}"
     ],
     preserveUseClient: true,
     clientFilesPattern: [
@@ -175,7 +173,7 @@ export default defineConfig((options) => [
       //themes
       "dist/themes/index.*(js|cjs|mjs)",
       // top-loader
-      "dist/top-loader/hooks/index.*(js|cjs|mjs)"
+      "dist/top-loader/index.*(js|cjs|mjs)"
     ]
   })
 ]);
