@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.6...next-kit-v0.1.7) (2025-09-23)
+
+
+### Bug Fixes
+
+* Fixing types result at extra/context ([a8c2e28](https://github.com/rzl-zone/next-kit/commit/a8c2e282323e9486ff88cb7e70402b72ffb35e69))
+
 ## [0.1.6](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.5...next-kit-v0.1.6) (2025-09-23)
 
 
