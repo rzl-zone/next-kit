@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.0...next-kit-v0.1.1) (2025-09-23)
+
+
+### Bug Fixes
+
+* Fixing exports at package.json, and fix readme.md ([aeb5445](https://github.com/rzl-zone/next-kit/commit/aeb5445214313717e6604d601148cd5d73e5f6a5))
+
 ## [0.1.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.0.1...next-kit-v0.1.0) (2025-09-23)
 
 
