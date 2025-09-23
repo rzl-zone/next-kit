@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.4...next-kit-v0.1.5) (2025-09-23)
+
+
+### Bug Fixes
+
+* Fixing exports at package.json, fix "use client" marks at index top-loader, fix readme.md ([de80132](https://github.com/rzl-zone/next-kit/commit/de801325d2f30a05f81af453dcfa9dda75ac95d5))
+
 ## [0.1.4](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.3...next-kit-v0.1.4) (2025-09-23)
 
 
