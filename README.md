@@ -93,7 +93,16 @@
 
   // For Top Loader. 
   import { | } from "@rzl-zone/next-kit/top-loader";
-  import { | } from "@rzl-zone/next-kit/top-loader/css"; 
+  ```
+  This import can be placed in your layout.tsx or global stylesheet entry, for example:
+
+  1. At layout.tsx:
+  ```ts
+  import "@rzl-zone/next-kit/top-loader/css";
+  ```
+  2. At global stylesheet entry (eg: globals.css):
+  ```css 
+  @import "@rzl-zone/next-kit/top-loader/css";
   ```
   #### Place your cursor inside { } or after "@rzl-zone/next-kit/{{ | }}" then press Ctrl+Space to see all available functions/types with full TSDoc hints.
    

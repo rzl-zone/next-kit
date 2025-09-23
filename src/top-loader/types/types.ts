@@ -43,11 +43,14 @@ export type RzlNextTopLoaderProps = {
    * ```
    * This import can be placed in your global stylesheet entry,
    * for example:
+   * 1. At layout.tsx:
    * ```ts
-   * // app.css or globals.css
    * import "@rzl-zone/next-kit/top-loader/css";
    * ```
-   * which defines a class named **`on_processing`**.
+   * 2. At global stylesheet entry (eg: globals.css):
+   * **`@import "@rzl-zone/next-kit/top-loader/css";`**
+   *
+   * Which defines a class named **`on_processing`**.
    *
    * - **⚠️ Warning:**
    *    - The value must be of type string, otherwise will return default value.
