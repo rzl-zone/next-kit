@@ -9,6 +9,9 @@
   "engineStrict": true,
   "packageManager": "pnpm@10.13.1",
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts"
+    },
     "./extra": {
       "import": {
         "types": "./dist/extra/index.d.ts",
@@ -49,16 +52,6 @@
         "default": "./dist/extra/pathname.cjs"
       }
     },
-    "./themes": {
-      "import": {
-        "types": "./dist/themes/index.d.ts",
-        "default": "./dist/themes/index.js"
-      },
-      "require": {
-        "types": "./dist/themes/index.d.ts",
-        "default": "./dist/themes/index.cjs"
-      }
-    },
     "./hoc": {
       "import": {
         "types": "./dist/hoc/index.d.ts",
@@ -67,6 +60,16 @@
       "require": {
         "types": "./dist/hoc/index.d.ts",
         "default": "./dist/hoc/index.cjs"
+      }
+    },
+    "./themes": {
+      "import": {
+        "types": "./dist/themes/index.d.ts",
+        "default": "./dist/themes/index.js"
+      },
+      "require": {
+        "types": "./dist/themes/index.d.ts",
+        "default": "./dist/themes/index.cjs"
       }
     },
     "./top-loader": {
@@ -95,8 +98,32 @@
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "dist/*"
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "extra": [
+        "dist/extra/index.d.ts"
+      ],
+      "extra/action": [
+        "dist/extra/action/index.d.ts"
+      ],
+      "extra/context": [
+        "dist/extra/context/index.d.ts"
+      ],
+      "extra/pathname": [
+        "dist/extra/pathname/index.d.ts"
+      ],
+      "hoc": [
+        "dist/hoc/index.d.ts"
+      ],
+      "themes": [
+        "dist/themes/index.d.ts"
+      ],
+      "top-loader": [
+        "dist/top-loader/index.d.ts"
+      ],
+      "top-loader/hooks": [
+        "dist/top-loader/hooks/index.d.ts"
       ]
     }
   },

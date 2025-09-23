@@ -97,6 +97,90 @@
   import { | } from "@rzl-zone/next-kit/top-loader/default.css"; 
   ```
   #### Place your cursor inside { } or after "@rzl-zone/next-kit/{{ | }}" then press Ctrl+Space to see all available functions/types with full TSDoc hints.
+   
+  ---
+  ### **Hint: Autocomplete Setup (Step by Step)**
+
+  #### Make TypeScript & VSCode automatically provide autocomplete for `@rzl-zone/next-kit` without needing triple-slash references in every file:
+
+  - 1️⃣ **Install @rzl-zone/next-kit.**
+
+    - Make sure the package is installed:
+
+      ```bash
+      npm install @rzl-zone/next-kit
+      # or
+      yarn add @rzl-zone/next-kit
+      # or
+      pnpm add @rzl-zone/next-kit
+      ```
+
+  - 2️⃣ **Create a types folder.**
+
+    - Inside your project root, make a folder called `types`:
+
+      ```pgsql
+      project-root/
+        ├─ src/
+        ├─ types/
+        │  └─ index.d.ts
+        ├─ tsconfig.json
+        └─ jsconfig.json
+      ```
+
+  - 3️⃣ **Add the global reference file.**
+
+    - Create `types/index.d.ts` with this content:
+
+      ```ts
+      /// <reference types="@rzl-zone/next-kit" />
+      ``` 
+
+      - This tells TypeScript to include the types from `@rzl-zone/next-kit` globally.
+      - You can add more references here if needed, for example:
+
+      ```ts
+      /// <reference types="node" />
+      /// <reference types="@rzl-zone/next-kit" />
+      ``` 
+
+  - 4️⃣ **Update tsconfig.json.**
+
+    - Make sure not to override "types" (or leave it empty) so TypeScript automatically picks up your types folder:
+
+      ```jsonc
+      // tsconfig.json
+      {
+        "compilerOptions": { 
+          "typeRoots": ["./types", "./node_modules/@types"],
+          // other your config...
+        },
+        "include": ["src", "types"],
+        // other your config...
+      }
+      ```
+      - `typeRoots` tells TS where to look for global type definitions.
+      - The `types` folder comes first, so your references override or add to the default `@types` packages
+
+  - 5️⃣ **Update jsconfig.json (for JavaScript projects).**
+
+    - If you also work with JS, do the same:
+
+      ```jsonc
+      // jsconfig.json
+      {
+        "compilerOptions": {
+          "checkJs": true,  // Optional, enables type checking 
+          "typeRoots": ["./types", "./node_modules/@types"],
+          // other your config...
+        },
+        "include": ["src", "types"],
+        // other your config...
+      }
+      ```
+      >ℹ️ ***Tip:*** *For JS projects, consider adding "checkJs": true for better IntelliSense.*
+    
+   **Now, all types from @rzl-zone/next-kit are globally available, and you don’t need "types": ["@rzl-zone/next-kit"] in tsconfig.json.** 
 
 --- 
 
