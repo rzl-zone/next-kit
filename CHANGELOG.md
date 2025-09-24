@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.8...next-kit-v0.1.9) (2025-09-24)
+
+
+### Bug Fixes
+
+* Fixing error message, tsconfig options, and refactor some structure folder, also fixing some tsDoc. ([3f23985](https://github.com/rzl-zone/next-kit/commit/3f23985f956f094f8663616db6e54e3cc090f58f))
+
 ## [0.1.8](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.7...next-kit-v0.1.8) (2025-09-23)
 
 
