@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.9...next-kit-v0.1.10) (2025-09-24)
+
+
+### Bug Fixes
+
+* Fixing generateReferenceIndex for build. ([9619854](https://github.com/rzl-zone/next-kit/commit/9619854fa7da6e27932b37cef64acc64f2eb628e))
+
 ## [0.1.9](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.8...next-kit-v0.1.9) (2025-09-24)
 
 
