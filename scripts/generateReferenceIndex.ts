@@ -14,7 +14,6 @@ try {
 
 const files = await fg(
   [
-    "**/*.css",
     "extra/index.d.ts",
     "extra/action.d.ts",
     "extra/context.d.ts",
