@@ -1,50 +1,48 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "baseUrl": ".",
-    /* JavaScript Support */
-    "allowJs": true,
-    /* Interop Constraints */
-    "allowSyntheticDefaultImports": true,
-    "alwaysStrict": true,
-    "checkJs": true,
-    /* Emit */
-    "declaration": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     /* Projects */
     "incremental": true,
-    "jsx": "react",
+    "tsBuildInfoFile": "${configDir}/.tsbuildinfo",
+    /* Language and Environment */
+    "target": "esnext",
     "lib": [
       "DOM",
       "DOM.Iterable",
       "ESNext"
     ],
+    "jsx": "react",
+    "useDefineForClassFields": true,
+    "moduleDetection": "force",
     /* Modules */
     "module": "esnext",
-    "moduleDetection": "force",
     "moduleResolution": "bundler",
-    "newLine": "lf",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noUncheckedSideEffectImports": true,
-    "noUncheckedIndexedAccess": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "${configDir}/dist",
     "resolveJsonModule": true,
-    /* Completeness */
-    "skipLibCheck": true,
+    /* JavaScript Support */
+    "allowJs": true,
+    "checkJs": true,
+    /* Emit */
+    "declaration": true,
+    "newLine": "lf",
+    "outDir": "${configDir}/dist",
+    /* Interop Constraints */
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     /* Type Checking */
     "strict": true,
+    "alwaysStrict": true,
     "strictNullChecks": true,
-    "stripInternal": true,
-    /* Language and Environment */
-    "target": "esnext",
-    "tsBuildInfoFile": "${configDir}/.tsbuildinfo",
-    "useDefineForClassFields": true
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedSideEffectImports": true,
+    "noEmitOnError": true,
+    /* Completeness */
+    "skipLibCheck": true
   }
 }

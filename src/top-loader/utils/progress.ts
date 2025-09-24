@@ -187,7 +187,8 @@ export class NProgress {
 
   static status: number | null = null;
   // Queue for animation functions
-  private static pending: Array<(next: () => void) => void> = [];
+  // eslint-disable-next-line no-unused-vars
+  private static pending: Array<(next: VoidFunction) => void> = [];
   private static isPaused: boolean = false;
 
   static configure(options: Partial<NProgressOptions>): typeof NProgress {
@@ -496,7 +497,8 @@ export class NProgress {
   }
 
   // Queue function for animations
-  static queue(callback: (next: () => void) => void): void {
+  // eslint-disable-next-line no-unused-vars
+  static queue(callback: (next: VoidFunction) => void): void {
     if (isFunction(callback)) {
       this.pending.push(callback);
       if (this.pending.length === 1) this.next();

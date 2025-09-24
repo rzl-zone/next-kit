@@ -210,19 +210,24 @@ export interface NavigateFwdOptionsUseRouter extends OptionsUseRouter {
 
 export interface UseAppRouterInstance {
   /** * ***Navigate to the previous history entry.*** */
+  // eslint-disable-next-line no-unused-vars
   back(options?: OptionsUseRouter): void;
   /** * ***Navigate to the next history entry.*** */
+  // eslint-disable-next-line no-unused-vars
   forward(options?: NavigateFwdOptionsUseRouter): void;
   /** * ***Refresh the current page.*** */
+  // eslint-disable-next-line no-unused-vars
   refresh(options?: OptionsUseRouter): void;
   /** * ***Navigate to the provided href.***
    *
    * **Pushes a new history entry.**
    */
+  // eslint-disable-next-line no-unused-vars
   push(href: string, options?: NavigateOptionsUseRouter): void;
   /** * ***Navigate to the provided href.***
    *
    * **Replaces the current history entry.**
    */
+  // eslint-disable-next-line no-unused-vars
   replace(href: string, options?: NavigateOptionsUseRouter): void;
 }

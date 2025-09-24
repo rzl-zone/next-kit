@@ -5,9 +5,10 @@ import {
   getStaticGenerationStore
 } from "@/extra/utils/async-storages";
 import { ReadonlyURLSearchParams } from "@/extra/utils/search-params";
-import { RZL_NEXT_EXTRA } from "./utils/constants";
 
-const { FLAG_MESSAGE } = RZL_NEXT_EXTRA.ERROR;
+import { RZL_NEXT_KIT_EXTRA } from "./utils/constants";
+
+const { FLAG_MESSAGE } = RZL_NEXT_KIT_EXTRA.ERROR;
 
 // -- Internal ------------------------
 
@@ -47,7 +48,7 @@ async function getRequestURL(callingExpression: string): Promise<URL> {
 /** -------------------------------------------------------------------
  * * ***This function lets you read the current URL's pathname.***
  * -------------------------------------------------------------------
- * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * @example
  * ```ts
@@ -70,9 +71,9 @@ export async function getPathname(): Promise<string> {
 /** -------------------------------------------------------------------
  * * ***This function lets you *read* the current URL's search parameters.***
  * -------------------------------------------------------------------
- * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
- * Learn more about [`URLSearchParams` on MDN](https://developer.mozilla.org/docs/Web/API/URLSearchParams)
+ * **Learn more about [`URLSearchParams` on MDN](https://developer.mozilla.org/docs/Web/API/URLSearchParams).**
  *
  * @example
  * ```ts

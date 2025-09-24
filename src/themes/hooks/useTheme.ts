@@ -4,6 +4,8 @@ import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 
 import type { UseTheme } from "../types";
+// eslint-disable-next-line no-unused-vars
+import type { ProvidersThemesApp } from "../providers/ProvidersThemesApp";
 
 /** ------------------------------------------------------------
  * * ***React hook for accessing the theme context.***
@@ -14,6 +16,7 @@ import type { UseTheme } from "../types";
  * ⚠️ ***Must be used inside `<ProvidersThemesApp>` or it will throw.***
  * @throws {Error} If the hook is called outside of the `<ProvidersThemesApp>` provider.
  * @returns {UseTheme} Object containing current theme data and setter.
+ * @see {@link ProvidersThemesApp | `ProvidersThemesApp`}.
  */
 export const useTheme = (): UseTheme => {
   const themeContext = useContext(ThemeContext);

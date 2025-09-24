@@ -2,9 +2,9 @@
 import type { AsyncLocalStorage } from "node:async_hooks";
 
 import { safeImport } from "@/extra/utils/dynamic-import";
-import { RZL_NEXT_EXTRA } from "./constants";
+import { RZL_NEXT_KIT_EXTRA } from "./constants";
 
-const { FLAG_MESSAGE } = RZL_NEXT_EXTRA.ERROR;
+const { FLAG_MESSAGE } = RZL_NEXT_KIT_EXTRA.ERROR;
 
 export function getExpectedRequestStore(callingExpression: string) {
   const workUnitStoreModule = safeImport<

@@ -1,9 +1,15 @@
 "use client";
 
 import { EffectCallback, memo, useCallback, useEffect, useRef } from "react";
-import { NProgress, isValidEasingValue } from "../utils/progress";
 import { usePathname, useSearchParams } from "next/navigation";
 
+import {
+  isBoolean,
+  isInteger,
+  isPlainObject,
+  isString,
+  isUndefined
+} from "@rzl-zone/utils-js/predicates";
 import { delay as delaying } from "@rzl-zone/utils-js/promises";
 import { disableUserInteraction, enableUserInteraction } from "@rzl-zone/utils-js/events";
 
@@ -13,15 +19,9 @@ import {
   SETTING_CONFIGS_TOP_LOADER
 } from "../constants";
 import { useCssTopLoader } from "../hooks/useCssTopLoader";
+import { NProgress, isValidEasingValue } from "../utils/progress";
 
 import type { RzlNextTopLoaderProps } from "../types/types";
-import {
-  isBoolean,
-  isInteger,
-  isPlainObject,
-  isString,
-  isUndefined
-} from "@rzl-zone/utils-js/predicates";
 
 const defaultProps = defaultPropsInitInitRzlNextTopLoader;
 const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultProps) => {
@@ -407,7 +407,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
                   } else {
                     preventProgress = true;
                     isButtonSubmitForm = false;
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    // eslint-disable-next-line no-unused-vars
                     isButtonChildSubmitForm = false;
                     break;
                   }

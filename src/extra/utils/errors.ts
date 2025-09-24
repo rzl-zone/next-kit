@@ -1,22 +1,33 @@
+import { isFunction } from "@rzl-zone/utils-js/predicates";
+
 export class ActionError extends Error {
+  public code: string;
   override name = "ActionError";
-  constructor(
-    public code: string,
-    message: string
-  ) {
+
+  constructor(code: string, message: string) {
     super(message);
-    Error.captureStackTrace(this, ActionError);
+    this.code = code;
+
+    // Preserve stack trace when available (Node.js & modern browsers).
+    if (isFunction(Error.captureStackTrace)) {
+      Error.captureStackTrace(this, ActionError);
+    } else {
+      // Fallback for very old environments.
+      this.stack = new Error(message).stack;
+    }
   }
 
-  toPlain(): ActionErrorPlain {
+  toJSON(): ActionErrorJson {
     return {
       code: this.code,
-      message: this.message
+      message: this.message,
+      stack: this.stack
     };
   }
 }
 
-export interface ActionErrorPlain {
+export interface ActionErrorJson {
   code: string;
   message: string;
+  stack: string | undefined;
 }

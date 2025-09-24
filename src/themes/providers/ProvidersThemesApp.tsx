@@ -13,7 +13,7 @@ import { isReactNode } from "@/_private/reactNode";
  * **Usage example in your `layout.tsx`:**
  *
  * ```tsx
- * import { ProvidersThemesApp } from "@/themes";
+ * import { ProvidersThemesApp } from "@rzl-zone/next-kit/themes";
  *
  * export default function RootLayout({ children }: { children: ReactNode }) {
  *   return (
@@ -25,14 +25,14 @@ import { isReactNode } from "@/_private/reactNode";
  *       </body>
  *     </html>
  *   );
- * }
+ * };
  * ```
+ * ---
+ * * *Any props you pass (e.g. `themes`, `defaultTheme`, etc) will override the default config.*
  *
- * *Any props you pass (e.g. `themes`, `defaultTheme`, etc) will override the default config.*
- *
- * Default `CONFIG_THEME`:
+ * Default `CONFIG THEME`:
  * ```ts
- * const CONFIG_THEME = {
+ * {
  *   attribute: "data-theme",
  *   storageKey: "rzl-theme",
  *   themes: ["dark", "light", "system"] as const,
@@ -57,9 +57,9 @@ import { isReactNode } from "@/_private/reactNode";
  *   }
  * }
  * ```
- * @param props - Props that extend / override the default `CONFIG_THEME`.
+ * @param props - Props that extend / override the default {@link CONFIG_THEME | `CONFIG THEME`}.
  * @throws Will throw an error if `children` is not provided.
- * @returns A `<ThemeProvider>` wrapping the passed children.
+ * @returns A `<ProvidersThemesApp>` wrapping the passed children.
  */
 export const ProvidersThemesApp = (props: ThemeProviderProps) => {
   assertIsPlainObject(props, {

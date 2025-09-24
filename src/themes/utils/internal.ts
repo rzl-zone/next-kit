@@ -6,18 +6,18 @@ import {
   isServer,
   isBoolean
 } from "@rzl-zone/utils-js/predicates";
-
 import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
 
-import { defaultColorSchemes, MEDIA_SCHEME_THEME } from "../configs/default";
 import type { Attribute, ThemeProviderProps } from "../types";
+import { defaultColorSchemes, MEDIA_SCHEME_THEME } from "../configs/default";
 
-export const saveToLS = (storageKey: string, value?: string) => {
+export const saveToLS = (storageKey: string, value?: string): void => {
+  if (isServer()) return undefined;
   // Save to storage
   if (isString(storageKey) && isNonEmptyString(value)) {
     try {
       localStorage.setItem(storageKey, value);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (e) {
       // Unsupported
     }
@@ -30,38 +30,39 @@ export const getTheme = (
   fallback?: string
 ): string | undefined => {
   if (isServer()) return undefined;
+
   let theme: string | undefined;
   try {
     const getTheme = localStorage.getItem(key);
     theme = getTheme && validTheme.includes(getTheme) ? getTheme : fallback;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line no-unused-vars
   } catch (e) {
     // Unsupported
   }
   return theme || fallback;
 };
 
-export const disableAnimation = (nonce?: string) => {
-  if (!isServer()) {
-    const css = document.createElement("style");
-    if (isNonEmptyString(nonce)) css.setAttribute("nonce", nonce);
-    css.appendChild(
-      document.createTextNode(
-        "*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}"
-      )
-    );
-    document.head.appendChild(css);
+export const disableAnimation = (nonce?: string): VoidFunction | undefined => {
+  if (isServer()) return undefined;
 
-    return () => {
-      // Force restyle
-      (() => window.getComputedStyle(document.body))();
+  const css = document.createElement("style");
+  if (isNonEmptyString(nonce)) css.setAttribute("nonce", nonce);
+  css.appendChild(
+    document.createTextNode(
+      "*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}"
+    )
+  );
+  document.head.appendChild(css);
 
-      // Wait for next tick before removing
-      setTimeout(() => {
-        document.head.removeChild(css);
-      }, 1);
-    };
-  }
+  return () => {
+    // Force restyle
+    (() => window.getComputedStyle(document.body))();
+
+    // Wait for next tick before removing
+    setTimeout(() => {
+      document.head.removeChild(css);
+    }, 1);
+  };
 };
 
 export const getSystemTheme = (ev?: MediaQueryList | MediaQueryListEvent) => {
@@ -78,7 +79,7 @@ export const updateMetaThemeColor = ({
   theme: string | undefined;
   /** Whether to indicate to browsers which color scheme in meta head, is used (dark or light) for built-in UI like inputs and buttons */
   enableMetaColorScheme: boolean | undefined;
-}) => {
+}): void => {
   if (
     !isServer() &&
     isString(theme) &&
@@ -114,7 +115,7 @@ export const updateMetaThemeColor = ({
   }
 };
 
-export const validatePropsAttribute = (val: Attribute | Attribute[]) => {
+export const validatePropsAttribute = (val: Attribute | Attribute[]): void => {
   if (!isString(val) || !isNonEmptyString(val)) {
     throw new TypeError(
       `Props \`storageKey\` for 'ProvidersThemesApp' must be of type \`string\` or \`undefined\` and value can't be empty-string as types from 'ThemeProviderProps', but received: \`${getPreciseType(val)}\`.`
@@ -137,25 +138,27 @@ export const handlingApplyTheme = ({
   name,
   resolved
 }: {
-  name: string;
+  name: string | undefined;
   resolved: string;
   defaultTheme: string;
   attributes: string[];
   attribute: NonUndefThemeProviderProps["attribute"];
   enableColorScheme: NonUndefThemeProviderProps["enableColorScheme"];
-}) => {
-  const docEl = document?.documentElement as HTMLElement | undefined;
-  const bodyEl = document?.body as HTMLElement | undefined;
+}): void => {
+  if (isServer()) return undefined;
+
+  const docEl = document.documentElement;
+  const bodyEl = document.body;
 
   const handleAttribute = (attr: Attribute) => {
     if (attr === "class") {
-      docEl?.classList.remove(...attributes);
-      if (name) docEl?.classList.add(name);
+      docEl.classList.remove(...attributes);
+      if (name) docEl.classList.add(name);
     } else if (attr.startsWith("data-")) {
       if (name) {
-        docEl?.setAttribute(attr, name);
+        docEl.setAttribute(attr, name);
       } else {
-        docEl?.removeAttribute(attr);
+        docEl.removeAttribute(attr);
       }
     }
   };
@@ -166,9 +169,9 @@ export const handlingApplyTheme = ({
     const fallback = defaultColorSchemes.includes(defaultTheme) ? defaultTheme : null;
     const colorScheme = defaultColorSchemes.includes(resolved) ? resolved : fallback;
     if (colorScheme) {
-      if (enableColorScheme === "body" && bodyEl) {
+      if (enableColorScheme === "body") {
         bodyEl.style.colorScheme = colorScheme;
-      } else if (docEl) {
+      } else {
         docEl.style.colorScheme = colorScheme;
       }
     }

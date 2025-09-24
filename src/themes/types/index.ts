@@ -5,7 +5,10 @@ import type {
   ScriptHTMLAttributes,
   SetStateAction
 } from "react";
-import { CONFIG_THEME } from "../configs";
+import type { CONFIG_THEME } from "../configs";
+
+// eslint-disable-next-line no-unused-vars
+import type { useTheme } from "..";
 
 /** * The default themes fetched from the main config. */
 type _DefaultThemes = typeof CONFIG_THEME.themes;
@@ -76,7 +79,7 @@ export interface ThemeOverrideConfig {}
  * - Optional override `themes?: ["pink", "blue"]` → `readonly ("pink" | "blue" | undefined)[]`
  * - No override → `["dark", "light", "system"]`
  */
-export type ThemesMode = ThemeOverrideConfig extends { themes: infer T }
+type ThemesMode = ThemeOverrideConfig extends { themes: infer T }
   ? T extends readonly (infer U)[]
     ? readonly U[]
     : _DefaultThemes
@@ -87,17 +90,16 @@ export type ThemesMode = ThemeOverrideConfig extends { themes: infer T }
     : _DefaultThemes;
 
 /** ------------------------------------------------------------
- * * ***Represents the valid individual theme mode, extracted from the `ThemesMode` array.***
+ * * ***Represents the valid individual theme mode, extracted from the {@link ThemesMode | `ThemesMode`} array.***
  * ------------------------------------------------------------
- *
- * This can be a string literal type like `"pink" | "blue"`, or `undefined` if `themes` is optional.
+ * **This can be a string literal type like `"pink" | "blue"`, or `undefined` if `themes` is optional.**
  */
 export type ThemeMode = ThemesMode extends readonly (infer T)[] ? T : undefined;
 
 /** ------------------------------------------------------------
  * * ***Props accepted by `<ProvidersThemesApp />`, used to configure how theming behaves on the page.***
  * ------------------------------------------------------------
- * You usually place this provider at the root of your application (e.g. in `app/layout.tsx`).
+ * **You usually place this provider at the root of your application (e.g. in `app/layout.tsx`).**
  */
 export type ThemeProviderProps = {
   /** ***Children React Node.***
@@ -215,11 +217,10 @@ export type ThemeProviderProps = {
 };
 
 /** ------------------------------------------------------------
- * * ***Value returned by {@link useTheme}.***
+ * * ***Value returned by {@link useTheme | `useTheme`}.***
  * ------------------------------------------------------------
- *
- * Contains the current theme information and helper utilities for manually
- * updating the active theme, including support for system-based themes.
+ * **Contains the current theme information and helper utilities for manually
+ * updating the active theme, including support for system-based themes.**
  */
 export type UseTheme = {
   /** ***List of all available theme names.*** */

@@ -1,30 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ResponseCookies } from "@edge-runtime/cookies";
 import type { SafeReturn } from "p-safe";
 
-import { getExpectedRequestStore } from "@/extra/utils/async-storages";
-import { ActionError, type ActionErrorPlain } from "@/extra/utils/errors";
-import { isIP } from "@/extra/utils/ip";
 import { headers } from "next/headers";
-import { assertIsString } from "@rzl-zone/utils-js/assertions";
+import { ResponseCookies, RequestCookies } from "@edge-runtime/cookies";
 import {
   hasOwnProp,
   isNil,
   isPlainObject,
   isUndefined
 } from "@rzl-zone/utils-js/predicates";
+import { assertIsString } from "@rzl-zone/utils-js/assertions";
+
+import { isIP } from "@/extra/utils/ip";
+import { getExpectedRequestStore } from "@/extra/utils/async-storages";
+import { ActionError, type ActionErrorJson } from "@/extra/utils/errors";
 
 // -- Types ---------------------------
 
+// eslint-disable-next-line no-unused-vars
 type AnyFunc<This = void> = (this: This, ...args: readonly any[]) => unknown;
 
+// eslint-disable-next-line no-unused-vars
 type ActionFunc<T> = T extends (...args: infer Args) => infer Return
-  ? (this: any, ...args: Args) => Promise<SafeReturn<Awaited<Return>, ActionError>>
+  ? // eslint-disable-next-line no-unused-vars
+    (this: any, ...args: Args) => Promise<SafeReturn<Awaited<Return>, ActionError>>
   : never;
 
 interface ActionContext<Return> {
+  // eslint-disable-next-line no-unused-vars
   resolve: (result: Return) => never;
-  reject: (error: ActionErrorPlain | ActionError) => never;
+  // eslint-disable-next-line no-unused-vars
+  reject: (error: ActionErrorJson | ActionError) => never;
 }
 
 // -- Internal ------------------------
@@ -46,7 +52,7 @@ class ActionClass<Return extends AnyFunc<ActionContext<any>>> {
     throw { data: result };
   }
 
-  reject(reason: ActionErrorPlain | ActionError): never {
+  reject(reason: ActionErrorJson | ActionError): never {
     throw reason;
   }
 
@@ -56,43 +62,24 @@ class ActionClass<Return extends AnyFunc<ActionContext<any>>> {
       const fnToCall = this.#fn ?? this.fn;
       const result_ = await fnToCall?.apply(this, args);
       return !isUndefined(result_) ? { data: result_ } : { data: void 0 };
-    } catch (e) {
-      if (e && isPlainObject(e) && hasOwnProp(e, "data")) return e;
-      if (e instanceof ActionError) return { error: e.toPlain() };
-      if (e && isPlainObject(e) && hasOwnProp(e, "code") && hasOwnProp(e, "message")) {
-        return { error: { code: e.code, message: e.message } };
+    } catch (e: unknown) {
+      if (!!e && isPlainObject(e) && hasOwnProp(e, "data"))
+        return e as {
+          data: unknown;
+        };
+      if (e instanceof ActionError) return { error: e.toJSON() };
+      if (!!e && isPlainObject(e) && hasOwnProp(e, "code") && hasOwnProp(e, "message")) {
+        return {
+          error: {
+            code: e.code,
+            message: e.message,
+            stack: e["stack"]
+          }
+        };
       }
       throw e;
     }
   }
-
-  // ? was deprecated because private `#fn` can be un-supported for old es.
-  // #fn: AnyFunc<ActionContext<any>>;
-  // constructor(fn: AnyFunc<ActionContext<any>>) {
-  //   this.#fn = fn;
-  // }
-  // /** @internal */
-  // async run1(...arguments_: any[]) {
-  //   try {
-  //     // eslint-disable-next-line prefer-spread
-  //     const result_ = await this.#fn.apply(this, arguments_);
-  //     if (!isUndefined(result_)) {
-  //       return { data: result_ };
-  //     }
-  //     return { data: void 0 };
-  //   } catch (e) {
-  //     if (!!e && isPlainObject(e) && hasOwnProp(e, "data")) {
-  //       return e;
-  //     }
-  //     if (e instanceof ActionError) {
-  //       return { error: e.toPlain() };
-  //     }
-  //     if (!!e && isPlainObject(e) && hasOwnProp(e, "code") && hasOwnProp(e, "message")) {
-  //       return { error: { code: e.code, message: e.message } };
-  //     }
-  //     throw e;
-  //   }
-  // }
 }
 
 /** Parses the 'x-forwarded-for' header to extract the client's IP address.
@@ -101,11 +88,11 @@ class ActionClass<Return extends AnyFunc<ActionContext<any>>> {
  * This function extracts and returns the first valid IP address.
  *
  * @link https://github.com/pbojinov/request-ip/blob/e1d0f4b89edf26c77cf62b5ef662ba1a0bd1c9fd/src/index.js#L9
+ *
+ * @internal
  */
 function getClientIpFromXForwardedFor(value: null | undefined | string) {
-  if (isNil(value)) {
-    return null;
-  }
+  if (isNil(value)) return null;
 
   assertIsString(value);
 
@@ -142,20 +129,19 @@ function getClientIpFromXForwardedFor(value: null | undefined | string) {
 }
 
 // -- Exported ------------------------
-type Action<Return extends AnyFunc<ActionContext<any>>> = InstanceType<
+
+export type Action<Return extends AnyFunc<ActionContext<any>>> = InstanceType<
   typeof ActionClass<Return>
 >;
-// const b:Action = new ActionClass().;
-export type { Action };
 
 /** -------------------------------------------------------------------
  * * ***A helper to simplify creating Next.js Server Actions.***
  * -------------------------------------------------------------------
- * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * @example
+ * * ***`actions.ts:`***
  * ```tsx
- * // -- actions.ts
  * 'use server';
  *
  * import { actionError, createAction } from '@/lib/next-extra';
@@ -166,8 +152,10 @@ export type { Action };
  *    }
  *    return `Hello, ${name}!`;
  * });
- *
- * // -- page.tsx (server-component)
+ * ```
+ * ---
+ * * ***`page.tsx (server-component):`***
+ * ```tsx
  * import { hello } from './actions';
  *
  * export default async function Page() {
@@ -194,7 +182,7 @@ export function createAction<T extends AnyFunc<ActionContext<any>>>(
 /** -------------------------------------------------------------------
  * * ***This function is for throw error from `createAction`.***
  * -------------------------------------------------------------------
- * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * @example
  * * ***`actions.ts:`***
@@ -233,13 +221,12 @@ export function actionError(code: string, message: string): never {
 /** -------------------------------------------------------------------
  * * ***Handles HTTP cookies for server-side components and actions.***
  * -------------------------------------------------------------------
- * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
- * This function serves two primary purposes:
- * 1. Reading cookies from an incoming HTTP request when used in a Server Component.
- * 2. Writing cookies to an outgoing HTTP response when used in a Server Component, Server Action, or Route Handler.
- *
- * This function leverages a shared request storage mechanism to access or modify the cookies.
+ * **This function leverages a shared request storage mechanism to access or modify the cookies.**
+ * - ***This function serves two primary purposes:***
+ *    1. Reading cookies from an incoming HTTP request when used in a Server Component.
+ *    2. Writing cookies to an outgoing HTTP response when used in a Server Component, Server Action, or Route Handler.
  *
  * @returns An object representing the mutable cookies for the current HTTP request context.
  *
@@ -275,7 +262,7 @@ export function cookies(): ResponseCookies {
 /** -------------------------------------------------------------------
  * * ***Retrieves the client's IP address from request headers.***
  * -------------------------------------------------------------------
- * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * ***The function checks various headers commonly used by different cloud providers and proxies to find the client's IP address.***
  * ***It prioritizes the 'x-forwarded-for' header, which may contain multiple IP addresses, and extracts the first one.***
@@ -344,4 +331,4 @@ export async function clientIP(): Promise<string | null> {
 
 // -- Third ---------------------------
 
-export { ResponseCookies, RequestCookies } from "@edge-runtime/cookies";
+export { ResponseCookies, RequestCookies };

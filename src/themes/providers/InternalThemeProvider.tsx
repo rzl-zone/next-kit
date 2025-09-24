@@ -1,5 +1,15 @@
 "use client";
 
+import React, {
+  memo,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import { useServerInsertedHTML } from "next/navigation";
 import {
   getPreciseType,
@@ -11,9 +21,11 @@ import {
   isString,
   isUndefined
 } from "@rzl-zone/utils-js/predicates";
+import { assertIsBoolean } from "@rzl-zone/utils-js/assertions";
+import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
 
+import type { ThemeMode, ThemeProviderProps, UseTheme } from "../types";
 import { isProdEnv } from "@/_private/nodeEnv";
-import { ThemeContext } from "../contexts/ThemeContext";
 
 import {
   disableAnimation,
@@ -24,25 +36,12 @@ import {
   updateMetaThemeColor,
   validatePropsAttribute
 } from "../utils/internal";
-import LocalStorageRefresherTheme from "../internals/ls-refresher";
-import { cleaningScriptFuncToString } from "../internals/helper";
-
-import { defaultThemes, MEDIA_SCHEME_THEME } from "../configs/default";
 import { scriptThemesApp } from "../internals/script-themes-app";
+import { cleaningScriptFuncToString } from "../internals/helper";
+import LocalStorageRefresherTheme from "../internals/ls-refresher";
 
-import type { ThemeMode, ThemeProviderProps, UseTheme } from "../types";
-import { assertIsBoolean } from "@rzl-zone/utils-js/assertions";
-import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
-import React, {
-  memo,
-  SetStateAction,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
+import { defaultThemes, MEDIA_SCHEME_THEME } from "../configs/default";
 
 const InternalThemeProvider = (props: ThemeProviderProps) => {
   const context = useContext(ThemeContext);
@@ -51,7 +50,7 @@ const InternalThemeProvider = (props: ThemeProviderProps) => {
   if (context) return props.children;
   return <ThemeInternal {...props} />;
 };
-InternalThemeProvider.displayName = isProdEnv ? undefined : "ThemeProvider";
+if (!isProdEnv) InternalThemeProvider.displayName = "InternalThemeProvider";
 
 const ThemeInternal = (props: ThemeProviderProps) => {
   const {

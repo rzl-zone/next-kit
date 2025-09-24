@@ -3,7 +3,7 @@ import type { ThemeProviderProps } from "../types";
 export const CONFIG_THEME = {
   attribute: "data-theme",
   storageKey: "rzl-theme",
-  themes: ["dark", "light", "system"] as const,
+  themes: ["dark", "light", "system"],
   enableSystem: true,
   forcedTheme: undefined,
   defaultTheme: undefined,

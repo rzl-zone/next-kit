@@ -1,9 +1,10 @@
-import { isProdEnv } from "@/_private/nodeEnv";
 import React, { ComponentType, FC, Suspense, SuspenseProps } from "react";
+import { isProdEnv } from "@/_private/nodeEnv";
 
 /** ------------------------------------------
- * * ***Higher-Order Component (HOC) to wrap a component with React Suspense.***
+ * * ***Higher-Order Component (HOC): `WithSuspense`.***
  * ------------------------------------------
+ * **Wrapping a component with React Suspense.**
  *
  * @template P - Props type of the wrapped component.
  * @param Component - The component to wrap.
@@ -22,9 +23,11 @@ export default function WithSuspense<P extends object>(
     );
   };
 
-  // Set display name for better debugging
-  const componentName = Component.displayName || Component.name || "Anonymous";
-  WrappedComponent.displayName = isProdEnv ? undefined : `WithSuspense(${componentName})`;
+  // Set display name for better debugging at non prod env
+  if (!isProdEnv) {
+    const componentName = Component.displayName || Component.name || "Anonymous";
+    WrappedComponent.displayName = `WithSuspense(${componentName})`;
+  }
 
   return WrappedComponent;
 }

@@ -2,8 +2,7 @@ export type {
   UseTheme,
   ThemeProviderProps,
   ThemeMode,
-  ThemeOverrideConfig,
-  ThemesMode
+  ThemeOverrideConfig
 } from "./types";
 
 export { useTheme } from "./hooks/useTheme";

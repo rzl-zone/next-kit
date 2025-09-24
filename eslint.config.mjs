@@ -31,9 +31,9 @@ export default tsEslint.config(
       ],
       "prefer-const": "warn",
       "no-unreachable": "warn",
-      "no-unused-vars": "off",
+      "no-unused-vars": "warn",
       "@typescript-eslint/semi": "off",
-      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-empty-object-type": "warn",
       "@typescript-eslint/no-unused-expressions": ["off"]

@@ -26,7 +26,7 @@ describe("Action", () => {
     it("should use reject and resolve", async () => {
       const action = createAction(function (name: string) {
         if (name === "foo") {
-          this.reject({ code: "foo", message: "foo" });
+          this.reject({ code: "foo", message: "foo", stack: undefined });
         }
         if (name === "poo") {
           throw new Error("NOt tHe PoO!");

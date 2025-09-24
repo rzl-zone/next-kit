@@ -1,38 +1,46 @@
 "use client";
 
 import React, { createContext, ReactNode, useContext, useMemo } from "react";
-import deepmerge from "deepmerge";
-import { RZL_NEXT_EXTRA } from "./utils/constants";
 
-const { PROPS_MESSAGE } = RZL_NEXT_EXTRA.ERROR;
+import deepmerge from "deepmerge";
+import { assertIsPlainObject } from "@rzl-zone/utils-js/assertions";
+import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
+import { getPreciseType, isServer, isString } from "@rzl-zone/utils-js/predicates";
+
+import { isProdEnv } from "@/_private/nodeEnv";
+import { isReactNode } from "@/_private/reactNode";
+import { RZL_NEXT_KIT_EXTRA } from "./utils/constants";
+
+const { PROPS_MESSAGE } = RZL_NEXT_KIT_EXTRA.ERROR;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface PageContextProps<T = any> {
   /** Defaults to `merge`. */
   strategy?: PageContextStrategy;
   data?: T;
-  children?: ReactNode;
+  children: ReactNode;
 }
 
-export type Context = { [key: string]: unknown };
+export interface Context {
+  [key: string]: unknown;
+}
 
 export type PageContextStrategy = "deepmerge" | "merge";
 
 declare global {
+  // eslint-disable-next-line no-unused-vars
   interface Window {
     __next_c?: [PageContextStrategy, { data: Context }][];
   }
 }
 
 const PageContext = createContext<Context | undefined>(undefined);
-if (process.env["NODE_ENV"] !== "production") {
-  PageContext.displayName = "PageContext";
-}
+if (!isProdEnv) PageContext.displayName = "PageContext";
 
 /** -------------------------------------------------------------------
  * * ***A component that provides context data to its children (can be use in server component).***
  * -------------------------------------------------------------------
- * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * @param props - The properties for the PageContextProvider component.
  * @returns A JSX element that provides the context to its children.
@@ -52,22 +60,34 @@ if (process.env["NODE_ENV"] !== "production") {
  * ```
  */
 function PageContextProvider<T extends Context = Context>(props: PageContextProps<T>) {
-  const { data, children, strategy } = props;
-  if (!data || typeof data !== "object" || data == null || Array.isArray(data)) {
-    throw new Error(
+  assertIsPlainObject(props, {
+    message({ currentType, validType }) {
+      return PROPS_MESSAGE(
+        `Props 'PageContextProvider' must be of type \`${currentType}\`, but received: \`${validType}\`.`
+      );
+    }
+  });
+
+  const { data, children, strategy = "merge" } = props;
+
+  if (!isString(strategy) || !["merge", "deepmerge"].includes(strategy)) {
+    throw new TypeError(
       PROPS_MESSAGE(
-        `Invalid 'data' parameter: expected a plain object, but received type '${typeof data}'.`
+        `Parameter \`strategy\` property of the \`props\` 'PageContextProvider' must be one of "merge" or "deepmerge", but received: \`${getPreciseType(
+          strategy
+        )}\`, with value: \`${safeStableStringify(strategy)}\`.`
       )
     );
   }
-  if (typeof strategy !== "string" || !["merge", "deepmerge"].includes(strategy)) {
-    throw new Error(
+
+  if (!isReactNode(children))
+    throw new TypeError(
       PROPS_MESSAGE(
-        `Invalid 'strategy' parameter: expected 'merge' or 'deepmerge', but got '${strategy}'. \nNote: value is case- and space-sensitive.`
+        "Parameter `children` property of the `props` 'PageContextProvider' is required as ReactNode type !"
       )
     );
-  }
-  const serializedData = JSON.stringify([strategy, { data }]);
+
+  const serializedData = safeStableStringify([strategy, { data }]);
 
   return (
     <PageContext.Provider value={data}>
@@ -84,20 +104,10 @@ function PageContextProvider<T extends Context = Context>(props: PageContextProp
 /** Alias for `PageContextProvider`. */
 export { PageContextProvider as PageContext };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface UsePageContextOptions {
-  /** -----------------------------------------------
-   * * ***Determines the hook should use the shared context from the adjacent server layout within the `PageContextProvider ` component or uses the client-side browser window.***
-   * -----------------------------------------------
-   * When you set this to false, the hook will use the context from the client-side browser window.
-   */
-  isolate?: boolean;
-}
-
 /** -------------------------------------------------------------------
  * * ***This hook uses the shared context from the adjacent server layout within the `PageContextProvider ` component.***
  * -------------------------------------------------------------------
- * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * @example
  * ```typescript jsx
@@ -115,17 +125,17 @@ export function usePageContext<T extends Context = Context>(): Readonly<T> {
   const pageContext = useContext(PageContext);
 
   if (!pageContext) {
-    throw new Error("usePageContext must be wrapped by PageContext");
+    throw new Error(PROPS_MESSAGE("`usePageContext` must be wrapped by `PageContext` !"));
   }
 
-  return pageContext as T;
+  return pageContext as Readonly<T>;
 }
 
 /** -------------------------------------------------------------------
  * * ***This hook uses the shared context from the client-side browser window. the context is only***
  * ***available on *client-side* after hydration.***
  * -------------------------------------------------------------------
- * * ***`⚠️ Warning: Currently is not support with turbopack flag at dev mode !!!`***
+ * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * @example
  * ```typescript jsx
@@ -143,9 +153,7 @@ export function useServerInsertedContext<T extends Context = Context>(): Readonl
   T | undefined
 > {
   return useMemo<T | undefined>(() => {
-    if (typeof window === "undefined" || typeof document === "undefined") {
-      return undefined;
-    }
+    if (isServer()) return undefined;
 
     let context = {};
 
@@ -157,6 +165,6 @@ export function useServerInsertedContext<T extends Context = Context>(): Readonl
       }
     }
 
-    return context as T;
+    return context as Readonly<T>;
   }, []);
 }

@@ -1,17 +1,12 @@
+"use client";
+
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 
 import { isProdEnv } from "@/_private/nodeEnv";
 import { ThemeMode } from "../types";
 import { usePathname } from "next/navigation";
 
-const LocalStorageRefresherTheme = ({
-  theme,
-  themes,
-  setTheme,
-  defaultTheme,
-  enableSystem = true,
-  storageKey = "rzl-theme"
-}: {
+type LocalStorageRefresherThemeProps = {
   /** Key used to store theme setting in localStorage, DefaultValue: `"rzl-theme"`. */
   storageKey: string | undefined;
   /**
@@ -29,7 +24,16 @@ const LocalStorageRefresherTheme = ({
   setTheme: Dispatch<SetStateAction<(string & {}) | ThemeMode>>;
   /** Active theme name */
   theme: string | undefined;
-}) => {
+};
+
+const LocalStorageRefresherTheme = ({
+  theme,
+  themes,
+  setTheme,
+  defaultTheme,
+  enableSystem = true,
+  storageKey = "rzl-theme"
+}: LocalStorageRefresherThemeProps) => {
   const pathname = usePathname();
 
   const StorageRefresher = useCallback(() => {
@@ -70,8 +74,6 @@ const LocalStorageRefresherTheme = ({
   return null;
 };
 
-LocalStorageRefresherTheme.displayName = isProdEnv
-  ? undefined
-  : "LocalStorageRefresherTheme";
+if (!isProdEnv) LocalStorageRefresherTheme.displayName = "LocalStorageRefresherTheme";
 
 export default LocalStorageRefresherTheme;
