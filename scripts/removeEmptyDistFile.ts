@@ -3,6 +3,7 @@ import { Project, SyntaxKind, Node } from "ts-morph";
 import fg from "fast-glob";
 import { unlinkSync, existsSync } from "node:fs";
 import { resolve, dirname, relative } from "node:path";
+import { isUndefined } from "@rzl-zone/utils-js/predicates";
 
 // ! STILL BUG, PLS DON'T USE THIS SCRIPT !!!
 
@@ -10,7 +11,7 @@ const project = new Project({ skipAddingFilesFromTsConfig: true });
 
 // --- helper: normalize import path ke absolute ---
 function resolveImportPath(fromFile: string, moduleValue: string) {
-  if (!moduleValue.startsWith(".")) return null; // skip node_modules
+  if (!moduleValue?.startsWith(".")) return null; // skip node_modules
   const base = resolve(dirname(fromFile), moduleValue);
   const exts = ["", ".ts", ".js", ".cjs", ".mjs", ".esm", ".d.ts"];
   for (const ext of exts) {
@@ -67,8 +68,8 @@ async function run() {
     let modified = false;
 
     // helper to check if module is directing to empty file
-    const isEmptyModuleImported = (mod: string) => {
-      const abs = resolveImportPath(filePath, mod);
+    const isEmptyModuleImported = (mod: string | undefined) => {
+      const abs = mod ? resolveImportPath(filePath, mod) : false;
       return abs ? emptyFiles.includes(abs) : false;
     };
 
@@ -86,7 +87,7 @@ async function run() {
       const expr = call.getExpression();
       const arg = call.getArguments()[0]?.getText().replace(/['"]/g, "");
 
-      if (!arg) continue;
+      if (!arg || isUndefined(arg)) continue;
 
       // require('...')
       if (expr.getText() === "require" && isEmptyModuleImported(arg)) {

@@ -33,7 +33,9 @@ const nonExternalDefault: ExtendedOptions["noExternal"] = [
 ];
 
 interface ExtendedOptions extends Options {
+  /** @default true */
   preserveUseClient?: boolean; // toggle
+  /** @default undefined */
   clientFilesPattern?: string | string[]; // folder/build pattern
 }
 
@@ -139,10 +141,13 @@ const configOptions = (options: ExtendedOptions): Options => {
     external: externalDefault,
     noExternal: nonExternalDefault,
     esbuildOptions(opts) {
+      opts.treeShaking = true;
       opts.minify = false;
       opts.keepNames = false;
       opts.legalComments = "none";
       opts.ignoreAnnotations = true;
+
+      return opts;
     },
     outDir,
     onSuccess,
