@@ -1,5 +1,28 @@
 import type { ColorCssNamed, PickStrict, Prettify } from "@rzl-zone/ts-types-plus";
-import type { NProgressEasing, NProgressOptions } from "../utils/progress";
+import type { RzlProgressEasing, RzlProgressOptions } from "../utils/rzlProgress";
+
+type RzlTopLoaderAttribute = {
+  // add new attribute for loader
+  /** * Force trigger loader bar on action.
+   *
+   * @deprecated Unused anymore.
+   * @description It will trigger if button type is submit and has valid form action.
+   * @default false
+   */
+  "data-submit-rzl-progress-bar"?: boolean;
+  /** * Prevent triggering loader bar on action.
+   * @default false
+   */
+  "data-prevent-rzl-progress-bar"?: boolean;
+};
+
+declare module "react" {
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-empty-object-type
+  interface ButtonHTMLAttributes<T> extends RzlTopLoaderAttribute {}
+
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-empty-object-type
+  interface AnchorHTMLAttributes<T> extends RzlTopLoaderAttribute {}
+}
 
 export type SpinnerPosition = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
@@ -8,43 +31,43 @@ export type ColorBase = {
   /** * ***Support only Valid Color CSS.*** */
   ValueBase?: ColorCssNamed;
 };
-export type ColorHex = {
-  type: "hex";
+export type ColorAdvance = {
+  type: "advance";
   /** * ***Support only HEX, RGB, RGBA, HSL, HSLA, HWB, LAB, LCH.*** */
-  ValueHex?: string;
+  ValueAdvance?: string;
 };
 
-export type NProgressType = Prettify<
+export type RzlProgressType = Prettify<
   {
     /** * ***Animation settings using easing (a CSS easing string).***
      *
      * - **⚠️ Warning:**
-     *    - The value must be of type {@link NProgressEasing}, otherwise will return default value.
+     *    - The value must be of type {@link RzlProgressEasing}, otherwise will return default value.
      * @default "ease"
      */
-    easing?: NProgressEasing;
-  } & NProgressOptions
+    easing?: RzlProgressEasing;
+  } & RzlProgressOptions
 >;
 
-export type RzlNextTopLoaderProps = {
+export type RzlNextProgressBarProps = {
   /** * ***CSS class name that will be applied to the loader container
    * **only while the loader is active (loading)**.***
    *
    * **Useful if you need to style or animate the element differently
    * during page transitions.**
    *
-   * By default, a simple ready-to-use style is provided in:
+   * *By default, a simple ready-to-use style is provided in:*
    * ```ts
-   * import "@rzl-zone/next-kit/top-loader/default.css";
+   * import "@rzl-zone/next-kit/progress-bar/default.css";
    * ```
-   * This import can be placed in your global stylesheet entry,
-   * for example:
+   * *This import can be placed in your global stylesheet entry,
+   * for example:*
    * 1. At layout.tsx:
    * ```ts
-   * import "@rzl-zone/next-kit/top-loader/default.css";
+   * import "@rzl-zone/next-kit/progress-bar/default.css";
    * ```
    * 2. At global stylesheet entry (eg: globals.css):
-   * **`@import "@rzl-zone/next-kit/top-loader/default.css";`**
+   * **`@import "@rzl-zone/next-kit/progress-bar/default.css";`**
    *
    * Which defines a class named **`on_processing`**.
    *
@@ -71,7 +94,7 @@ export type RzlNextTopLoaderProps = {
   /** * ***The position of the progress bar at the start of the page load.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be valid integer number, otherwise will return default value.
+   *    - The value must be valid number, otherwise will return default value.
    * @default 0
    */
   startPosition?: number;
@@ -141,10 +164,10 @@ export type RzlNextTopLoaderProps = {
   /** * ***The color of the Spinner. Support only HEX, RGB, RGBA, HSL, HSLA, HWB, LAB, LCH or Valid Color CSS, depends of your type props.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type {@link ColorBase} or {@link ColorHex}, otherwise will return default value.
+   *    - The value must be of type {@link ColorBase | *`ColorBase`*} or {@link ColorAdvance | *`ColorAdvance`*}, otherwise will return default value.
    * @default hex: "#29f"
    */
-  colorSpinner?: Extract<ColorBase | ColorHex, { type: "hex" | "base" }>;
+  colorSpinner?: Extract<ColorBase | ColorAdvance, { type: "advance" | "base" }>;
   /** * ***The size of the spinner.***
    *
    * - **⚠️ Warning:**
@@ -162,10 +185,10 @@ export type RzlNextTopLoaderProps = {
   /** * ***The ease function of the spinner.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type {@link NProgressEasing}, otherwise will return default value.
+   *    - The value must be of type {@link RzlProgressEasing | *`RzlProgressEasing`*}, otherwise will return default value.
    * @default "linear"
    */
-  spinnerEase?: NProgressEasing;
+  spinnerEase?: RzlProgressEasing;
   /** * ***Showing Progress Bar On First Initial/Refresh Page.***
    *
    * @deprecated Unused anymore.
@@ -179,12 +202,12 @@ export type RzlNextTopLoaderProps = {
      */
     delay?: number;
   };
-  /** * ***Options of `NProgress`.*** */
-  options?: NProgressType;
+  /** * ***Options of `RzlProgress`.*** */
+  options?: RzlProgressType;
 };
 
-type OptionsNProgress = Prettify<
-  NProgressType & Partial<PickStrict<RzlNextTopLoaderProps, "startPosition">>
+type OptionsRzlProgress = Prettify<
+  RzlProgressType & Partial<PickStrict<RzlNextProgressBarProps, "startPosition">>
 >;
 
 export type OptionsUseRouter = {
@@ -192,8 +215,8 @@ export type OptionsUseRouter = {
   disableProgressBar?: boolean;
   /** @default false */
   disablePreventAnyAction?: boolean;
-  /** * ***Options of `NProgress`*** */
-  options?: OptionsNProgress;
+  /** * ***Options of `RzlProgress`.*** */
+  options?: OptionsRzlProgress;
 };
 
 export interface NavigateOptionsUseRouter extends OptionsUseRouter {

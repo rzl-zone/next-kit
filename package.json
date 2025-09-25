@@ -8,81 +8,47 @@
   "homepage": "https://github.com/rzl-zone/next-kit",
   "engineStrict": true,
   "packageManager": "pnpm@10.13.1",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts"
     },
     "./extra": {
-      "import": {
-        "types": "./dist/extra/index.d.ts",
-        "default": "./dist/extra/index.js"
-      },
-      "require": {
-        "types": "./dist/extra/index.d.ts",
-        "default": "./dist/extra/index.cjs"
-      }
+      "types": "./dist/extra/index.d.ts",
+      "import": "./dist/extra/index.js",
+      "require": "./dist/extra/index.cjs"
     },
     "./extra/action": {
-      "import": {
-        "types": "./dist/extra/action.d.ts",
-        "default": "./dist/extra/action.js"
-      },
-      "require": {
-        "types": "./dist/extra/action.d.ts",
-        "default": "./dist/extra/action.cjs"
-      }
+      "types": "./dist/extra/action/index.d.ts",
+      "import": "./dist/extra/action/index.js",
+      "require": "./dist/extra/action/index.cjs"
     },
     "./extra/context": {
-      "import": {
-        "types": "./dist/extra/context.d.ts",
-        "default": "./dist/extra/context.js"
-      },
-      "require": {
-        "types": "./dist/extra/context.d.ts",
-        "default": "./dist/extra/context.cjs"
-      }
+      "types": "./dist/extra/context/index.d.ts",
+      "import": "./dist/extra/context/index.js",
+      "require": "./dist/extra/context/index.cjs"
     },
     "./extra/pathname": {
-      "import": {
-        "types": "./dist/extra/pathname.d.ts",
-        "default": "./dist/extra/pathname.js"
-      },
-      "require": {
-        "types": "./dist/extra/pathname.d.ts",
-        "default": "./dist/extra/pathname.cjs"
-      }
+      "types": "./dist/extra/pathname/index.d.ts",
+      "import": "./dist/extra/pathname/index.js",
+      "require": "./dist/extra/pathname/index.cjs"
     },
     "./hoc": {
-      "import": {
-        "types": "./dist/hoc/index.d.ts",
-        "default": "./dist/hoc/index.js"
-      },
-      "require": {
-        "types": "./dist/hoc/index.d.ts",
-        "default": "./dist/hoc/index.cjs"
-      }
+      "types": "./dist/hoc/index.d.ts",
+      "import": "./dist/hoc/index.js",
+      "require": "./dist/hoc/index.cjs"
     },
     "./themes": {
-      "import": {
-        "types": "./dist/themes/index.d.ts",
-        "default": "./dist/themes/index.js"
-      },
-      "require": {
-        "types": "./dist/themes/index.d.ts",
-        "default": "./dist/themes/index.cjs"
-      }
+      "types": "./dist/themes/index.d.ts",
+      "import": "./dist/themes/index.js",
+      "require": "./dist/themes/index.cjs"
     },
-    "./top-loader": {
-      "import": {
-        "types": "./dist/top-loader/index.d.ts",
-        "default": "./dist/top-loader/index.js"
-      },
-      "require": {
-        "types": "./dist/top-loader/index.d.ts",
-        "default": "./dist/top-loader/index.cjs"
-      }
+    "./progress-bar": {
+      "types": "./dist/progress-bar/index.d.ts",
+      "import": "./dist/progress-bar/index.js",
+      "require": "./dist/progress-bar/index.cjs"
     },
-    "./top-loader/default.css": "./dist/top-loader/default.css"
+    "./progress-bar/default.css": "./dist/progress-bar/default.css"
   },
   "typesVersions": {
     "*": {
@@ -107,8 +73,8 @@
       "themes": [
         "dist/themes/index.d.ts"
       ],
-      "top-loader": [
-        "dist/top-loader/index.d.ts"
+      "progress-bar": [
+        "dist/progress-bar/index.d.ts"
       ]
     }
   },
@@ -151,14 +117,17 @@
     "clean-dist": "del-cli \"dist/*\"",
     "clean-dist:types-cts": "del-cli \"dist/**/*.d.{cts,mts}\"",
     "clean-dist:js-comments": "tsx scripts/cleanDistJsComments.ts",
+    "copy:copy-files-dynamics": "tsx scripts/copyFileDynamic.ts",
     "delete:newline": "tsx scripts/removeFinalNewLine.ts",
     "delete-dist:index-runtime": "del-cli \"dist/index.{js,js.map,cjs,cjs.map,esm,esm.map}\" \"dist/index.d.{ts,cts,mts,esm}\"",
     "fix:dts-react-import": "tsx scripts/fixDtsReactImport.ts",
-    "minify:dist": "tsx scripts/minifyDist.ts",
+    "inject:banner": "tsx scripts/injectBanner",
+    "minify:dts-dist": "tsx scripts/minifyDtsDist.ts",
+    "normalize:new-lines": "tsx scripts/normalizeNewLineDistFiles",
     "build:types-dts": "dts-bundle-generator --config dts-config.cjs --silent --external-imports next",
     "generate:reference-index": "tsx scripts/generateReferenceIndex.ts",
-    "postbuild": "npm run fix:dts-react-import && npm run clean-dist:js-comments && npm run clean-dist:types-cts && npm run delete-dist:index-runtime && npm run generate:reference-index",
-    "build": "npm run clean-dist && tsup && npm run postbuild",
+    "postbuild": "",
+    "build": "npm run clean-dist && tsup && npm run copy:copy-files-dynamics && npm run fix:dts-react-import && npm run clean-dist:js-comments && npm run normalize:new-lines && npm run clean-dist:types-cts && npm run delete-dist:index-runtime && npm run generate:reference-index && npm run inject:banner",
     "format-prettier:write": "prettier --write .",
     "format-prettier:check": "prettier --check .",
     "lint": "eslint . --ext .ts,.js",
@@ -170,7 +139,6 @@
   },
   "dependencies": {
     "@edge-runtime/cookies": "^6.0.0",
-    "@rzl-zone/ts-types-plus": "^0.0.8",
     "deepmerge": "^4.3.1",
     "p-safe": "^1.0.0",
     "validate-color": "^2.2.4"
@@ -178,7 +146,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.16.0",
-    "@rzl-zone/utils-js": "^3.5.0",
+    "@rzl-zone/ts-types-plus": "^0.0.13",
+    "@rzl-zone/utils-js": "^3.5.3",
     "@types/chai": "^5.2.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^30.0.0",
@@ -188,6 +157,7 @@
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "chai": "^5.2.1",
+    "chalk": "^5.6.2",
     "del-cli": "^6.0.0",
     "dts-bundle-generator": "^9.5.1",
     "esbuild": "^0.25.10",

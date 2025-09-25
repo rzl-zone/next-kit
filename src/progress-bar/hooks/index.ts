@@ -1,13 +1,16 @@
 "use client";
 
-import { NProgress } from "../utils/progress";
+import React from "react";
 import { useRouter as useNextRouter } from "next/navigation";
 
 import { delay } from "@rzl-zone/utils-js/promises";
+import { isInteger, isPlainObject } from "@rzl-zone/utils-js/predicates";
+import { assertIsBoolean, assertIsString } from "@rzl-zone/utils-js/assertions";
 import { enableUserInteraction, disableUserInteraction } from "@rzl-zone/utils-js/events";
 
-import { defaultOptionsTopsLoader } from "../constants";
-import { useTopLoaderRouterWithEnhanced } from "./useTopLoaderRouterWithEnhanced";
+import { RzlProgress } from "../utils/rzlProgress";
+import { defaultOptionsProgressBar } from "../constants";
+import { useProgressBarRouterEnhanced } from "./useProgressBarRouterEnhanced";
 
 import type {
   OptionsUseRouter,
@@ -15,9 +18,6 @@ import type {
   NavigateOptionsUseRouter,
   NavigateFwdOptionsUseRouter
 } from "../types/types";
-import { isInteger, isPlainObject } from "@rzl-zone/utils-js/predicates";
-import { assertIsBoolean, assertIsString } from "@rzl-zone/utils-js/assertions";
-import { useCallback } from "react";
 
 /** ------------------------------------------------------------------
  * * ***Custom useRouter hook to work with NextTopLoader, Compatible with app router only***.
@@ -33,13 +33,13 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
 
   const router = useNextRouter();
 
-  const startProgress = useCallback(
+  const startProgress = React.useCallback(
     ({
       disableProgressBar = false,
       disablePreventAnyAction = false,
-      options = defaultOptionsTopsLoader
+      options = defaultOptionsProgressBar
     }: NavigateOptionsUseRouter = {}) => {
-      if (!isPlainObject(options)) options = defaultOptionsTopsLoader;
+      if (!isPlainObject(options)) options = defaultOptionsProgressBar;
 
       const { startPosition, ...restNpOptions } = options;
 
@@ -54,32 +54,32 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
         }
       });
 
-      if (!disableProgressBar && !NProgress.isStarted() && !NProgress.isRendered()) {
-        NProgress.configure(restNpOptions);
+      if (!disableProgressBar && !RzlProgress.isStarted() && !RzlProgress.isRendered()) {
+        RzlProgress.configure(restNpOptions);
 
         if (startPosition && startPosition > 0) {
-          NProgress.set(startPosition);
+          RzlProgress.set(startPosition);
         }
 
         if (!disablePreventAnyAction) {
           disableUserInteraction();
         }
 
-        NProgress.start();
+        RzlProgress.start();
       }
     },
     [router]
   );
 
-  const stopProgress = useCallback(() => {
+  const stopProgress = React.useCallback(() => {
     enableUserInteraction();
 
-    if (!NProgress.isStarted() || !NProgress.isRendered()) return;
+    if (!RzlProgress.isStarted() || !RzlProgress.isRendered()) return;
 
-    NProgress.done();
+    RzlProgress.done();
   }, []);
 
-  const replace = useCallback(
+  const replace = React.useCallback(
     (href: string, options?: NavigateOptionsUseRouter) => {
       assertIsString(href, {
         message: ({ currentType, validType }) => {
@@ -88,7 +88,7 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
       });
 
       if (!isPlainObject(options)) {
-        options = { scroll: true, options: defaultOptionsTopsLoader };
+        options = { scroll: true, options: defaultOptionsProgressBar };
       }
 
       startProgress(options);
@@ -98,7 +98,7 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
     [router]
   );
 
-  const push = useCallback(
+  const push = React.useCallback(
     (href: string, options?: NavigateOptionsUseRouter) => {
       assertIsString(href, {
         message: ({ currentType, validType }) => {
@@ -107,7 +107,7 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
       });
 
       if (!isPlainObject(options)) {
-        options = { scroll: true, options: defaultOptionsTopsLoader };
+        options = { scroll: true, options: defaultOptionsProgressBar };
       }
 
       startProgress(options);
@@ -117,10 +117,10 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
     [router]
   );
 
-  const back = useCallback(
+  const back = React.useCallback(
     (options?: OptionsUseRouter) => {
       if (!isPlainObject(options)) {
-        options = { options: defaultOptionsTopsLoader };
+        options = { options: defaultOptionsProgressBar };
       }
 
       startProgress(options);
@@ -130,10 +130,10 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
     [router]
   );
 
-  const refresh = useCallback(
+  const refresh = React.useCallback(
     (options?: OptionsUseRouter) => {
       if (!isPlainObject(options)) {
-        options = { options: defaultOptionsTopsLoader };
+        options = { options: defaultOptionsProgressBar };
       }
 
       startProgress(options);
@@ -143,10 +143,10 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
     [router]
   );
 
-  const forward = useCallback(
+  const forward = React.useCallback(
     async (options?: NavigateFwdOptionsUseRouter) => {
       if (!isPlainObject(options)) {
-        options = { options: defaultOptionsTopsLoader };
+        options = { options: defaultOptionsProgressBar };
       }
 
       let { delayStops = 100 } = options;
@@ -164,7 +164,7 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
   );
 
   if (withEnhanced) {
-    return useTopLoaderRouterWithEnhanced({
+    return useProgressBarRouterEnhanced({
       ...router,
       push,
       replace,

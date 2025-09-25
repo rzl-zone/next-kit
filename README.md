@@ -88,22 +88,22 @@
   // For Higher-Order Components.
   import { | } from "@rzl-zone/next-kit/hoc"; 
 
+  // For Progress Bar Loader. 
+  import { | } from "@rzl-zone/next-kit/progress-bar";
+
   // For Themes Mode (eg: dark, light, system).
   import { | } from "@rzl-zone/next-kit/themes"; 
-
-  // For Top Loader. 
-  import { | } from "@rzl-zone/next-kit/top-loader";
   ```
-  This import can be placed in your layout.tsx or global stylesheet entry, for example:
+  For Default CSS Progress Bar Loader, this import can be placed in your layout.tsx or global stylesheet entry, for example:
 
   1. At layout.tsx:
-  ```ts
-  import "@rzl-zone/next-kit/top-loader/default.css";
-  ```
+      ```ts
+      import "@rzl-zone/next-kit/progress-bar/default.css";
+      ```
   2. At global stylesheet entry (eg: globals.css):
-  ```css 
-  @import "@rzl-zone/next-kit/top-loader/default.css";
-  ```
+      ```css 
+      @import "@rzl-zone/next-kit/progress-bar/default.css";
+      ```
   #### Place your cursor inside { } or after "@rzl-zone/next-kit/{{ | }}" then press Ctrl+Space to see all available functions/types with full TSDoc hints.
    
   ---

@@ -1,6 +1,6 @@
-import type { NProgressType } from "../types/types";
+import type { RzlProgressType } from "../types/types";
 
-export const defaultOptionsTopsLoader: NProgressType = {
+export const defaultOptionsProgressBar = {
   easing: "ease",
   showSpinner: true,
   minimum: 0.08,
@@ -17,25 +17,24 @@ export const defaultOptionsTopsLoader: NProgressType = {
   spinnerSelector: '[role="spinner"]',
   parent: "body",
   direction: "ltr"
-} as const;
+} as const satisfies RzlProgressType;
 
+type ElementProgress = HTMLElement | HTMLAnchorElement;
 export const DATA_ATTRIBUTE = {
-  BUTTON_SUBMIT: "data-submit-nprogress",
-  CHILD_BUTTON_SUBMIT: "data-child-submit-nprogress",
-  PREVENT_NPROGRESS: "data-prevent-nprogress",
-  IS_PREVENT_NPROGRESS: (element?: HTMLElement | HTMLAnchorElement | null) => {
-    return element?.getAttribute(DATA_ATTRIBUTE.PREVENT_NPROGRESS) === "true";
+  BUTTON_SUBMIT: "data-submit-rzl-progress-bar",
+  CHILD_BUTTON_SUBMIT: "data-child-submit-rzl-progress-bar",
+  PREVENT_RZL_PROGRESS: "data-prevent-rzl-progress-bar",
+  IS_PREVENT_RZL_PROGRESS: (element?: ElementProgress | null) => {
+    return element?.getAttribute(DATA_ATTRIBUTE.PREVENT_RZL_PROGRESS) === "true";
   },
-  IS_BTN_SUBMIT_NPROGRESS: (element?: HTMLElement | HTMLAnchorElement | null) => {
+  IS_BTN_SUBMIT_RZL_PROGRESS: (element?: ElementProgress | null) => {
     return element?.getAttribute(DATA_ATTRIBUTE.BUTTON_SUBMIT) === "true";
   },
-  IS_CHILD_BTN_SUBMIT_NPROGRESS: (
-    element?: HTMLElement | Element | HTMLAnchorElement | null
-  ) => {
+  IS_CHILD_BTN_SUBMIT_RZL_PROGRESS: (element?: Element | ElementProgress | null) => {
     return element?.getAttribute(DATA_ATTRIBUTE.CHILD_BUTTON_SUBMIT) === "true";
   },
-  IS_VALID_BTN_SUBMIT_NPROGRESS: (
-    element?: HTMLElement | Element | HTMLButtonElement | null
+  IS_VALID_BTN_SUBMIT_RZL_PROGRESS: (
+    element?: Element | ElementProgress | null
   ): element is HTMLButtonElement => {
     if (!element) return false;
 
@@ -66,11 +65,11 @@ export const DATA_ATTRIBUTE = {
   }
 } as const;
 
-export const SETTING_CONFIGS_TOP_LOADER = {
+export const SETTING_CONFIGS_PROGRESS_BAR = {
   MAXIMUM_COUNT_LIMIT_INTERVAL: 200
-};
+} as const;
 
-export const defaultPropsInitInitRzlNextTopLoader = {
+export const defaultPropsInitInitRzlNextProgressBar = {
   // showProgressOnInitial = {
   //   delay: 100,
   //   enabled: true
@@ -87,5 +86,5 @@ export const defaultPropsInitInitRzlNextTopLoader = {
   delay: 0,
   stopDelay: 0,
   showForHashAnchor: true,
-  options: defaultOptionsTopsLoader
+  options: defaultOptionsProgressBar
 } as const;

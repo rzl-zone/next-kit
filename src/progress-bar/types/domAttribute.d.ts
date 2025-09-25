@@ -9,16 +9,15 @@ type RzlTopLoaderAttribute = {
    * @description It will trigger if button type is submit and has valid form action.
    * @default false
    */
-  // "data-submit-nprogress"?: boolean;
+  // "data-submit-rzl-progress-bar"?: boolean;
   /** * Prevent triggering loader bar on action.
    * @default false
    */
-  "data-prevent-nprogress"?: boolean;
+  "data-prevent-rzl-progress-bar"?: boolean;
 };
 
 declare module "react" {
   interface ButtonHTMLAttributes<T> extends RzlTopLoaderAttribute {}
 
-  interface AnchorHTMLAttributes<T>
-    extends Omit<RzlTopLoaderAttribute, "data-submit-nprogress"> {}
+  interface AnchorHTMLAttributes<T> extends RzlTopLoaderAttribute {}
 }

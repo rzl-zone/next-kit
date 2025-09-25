@@ -35,7 +35,7 @@ export function getAnchorProperty<
   K extends keyof T,
   P extends T[K]
 >(a: T, key: K): P extends SVGAnimatedString ? string : P {
-  if (typeof key === "string" && key === DATA_ATTRIBUTE.PREVENT_NPROGRESS) {
+  if (typeof key === "string" && key === DATA_ATTRIBUTE.PREVENT_RZL_PROGRESS) {
     const dataKey = key.substring(5) as keyof DOMStringMap;
     return a.dataset[dataKey] as P extends SVGAnimatedString ? string : P;
   }

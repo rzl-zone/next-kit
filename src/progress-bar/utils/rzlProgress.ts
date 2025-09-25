@@ -56,7 +56,7 @@ export function removeElement(element: HTMLElement | null): void {
   }
 }
 
-export const isValidEasingValue = (value: string): value is NProgressEasing => {
+export const isValidEasingValue = (value: string): value is RzlProgressEasing => {
   if (!isString(value)) return false;
   const presets = ["linear", "ease", "ease-in", "ease-out", "ease-in-out"];
   return presets.includes(value);
@@ -69,11 +69,16 @@ export function isValidParentValue(value: unknown): value is HTMLElement | strin
   return false;
 }
 
-export type NProgressDirection = "ltr" | "rtl";
-export type NProgressEasing = "linear" | "ease" | "ease-in" | "ease-out" | "ease-in-out";
+export type RzlProgressDirection = "ltr" | "rtl";
+export type RzlProgressEasing =
+  | "linear"
+  | "ease"
+  | "ease-in"
+  | "ease-out"
+  | "ease-in-out";
 
-export interface NProgressOptions {
-  /** * ***The initial position for the TopLoader in percentage, 0.08 is 8%.***
+export interface RzlProgressOptions {
+  /** * ***The initial position for the Progress Bar Loader in percentage, 0.08 is 8%.***
    *
    * - **⚠️ Warning:**
    *    - The value must be of type number, otherwise will return default value.
@@ -87,7 +92,7 @@ export interface NProgressOptions {
    * @default 1
    */
   maximum?: number;
-  /** * ***Defines a template for the TopLoader.***
+  /** * ***Defines a template for the Progress Bar Loader.***
    *
    * - **⚠️ Warning:**
    *    - The value must be of type string, otherwise will return default value.
@@ -100,18 +105,18 @@ export interface NProgressOptions {
   /** * ***Animation settings using easing (a CSS easing string).***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type {@link NProgressEasing}, otherwise will return default value.
+   *    - The value must be of type {@link RzlProgressEasing | *`RzlProgressEasing`*}, otherwise will return default value.
    * @default "linear"
    */
-  easing?: NProgressEasing;
-  /** * ***Animation speed in ms for the TopLoader.***
+  easing?: RzlProgressEasing;
+  /** * ***Animation speed in ms for the Progress Bar Loader.***
    *
    * - **⚠️ Warning:**
    *    - The value must be of type integer number, otherwise will return default value.
    * @default 200
    */
   speed?: number;
-  /** * ***Auto incrementing behavior for the TopLoader.***
+  /** * ***Auto incrementing behavior for the Progress Bar Loader.***
    *
    * - **⚠️ Warning:**
    *    - The value must be of type boolean, otherwise will return default value.
@@ -135,7 +140,7 @@ export interface NProgressOptions {
   /** * ***Specify this to change the parent container.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type {@link HTMLElement} or string, otherwise will return default value.
+   *    - The value must be of type {@link HTMLElement | *`HTMLElement`*} or string, otherwise will return default value.
    * @default "body"
    */
   parent?: HTMLElement | string;
@@ -162,14 +167,15 @@ export interface NProgressOptions {
   /** * ***The direction bar.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type {@link NProgressDirection}, otherwise will return default value.
+   *    - The value must be of type {@link RzlProgressDirection | *`RzlProgressDirection`*}, otherwise will return default value.
    * @default 'ltr'
    */
-  direction?: NProgressDirection;
+  direction?: RzlProgressDirection;
 }
 
-export class NProgress {
-  static settings: Required<NProgressOptions> = {
+export class RzlProgress {
+  /** * ***Default options settings.*** */
+  static settings: Required<RzlProgressOptions> = {
     minimum: 0.08,
     maximum: 1,
     template: `<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`,
@@ -186,12 +192,13 @@ export class NProgress {
   };
 
   static status: number | null = null;
-  // Queue for animation functions
+  /** * ***Queue for animation functions.*** */
   // eslint-disable-next-line no-unused-vars
   private static pending: Array<(next: VoidFunction) => void> = [];
   private static isPaused: boolean = false;
 
-  static configure(options: Partial<NProgressOptions>): typeof NProgress {
+  /** * ***Configure the `RzlProgress` behavior.*** */
+  static configure(options: Partial<RzlProgressOptions>): typeof RzlProgress {
     if (!isPlainObject(options)) options = this.settings;
 
     let {
@@ -258,16 +265,17 @@ export class NProgress {
       positionUsing,
       spinnerSelector
     });
+
     return this;
   }
 
-  // Check if NProgress has started
+  /** * ***Check if `RzlProgress` has started.*** */
   static isStarted(): boolean {
     return typeof this.status === "number";
   }
 
-  // Set the progress status
-  static set(n: number): typeof NProgress {
+  /** * ***Set the progress status.*** */
+  static set(n: number): typeof RzlProgress {
     if (!isNumber(n)) n = 0;
 
     if (this.isPaused) return this;
@@ -312,8 +320,8 @@ export class NProgress {
     return this;
   }
 
-  // Start the progress
-  static start(): typeof NProgress {
+  /** * ***Start the `RzlProgress`.*** */
+  static start(): typeof RzlProgress {
     if (!this.status) this.set(0);
     const work = () => {
       if (this.isPaused) return;
@@ -329,7 +337,7 @@ export class NProgress {
 
   /**
    * @param force Default `false`
-   * @returns Instance `NProgress` Class.
+   * @returns Instance `RzlProgress` Class.
    */
   static done(force?: boolean) {
     if (!isBoolean(force)) force = false;
@@ -337,8 +345,8 @@ export class NProgress {
     return this.inc(0.3 + 0.5 * Math.random()).set(1);
   }
 
-  // Increment the progress
-  static inc(amount?: number): typeof NProgress {
+  /** * ***Increment the `RzlProgress`.*** */
+  static inc(amount?: number): typeof RzlProgress {
     if (this.isPaused) return this;
     let n = this.status;
     if (!n) {
@@ -364,13 +372,13 @@ export class NProgress {
     }
   }
 
-  // Advance the progress
+  /** * ***Advance the `RzlProgress`.*** */
   static trickle() {
     if (this.isPaused) return this;
     return this.inc();
   }
 
-  // Handle jQuery promises (for compatibility)
+  /** * ***Handle jQuery promises (for compatibility).*** */
   static promise($promise?: { state?: AnyFunction; always?: AnyFunction }) {
     if (!$promise || (isFunction($promise.state) && $promise.state() === "resolved")) {
       return this;
@@ -401,19 +409,19 @@ export class NProgress {
     return this;
   }
 
-  // Render the NProgress component
+  /** * ***Render the `RzlProgress` component.*** */
   static render(fromStart = false): HTMLElement | undefined {
     if (isServer()) return;
 
     if (this.isRendered()) {
-      const nProgEl = document.getElementById("nprogress");
+      const nProgEl = document.getElementById("rzl-progress");
       if (nProgEl) return nProgEl;
     }
 
-    addClass(document.documentElement, "nprogress-busy");
+    addClass(document.documentElement, "rzl-progress-busy");
 
     const progress = document.createElement("div");
-    progress.id = "nprogress";
+    progress.id = "rzl-progress";
     progress.innerHTML = this.settings.template;
 
     const bar = progress.querySelector<HTMLElement>(this.settings.barSelector)!;
@@ -435,46 +443,61 @@ export class NProgress {
       spinner && removeElement(spinner);
     }
 
-    if (parent !== document.body) addClass(parent, "nprogress-custom-parent");
+    if (parent !== document.body) addClass(parent, "rzl-progress-custom-parent");
 
     parent.appendChild(progress);
 
     return progress;
   }
 
-  // Remove NProgress from the DOM
+  /** * ***Remove `RzlProgress` from the DOM.*** */
   static remove(): void {
     if (isServer()) return;
 
-    removeClass(document.documentElement, "nprogress-busy");
+    removeClass(document.documentElement, "rzl-progress-busy");
     const parent =
       typeof this.settings.parent === "string"
-        ? document.querySelector(this.settings.parent)
+        ? document.querySelector<HTMLElement>(this.settings.parent)
         : this.settings.parent;
-    removeClass(parent as HTMLElement, "nprogress-custom-parent");
-    const progress = document.getElementById("nprogress");
+
+    if (parent) removeClass(parent, "rzl-progress-custom-parent");
+    const progress = document.getElementById("rzl-progress");
     progress && removeElement(progress);
   }
 
-  // Pause the progress
+  /** * ***Pause the `RzlProgress`.*** */
   static pause() {
     this.isPaused = true;
     return this;
   }
 
-  // Resume the progress
+  /** * ***Resume the `RzlProgress`.*** */
   static resume() {
     this.isPaused = false;
     return this;
   }
 
-  // Check if NProgress is rendered in the DOM
+  /** * ***Check if `RzlProgress` is rendered in the DOM.*** */
   static isRendered(): boolean {
     if (isServer()) return false;
-    return !!document.getElementById("nprogress");
+    return !!document.getElementById("rzl-progress");
   }
 
-  // Determine the CSS positioning method to use
+  /** * ***Queue function for animations.*** */
+  // eslint-disable-next-line no-unused-vars
+  static queue(callback: (next: VoidFunction) => void): void {
+    if (isFunction(callback)) {
+      this.pending.push(callback);
+      if (this.pending.length === 1) this.next();
+    }
+  }
+
+  /** * ***Determine the `RzlProgress` direction passed.*** */
+  static getDirection() {
+    return this.settings.direction;
+  }
+
+  /** * ***Determine the CSS positioning `RzlProgress` method to use.*** */
   static getPositioningCSS(): "translate3d" | "translate" | "margin" {
     const bodyStyle = document.body.style;
     const vendorPrefix =
@@ -496,20 +519,13 @@ export class NProgress {
     }
   }
 
-  // Queue function for animations
-  // eslint-disable-next-line no-unused-vars
-  static queue(callback: (next: VoidFunction) => void): void {
-    if (isFunction(callback)) {
-      this.pending.push(callback);
-      if (this.pending.length === 1) this.next();
-    }
-  }
-
+  /** @internal */
   private static next(): void {
     const fn = this.pending.shift();
     if (fn) fn(this.next.bind(this));
   }
 
+  /** @internal */
   private static barPositionCSS(
     n: number,
     speed: number,

@@ -1,22 +1,26 @@
 "use client";
 
+import type { Prettify } from "@rzl-zone/ts-types-plus";
+
+import React from "react";
 import { validateHTMLColor } from "validate-color";
 
-import type { ColorBase, ColorHex, RzlNextTopLoaderProps } from "../types/types";
-import { NProgressEasing } from "../utils/progress";
-import * as React from "react";
+import { isValidEasingValue, RzlProgressEasing } from "../utils/rzlProgress";
+import type { ColorBase, ColorAdvance, RzlNextProgressBarProps } from "../types/types";
+import { isNonEmptyString } from "@rzl-zone/utils-js/predicates";
 
-type UseCssTopLoader = {
-  //
-  color: string;
-  height: string;
-  zIndex: number;
-  spinnerSize: string;
-  spinnerSpeed: number;
-  showAtBottom: boolean;
-  spinnerEase: NProgressEasing;
-  colorSpinner: ColorBase | ColorHex | undefined;
-} & Pick<RzlNextTopLoaderProps, "id" | "name" | "nonce" | "style">;
+type UseCssTopLoader = Prettify<
+  {
+    color: string;
+    height: string;
+    zIndex: number;
+    spinnerSize: string;
+    spinnerSpeed: number;
+    showAtBottom: boolean;
+    spinnerEase: RzlProgressEasing;
+    colorSpinner: ColorBase | ColorAdvance | undefined;
+  } & Pick<RzlNextProgressBarProps, "id" | "name" | "nonce" | "style">
+>;
 
 export const useCssTopLoader = ({
   id,
@@ -36,27 +40,31 @@ export const useCssTopLoader = ({
   const spinnerPositionStyle = showAtBottom ? "bottom: 15px;" : "top: 15px;";
 
   const validationEaseSpinner = React.useCallback(() => {
-    const validEase = ["linear", "ease", "ease-in", "ease-out", "ease-in-out"] as const;
-
-    if (spinnerEase && validEase.includes(spinnerEase)) return spinnerEase;
+    if (isValidEasingValue(spinnerEase)) return spinnerEase;
 
     return "linear";
   }, [spinnerEase]);
 
-  const validationOfColorSpinner = React.useCallback(() => {
-    const colorBase = (colorSpinner as ColorBase)?.ValueBase;
-    const colorHex = (colorSpinner as ColorHex)?.ValueHex;
+  const typeColorBase =
+    colorSpinner?.type === "base" && isNonEmptyString(colorSpinner.ValueBase)
+      ? colorSpinner.ValueBase
+      : undefined;
+  const typeColorHex =
+    colorSpinner?.type === "advance" && isNonEmptyString(colorSpinner.ValueAdvance)
+      ? colorSpinner.ValueAdvance
+      : undefined;
 
-    if (colorBase && colorHex) {
+  const validationOfColorSpinner = React.useCallback(() => {
+    if (typeColorBase && typeColorHex) {
       return "#29f";
     } else {
-      if (colorBase) return colorBase;
-      if (colorHex && validateHTMLColor(colorHex)) return colorHex;
+      if (typeColorBase) return typeColorBase;
+      if (typeColorHex && validateHTMLColor(typeColorHex)) return typeColorHex;
       return "#29f";
     }
   }, [
-    (colorSpinner as ColorBase)?.ValueBase, // Use individual properties
-    (colorSpinner as ColorHex)?.ValueHex // Use individual properties
+    typeColorBase, // Use individual properties
+    typeColorHex // Use individual properties
   ]);
 
   const styles = React.useMemo(() => {
@@ -64,7 +72,7 @@ export const useCssTopLoader = ({
       typeof style === "string" && style.trim().length
         ? style.replace(/\s\s+/g, "").trim()
         : `
-        #nprogress {
+        #rzl-progress {
           pointer-events: none;
           position: fixed;
           z-index: ${zIndex};
@@ -73,7 +81,7 @@ export const useCssTopLoader = ({
           width: 100%;height: ${height};
         }
 
-        #nprogress .bar {
+        #rzl-progress .bar {
           position: fixed;
           width: 100%;
           left: 0;
@@ -83,7 +91,7 @@ export const useCssTopLoader = ({
           background: ${color};
         }
         
-        #nprogress .peg {
+        #rzl-progress .peg {
           display: block;
           position: absolute;
           right: 0px;
@@ -97,7 +105,7 @@ export const useCssTopLoader = ({
                   transform: rotate(3deg) translate(0px, -4px);
         }
         
-        #nprogress .spinner {
+        #rzl-progress .spinner {
           display: block;
           position: fixed;
           z-index: ${zIndex};
@@ -105,7 +113,7 @@ export const useCssTopLoader = ({
           right:15px;
         }
 
-        #nprogress .spinner-icon {
+        #rzl-progress .spinner-icon {
           width: 18px;
           height: 18px;
           box-sizing: border-box;
@@ -113,25 +121,25 @@ export const useCssTopLoader = ({
           border-top-color: ${validationOfColorSpinner()};
           border-left-color: ${validationOfColorSpinner()};
           border-radius: 50%;
-          -webkit-animation: nprogress-spinner ${spinnerSpeed}ms ${validationEaseSpinner()} infinite;
-                  animation: nprogress-spinner ${spinnerSpeed}ms ${validationEaseSpinner()} infinite;
+          -webkit-animation: rzl-progress-spinner ${spinnerSpeed}ms ${validationEaseSpinner()} infinite;
+                  animation: rzl-progress-spinner ${spinnerSpeed}ms ${validationEaseSpinner()} infinite;
         }
 
-        .nprogress-custom-parent {
+        .rzl-progress-custom-parent {
           overflow: hidden;
           position: relative;
         }
 
-        .nprogress-custom-parent #nprogress .spinner,
-        .nprogress-custom-parent #nprogress .bar {
+        .rzl-progress-custom-parent #rzl-progress .spinner,
+        .rzl-progress-custom-parent #rzl-progress .bar {
           position: absolute;
         }
 
-        @-webkit-keyframes nprogress-spinner {
+        @-webkit-keyframes rzl-progress-spinner {
           0%   { -webkit-transform: rotate(0deg); }
           100% { -webkit-transform: rotate(360deg); }
         }
-        @keyframes nprogress-spinner {
+        @keyframes rzl-progress-spinner {
           0%   { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
@@ -157,22 +165,16 @@ export const useCssTopLoader = ({
     const styleElement = document.createElement("style");
 
     styleElement.setAttribute("type", "text/css");
-    styleElement.setAttribute("data-styles", "rzl-app-loader_bar");
+    styleElement.setAttribute("data-styles", "rzl-app-progress_bar");
 
     // Set the 'id' only if it's provided, otherwise it will be undefined
-    if (id) {
-      styleElement.id = id; // Only set if 'id' is provided
-    }
+    if (id) styleElement.id = id;
 
     // Conditionally set the 'name' attributes if they are defined
-    if (name) {
-      styleElement.setAttribute("name", name);
-    }
+    if (name) styleElement.setAttribute("name", name);
 
     // Conditionally set the 'nonce' attributes if they are defined
-    if (nonce) {
-      styleElement.setAttribute("nonce", nonce);
-    }
+    if (nonce) styleElement.setAttribute("nonce", nonce);
 
     // Set the CSS content inside the <style> element
     styleElement.innerHTML = styles;

@@ -1,11 +1,12 @@
 "use client";
 
-import { EffectCallback, memo, useCallback, useEffect, useRef } from "react";
+import React, { type EffectCallback, useCallback, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import {
   isBoolean,
   isInteger,
+  isNumber,
   isPlainObject,
   isString,
   isUndefined
@@ -15,18 +16,25 @@ import { disableUserInteraction, enableUserInteraction } from "@rzl-zone/utils-j
 
 import {
   DATA_ATTRIBUTE,
-  defaultPropsInitInitRzlNextTopLoader,
-  SETTING_CONFIGS_TOP_LOADER
+  defaultPropsInitInitRzlNextProgressBar,
+  SETTING_CONFIGS_PROGRESS_BAR
 } from "../constants";
 import { useCssTopLoader } from "../hooks/useCssTopLoader";
-import { NProgress, isValidEasingValue } from "../utils/progress";
+import { RzlProgress, isValidEasingValue } from "../utils/rzlProgress";
 
-import type { RzlNextTopLoaderProps } from "../types/types";
+import type { RzlNextProgressBarProps } from "../types/types";
 
-const defaultProps = defaultPropsInitInitRzlNextTopLoader;
-const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultProps) => {
+const defaultProps = defaultPropsInitInitRzlNextProgressBar;
+const ComponentInitRzlNextProgressBar = (
+  props: RzlNextProgressBarProps = defaultProps
+) => {
   if (!isPlainObject(props)) props = {};
+
   let {
+    id,
+    name,
+    nonce,
+    style,
     colorSpinner,
     classNameIfLoading = defaultProps.classNameIfLoading,
     spinnerSpeed = defaultProps.spinnerSpeed,
@@ -43,8 +51,6 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
     options = defaultProps.options
   } = props;
 
-  let { id, name, nonce, style } = props;
-
   if (!isUndefined(id) && !isString(id)) id = undefined;
   if (!isUndefined(name) && !isString(name)) name = undefined;
   if (!isUndefined(nonce) && !isString(nonce)) nonce = undefined;
@@ -56,13 +62,13 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
   if (
     !isUndefined(colorSpinner) &&
     (!isPlainObject(colorSpinner) ||
-      (colorSpinner.type !== "base" && colorSpinner.type !== "hex") ||
+      (colorSpinner.type !== "base" && colorSpinner.type !== "advance") ||
       (colorSpinner.type === "base" &&
         !isUndefined(colorSpinner.ValueBase) &&
         !isString(colorSpinner.ValueBase)) ||
-      (colorSpinner.type === "hex" &&
-        !isUndefined(colorSpinner.ValueHex) &&
-        !isString(colorSpinner.ValueHex)))
+      (colorSpinner.type === "advance" &&
+        !isUndefined(colorSpinner.ValueAdvance) &&
+        !isString(colorSpinner.ValueAdvance)))
   ) {
     colorSpinner = undefined;
   }
@@ -74,7 +80,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
   if (!isString(height)) height = defaultProps.height;
   if (!isInteger(zIndex)) zIndex = defaultProps.zIndex;
   if (!isBoolean(showAtBottom)) showAtBottom = defaultProps.showAtBottom;
-  if (!isInteger(startPosition)) startPosition = defaultProps.startPosition;
+  if (!isNumber(startPosition)) startPosition = defaultProps.startPosition;
   if (!isInteger(delay)) delay = defaultProps.delay;
   if (!isInteger(stopDelay)) stopDelay = defaultProps.stopDelay;
   if (!isBoolean(showForHashAnchor)) showForHashAnchor = defaultProps.showForHashAnchor;
@@ -83,13 +89,13 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
   const {
     FORM,
     BUTTON_SUBMIT,
-    IS_BTN_SUBMIT_NPROGRESS,
     CHILD_BUTTON_SUBMIT,
-    IS_CHILD_BTN_SUBMIT_NPROGRESS,
-    IS_VALID_BTN_SUBMIT_NPROGRESS,
-    IS_PREVENT_NPROGRESS
+    IS_BTN_SUBMIT_RZL_PROGRESS,
+    IS_CHILD_BTN_SUBMIT_RZL_PROGRESS,
+    IS_PREVENT_RZL_PROGRESS,
+    IS_VALID_BTN_SUBMIT_RZL_PROGRESS
   } = DATA_ATTRIBUTE;
-  const { MAXIMUM_COUNT_LIMIT_INTERVAL } = SETTING_CONFIGS_TOP_LOADER;
+  const { MAXIMUM_COUNT_LIMIT_INTERVAL } = SETTING_CONFIGS_PROGRESS_BAR;
   const { IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION, IS_METHOD_POST_FORM } = FORM;
 
   let timer: NodeJS.Timeout | number = 0;
@@ -149,15 +155,15 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
   const startProgress = useCallback(
     async (withDelay = true) => {
       if (!isBoolean(withDelay)) withDelay = true;
-      if (NProgress.isStarted() || NProgress.isRendered()) return;
+      if (RzlProgress.isStarted() || RzlProgress.isRendered()) return;
 
-      NProgress.configure(options);
+      RzlProgress.configure(options);
 
       timer = setTimeout(
         async () => {
-          if (startPosition > 0) NProgress.set(startPosition);
+          if (startPosition > 0) RzlProgress.set(startPosition);
 
-          NProgress.start();
+          RzlProgress.start();
           disableUserInteraction(classNameIfLoading);
         },
         withDelay ? delay : 1
@@ -184,14 +190,14 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
         async () => {
           enableUserInteraction(classNameIfLoading);
 
-          if (!(NProgress.isStarted() || NProgress.isRendered())) return;
+          if (!(RzlProgress.isStarted() || RzlProgress.isRendered())) return;
 
-          NProgress.done(force);
+          RzlProgress.done(force);
         },
         withDelay ? stopDelay : 1
       );
 
-      NProgress.configure(options);
+      RzlProgress.configure(options);
     },
     [options]
   );
@@ -242,7 +248,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
       docs?.querySelectorAll("button")?.forEach((doc) => {
         if (
           doc.type === "submit" &&
-          IS_BTN_SUBMIT_NPROGRESS(doc) &&
+          IS_BTN_SUBMIT_RZL_PROGRESS(doc) &&
           (IS_METHOD_POST_FORM(doc.form) ||
             IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION(doc.form))
         )
@@ -266,7 +272,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
       if (searchCounting.current < MAXIMUM_COUNT_LIMIT_INTERVAL) {
         if (document.querySelectorAll(`[${BUTTON_SUBMIT}]`).length) {
           document.querySelectorAll(`[${BUTTON_SUBMIT}]`)?.forEach((button) => {
-            if (IS_VALID_BTN_SUBMIT_NPROGRESS(button)) {
+            if (IS_VALID_BTN_SUBMIT_RZL_PROGRESS(button)) {
               const isBtnSubmitFormValid =
                 button.form &&
                 (IS_METHOD_POST_FORM(button.form) ||
@@ -334,11 +340,10 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
       return false;
     }
 
-    // deno-lint-ignore no-var
     const nProgressClass: NodeListOf<HTMLHtmlElement> = document.querySelectorAll("html");
 
-    const removeNProgressClass = (): void =>
-      nProgressClass.forEach((el: Element) => el.classList.remove("nprogress-busy"));
+    const removeRzlProgressClass = (): void =>
+      nProgressClass.forEach((el: Element) => el.classList.remove("rzl-progress-busy"));
 
     /** * Find the closest anchor to trigger
      *
@@ -352,7 +357,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
       return element as HTMLAnchorElement;
     }
 
-    /** * ClickHandler To Trigger NProgress
+    /** * ClickHandler To Trigger RzlProgress
      *
      * @param event {MouseEvent}
      * @returns {void}
@@ -364,15 +369,15 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
         const newUrl = anchor?.href;
 
         let preventProgress =
-          IS_PREVENT_NPROGRESS(target) || IS_PREVENT_NPROGRESS(anchor);
+          IS_PREVENT_RZL_PROGRESS(target) || IS_PREVENT_RZL_PROGRESS(anchor);
 
-        let isButtonSubmitForm = IS_BTN_SUBMIT_NPROGRESS(target);
-        let isButtonChildSubmitForm = IS_CHILD_BTN_SUBMIT_NPROGRESS(target);
+        let isButtonSubmitForm = IS_BTN_SUBMIT_RZL_PROGRESS(target);
+        let isButtonChildSubmitForm = IS_CHILD_BTN_SUBMIT_RZL_PROGRESS(target);
 
         if (!preventProgress || !isButtonSubmitForm) {
           let element: HTMLButtonElement | HTMLElement | Element | null = target;
 
-          if (isButtonSubmitForm && IS_VALID_BTN_SUBMIT_NPROGRESS(element)) {
+          if (isButtonSubmitForm && IS_VALID_BTN_SUBMIT_RZL_PROGRESS(element)) {
             const isBtnSubmitForm =
               IS_METHOD_POST_FORM(element.form) ||
               IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION(element.form);
@@ -392,7 +397,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
           } else {
             if (element.hasAttribute(DATA_ATTRIBUTE.CHILD_BUTTON_SUBMIT)) {
               while (element && element.tagName.toLowerCase() !== "a") {
-                if (IS_BTN_SUBMIT_NPROGRESS(element.parentElement)) {
+                if (IS_BTN_SUBMIT_RZL_PROGRESS(element.parentElement)) {
                   if (
                     element.parentElement instanceof HTMLButtonElement &&
                     (IS_METHOD_POST_FORM(element.parentElement.form) ||
@@ -416,7 +421,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
               }
             } else {
               while (element && element.tagName.toLowerCase() !== "a") {
-                if (IS_PREVENT_NPROGRESS(element.parentElement)) {
+                if (IS_PREVENT_RZL_PROGRESS(element.parentElement)) {
                   preventProgress = true;
                   break;
                 }
@@ -476,7 +481,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
       } catch (err) {
         // Log the error in development only!
         if (process.env["NODE_ENV"] === "development") {
-          console.error("NextTopLoader error: ", err);
+          console.error("ComponentInitRzlNextProgressBar error: ", err);
         }
 
         await startProgress();
@@ -496,7 +501,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
       history.pushState = async (...args) => {
         await stopProgress();
 
-        removeNProgressClass();
+        removeRzlProgressClass();
 
         setAttrChildSubmitBtn(document);
         return pushState.apply(history, args);
@@ -513,7 +518,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
       history.replaceState = async (...args) => {
         await stopProgress();
 
-        removeNProgressClass();
+        removeRzlProgressClass();
 
         setAttrChildSubmitBtn(document);
         return replaceState.apply(history, args);
@@ -522,7 +527,7 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
 
     async function handlePageHide() {
       await stopProgress();
-      removeNProgressClass();
+      removeRzlProgressClass();
     }
 
     /** * Handle Browser Back and Forth Navigation  */
@@ -558,7 +563,8 @@ const ComponentInitRzlNextTopLoader = (props: RzlNextTopLoaderProps = defaultPro
  * ------------------------------------------------------------------
  * **If you forcing to use from this components, you need wrapping with Suspense.**
  *
- *  @deprecated `Import { NextTopLoader } from "@rzl-zone/next-kit/top-loader"` instead, because include `WithSuspense` in there.
+ * ⚠️ **Deprecated:**
+ *    - Use `import { RzlNextTopLoader } from "@rzl-zone/next-kit/progress-bar";` instead, because include `WithSuspense` in there.
  */
-const InitNextTopLoaderComponent = memo(ComponentInitRzlNextTopLoader);
-export default InitNextTopLoaderComponent;
+const InitNextProgressBarComponent = React.memo(ComponentInitRzlNextProgressBar);
+export default InitNextProgressBarComponent;

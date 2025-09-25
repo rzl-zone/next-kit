@@ -11,9 +11,6 @@ importers:
       '@edge-runtime/cookies':
         specifier: ^6.0.0
         version: 6.0.0
-      '@rzl-zone/ts-types-plus':
-        specifier: ^0.0.8
-        version: 0.0.8
       deepmerge:
         specifier: ^4.3.1
         version: 4.3.1
@@ -30,9 +27,12 @@ importers:
       '@eslint/js':
         specifier: ^9.16.0
         version: 9.36.0
+      '@rzl-zone/ts-types-plus':
+        specifier: ^0.0.13
+        version: 0.0.13
       '@rzl-zone/utils-js':
-        specifier: ^3.5.0
-        version: 3.5.0
+        specifier: ^3.5.3
+        version: 3.5.3
       '@types/chai':
         specifier: ^5.2.2
         version: 5.2.2
@@ -60,6 +60,9 @@ importers:
       chai:
         specifier: ^5.2.1
         version: 5.3.3
+      chalk:
+        specifier: ^5.6.2
+        version: 5.6.2
       del-cli:
         specifier: ^6.0.0
         version: 6.0.0
@@ -768,12 +771,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rzl-zone/ts-types-plus@0.0.8':
-    resolution: {integrity: sha512-K+rUK1RMSZKl5G0s04sUhplX+az8v23HpaD0fRPwSjgebmZ6eOE6wFOHRDaelaoHqiY+G75mXk6Bp94pgskDjg==}
+  '@rzl-zone/ts-types-plus@0.0.13':
+    resolution: {integrity: sha512-8Blxv1+4sTn3bSai+GIiUL+mH3otGm51v2yKlRHtrj1pefXb+FmDCJmZfXo5AkRVLWSOG+8yYM//vLcLVKJnoA==}
     engines: {node: '>=16'}
 
-  '@rzl-zone/utils-js@3.5.0':
-    resolution: {integrity: sha512-nMqZvSXgZZaHP+JAjJ/zu0PkV2tcDYkP9xkBN2edbzpw966SN0V56Uo8J8dV8nZNlz3BXqzfs4tZtU23uSwY2Q==}
+  '@rzl-zone/utils-js@3.5.3':
+    resolution: {integrity: sha512-VthizMhEQo8wI23jysupNnjzYPCQdf9zYFGf3S4azcL1od3jdLpGR2Zh4WxdygTdT2QOJu2BVAUwgMwZz6vAgw==}
     engines: {node: '>=16'}
     peerDependencies:
       tailwindcss: ^3.0.0 || ^4.0.0
@@ -1050,6 +1053,10 @@ packages:
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
+
+  chalk@5.6.2:
+    resolution: {integrity: sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA==}
+    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
   check-error@2.1.1:
     resolution: {integrity: sha512-OAlb+T7V4Op9OwdkjmguYRqncdlx5JiofwOAUkmTF+jNdHwzTaTs4sRAGpzLF3oOz5xAyDGrPgeIDFQmDOTiJw==}
@@ -2880,11 +2887,11 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.52.0':
     optional: true
 
-  '@rzl-zone/ts-types-plus@0.0.8': {}
+  '@rzl-zone/ts-types-plus@0.0.13': {}
 
-  '@rzl-zone/utils-js@3.5.0':
+  '@rzl-zone/utils-js@3.5.3':
     dependencies:
-      '@rzl-zone/ts-types-plus': 0.0.8
+      '@rzl-zone/ts-types-plus': 0.0.13
       clsx: 2.1.1
       date-fns: 4.1.0
       libphonenumber-js: 1.12.17
@@ -3172,6 +3179,8 @@ snapshots:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+
+  chalk@5.6.2: {}
 
   check-error@2.1.1: {}
 

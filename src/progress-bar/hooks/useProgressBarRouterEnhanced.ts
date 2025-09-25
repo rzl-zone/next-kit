@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 import { UseAppRouterInstance } from "../types/types";
 
-export const useTopLoaderRouterWithEnhanced = (router: UseAppRouterInstance) => {
+export const useProgressBarRouterEnhanced = (router: UseAppRouterInstance) => {
   const { back, forward, push, refresh, replace, ...restRouter } = router;
 
   const enhancedRouter = React.useMemo(() => {
