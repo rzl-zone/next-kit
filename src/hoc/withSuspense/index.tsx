@@ -24,10 +24,8 @@ export default function WithSuspense<P extends object>(
   };
 
   // Set display name for better debugging at non prod env
-  if (!isProdEnv) {
-    const componentName = Component.displayName || Component.name || "Anonymous";
-    WrappedComponent.displayName = `WithSuspense(${componentName})`;
-  }
+  const componentName = Component.displayName || Component.name || "Anonymous";
+  WrappedComponent.displayName = isProdEnv ? undefined : `WithSuspense(${componentName})`;
 
   return WrappedComponent;
 }

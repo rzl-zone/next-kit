@@ -50,7 +50,8 @@ const InternalThemeProvider = (props: ThemeProviderProps) => {
   if (context) return props.children;
   return <ThemeInternal {...props} />;
 };
-if (!isProdEnv) InternalThemeProvider.displayName = "InternalThemeProvider";
+
+InternalThemeProvider.displayName = isProdEnv ? undefined : "InternalThemeProvider";
 
 const ThemeInternal = (props: ThemeProviderProps) => {
   const {

@@ -74,6 +74,8 @@ const LocalStorageRefresherTheme = ({
   return null;
 };
 
-if (!isProdEnv) LocalStorageRefresherTheme.displayName = "LocalStorageRefresherTheme";
+LocalStorageRefresherTheme.displayName = isProdEnv
+  ? undefined
+  : "LocalStorageRefresherTheme";
 
 export default LocalStorageRefresherTheme;

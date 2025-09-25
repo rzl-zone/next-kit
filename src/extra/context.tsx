@@ -35,7 +35,7 @@ declare global {
 }
 
 const PageContext = createContext<Context | undefined>(undefined);
-if (!isProdEnv) PageContext.displayName = "PageContext";
+PageContext.displayName = isProdEnv ? undefined : "PageContext";
 
 /** -------------------------------------------------------------------
  * * ***A component that provides context data to its children (can be use in server component).***
