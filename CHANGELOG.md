@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.10...next-kit-v0.2.0) (2025-09-25)
+
+
+### Features
+
+* **refactor:** Refactor folder `progress-bar`, fix build scripts and tsconfig, and some logic. ([0b486be](https://github.com/rzl-zone/next-kit/commit/0b486be10d25e93625028ccfc36b15fc5a1a6bb8))
+
+
+### Bug Fixes
+
+* Fixing bug on component displayName at isProdEnv only. ([cb77d14](https://github.com/rzl-zone/next-kit/commit/cb77d142d2d723cd3ef64915a5324233a7a0c97a))
+* Fixing tsup config and tsconfig, also fix some bug at build script ([e0476cd](https://github.com/rzl-zone/next-kit/commit/e0476cd91c3e78292b7222589491da1e70af68de))
+
 ## [0.1.10](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.9...next-kit-v0.1.10) (2025-09-24)
 
 
