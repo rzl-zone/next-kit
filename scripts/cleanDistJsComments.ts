@@ -72,7 +72,7 @@ const cleanDistJsComments = async (
           .replace(/\/\/\s*eslint[^\n]*/g, "")
       );
 
-    const finalContent = cleanedLines.join("\n");
+    const finalContent = cleanedLines.join("\n").replace(/(\r?\n){3,}/g, "\r\n\r\n");
 
     if (finalContent !== content) {
       await fs.promises.writeFile(filePath, finalContent, "utf8");
