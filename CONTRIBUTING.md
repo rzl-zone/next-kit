@@ -1,7 +1,7 @@
-# 🙌 Contributing to @rzl-zone/next-kit
+# 🙌 Contributing to **`@rzl-zone/next-kit`**
 
 Hi there! 🎉  
-Thanks for considering to contribute to **@rzl-zone/next-kit** 🚀  
+Thanks for considering to contribute to **@rzl-zone/next-kit**. 🚀  
 This guide will help you set up everything you need to start hacking on the project.
 
 ---
@@ -10,14 +10,14 @@ This guide will help you set up everything you need to start hacking on the proj
 
 We welcome all contributions, including:
 
-- 🐛 Bug reports
-- ✨ Feature requests
-- 📝 Improving documentation
-- 🛠 Code improvements or new utility functions
+- 🐛 Bug reports.
+- ✨ Feature requests.
+- 📝 Improving documentation.
+- 🛠 Code improvements or new utility functions.
 
 ---
 
-## 🚀 Getting started
+## 🚀 Getting started.
 
 1.  **Fork the repository**
 
@@ -58,12 +58,12 @@ We welcome all contributions, including:
     ```bash
     git push origin feature/my-awesome-feature
     ```
-10. **Create a Pull Request **
+10. **Create a Pull Request**
     ###### Go to your repo on GitHub, and click Compare & pull request.
 
 ---
 
-## ✨ Code style
+## ✨ Code style.
 
 - Use TypeScript.
 - Follow existing folder & file structure.
@@ -72,15 +72,15 @@ We welcome all contributions, including:
 
 ---
 
-## ✅ Before you submit
+## ✅ Before you submit.
 
 - Make sure the project builds successfully.
 - Make sure there are no lint or TypeScript errors.
 
 ---
 
-## ❤️ Thank you
+## ❤️ Thank you.
 
 We appreciate your contribution.  
 Whether it's a tiny typo fix or a new utility function — you're awesome! ✨  
-Made with ❤️ **[@rzl-app](https://github.com/rzl-app).**
+*Made with ❤️ **[@rzl-app](https://github.com/rzl-app).***
