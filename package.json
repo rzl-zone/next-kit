@@ -160,7 +160,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@rzl-zone/utils-js": "^3.5.6",
+    "@rzl-zone/utils-js": "latest",
     "@types/chai": "^5.2.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^30.0.0",
