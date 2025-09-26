@@ -1,8 +1,8 @@
 import fs from "fs";
+import chalk from "chalk";
 import glob from "fast-glob";
 import { defineConfig, type Options } from "tsup";
 import { isBoolean, isString } from "@rzl-zone/utils-js/predicates";
-import chalk from "chalk";
 
 const externalDefault: ExtendedOptions["external"] = [
   "next",
@@ -115,7 +115,7 @@ export default defineConfig((options) => [
     outDir: "dist",
     entry: [
       // utils
-      "src/utils/*.ts",
+      "src/utils/index.ts",
       // extra
       "src/extra/*.ts",
       "src/extra/*.tsx",
