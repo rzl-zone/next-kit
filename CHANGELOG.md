@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.2.0...next-kit-v0.3.0) (2025-09-26)
+
+
+### Features
+
+* Add new utility function category. ([5ff3fc1](https://github.com/rzl-zone/next-kit/commit/5ff3fc15c358d388696347f7bacaab495e4280e4))
+
+
+### Bug Fixes
+
+* **chore:** Update deprecated devDeps packages, and uninstall unused packages. ([ebb924d](https://github.com/rzl-zone/next-kit/commit/ebb924dcea2c4aa688a446e6a62316facf7d9367))
+* **chore:** Update some .md files, and remove unused config file for build. ([ab98846](https://github.com/rzl-zone/next-kit/commit/ab98846c380d4fb851bb87e8b5d13638bc839cec))
+
 ## [0.2.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.1.10...next-kit-v0.2.0) (2025-09-25)
 
 
