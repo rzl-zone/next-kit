@@ -25,7 +25,6 @@ import { assertIsBoolean } from "@rzl-zone/utils-js/assertions";
 import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
 
 import type { ThemeMode, ThemeProviderProps, UseTheme } from "../types";
-import { isProdEnv } from "@/utils/nodeEnv";
 
 import {
   disableAnimation,
@@ -50,8 +49,6 @@ const InternalThemeProvider = (props: ThemeProviderProps) => {
   if (context) return props.children;
   return <ThemeInternal {...props} />;
 };
-
-InternalThemeProvider.displayName = isProdEnv() ? undefined : "InternalThemeProvider";
 
 const ThemeInternal = (props: ThemeProviderProps) => {
   const {

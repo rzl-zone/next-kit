@@ -2,7 +2,6 @@
 
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 
-import { isProdEnv } from "@/utils/nodeEnv";
 import { ThemeMode } from "../types";
 import { usePathname } from "next/navigation";
 
@@ -73,9 +72,5 @@ const LocalStorageRefresherTheme = ({
 
   return null;
 };
-
-LocalStorageRefresherTheme.displayName = isProdEnv()
-  ? undefined
-  : "LocalStorageRefresherTheme";
 
 export default LocalStorageRefresherTheme;
