@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.3.1...next-kit-v0.4.0) (2025-09-26)
+
+
+### Features
+
+* Add new extra types category for ts developer. ([415318a](https://github.com/rzl-zone/next-kit/commit/415318a0241d388f31cb2fc435b1e8f578a50f71))
+
+
+### Bug Fixes
+
+* remove unused displayName for react component internal at `themes` category. ([7ed27a8](https://github.com/rzl-zone/next-kit/commit/7ed27a82b45dedeccc3b52e4b0417d01a2a30ed4))
+
 ## [0.3.1](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.3.0...next-kit-v0.3.1) (2025-09-26)
 
 
