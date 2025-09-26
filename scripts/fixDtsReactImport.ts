@@ -1,7 +1,8 @@
 import fg from "fast-glob";
 import { relative } from "path";
 import { promises as fs } from "fs";
-import chalk from "chalk";
+
+import { BUILD_LOGGER } from "./utils/logger";
 
 let importingFixed = 0;
 /**
@@ -10,13 +11,9 @@ let importingFixed = 0;
  */
 async function run(): Promise<void> {
   try {
-    console.log(
-      chalk.bold(
-        `🕧 ${chalk.cyanBright("Starting")} to ${chalk.underline.blueBright(
-          "Fixing DTS React Import"
-        )} at ${chalk.italic.underline.whiteBright("'dist'")} folder.`
-      )
-    );
+    BUILD_LOGGER.ON_STARTING({
+      actionName: "Fixing DTS React Import"
+    });
 
     const files = await fg("dist/**/*.d.{ts,cts,esm,mts}");
 
@@ -105,33 +102,23 @@ async function run(): Promise<void> {
         await fs.writeFile(file, result, "utf8");
         importingFixed++;
 
-        console.log(
-          `${chalk.bold("   >")} ${chalk.italic(
-            `${chalk.white(importingFixed + ".")} ${chalk.white(
-              "Fixed DTS React Import"
-            )} ${chalk.yellowBright("in")} ${chalk.bold.underline.blueBright(relative(process.cwd(), file))}.`
-          )}`
-        );
+        BUILD_LOGGER.ON_PROCESS({
+          actionName: "Fixed DTS React Import",
+          count: importingFixed,
+          nameDirect: relative(process.cwd(), file)
+        });
       }
     }
 
-    console.log(
-      chalk.bold(
-        `✅ ${chalk.greenBright("Success")} ${chalk.underline.blueBright(
-          "Fixing DTS React Import"
-        )} (${chalk.yellowBright(
-          `${importingFixed} file${importingFixed > 1 ? "(s)" : ""}`
-        )}) at ${chalk.italic.underline.whiteBright("'dist'")} folder.`
-      )
-    );
-  } catch (err) {
-    console.error(
-      chalk.bold(
-        `✅ ${chalk.redBright("Error")} to ${chalk.underline.blueBright(
-          "Fixing DTS React Import"
-        )} at ${chalk.cyan("dist")} folder, because: \n\n > ${chalk.inverse.red(err)}`
-      )
-    );
+    BUILD_LOGGER.ON_FINISH({
+      actionName: "Fixing DTS React Import",
+      count: importingFixed
+    });
+  } catch (error) {
+    BUILD_LOGGER.ON_ERROR({
+      actionName: "Fixing DTS React Import",
+      error
+    });
   }
 }
 

@@ -1,7 +1,8 @@
-import { isNonEmptyString } from "@rzl-zone/utils-js/predicates";
-import chalk from "chalk";
-import fsExtra from "fs-extra";
 import path from "path";
+import fsExtra from "fs-extra";
+import { isNonEmptyString } from "@rzl-zone/utils-js/predicates";
+
+import { BUILD_LOGGER } from "./utils/logger";
 
 /**
  * Copy any file (commonly CSS) into a `dist` sub-directory with dynamic paths.
@@ -44,13 +45,11 @@ async function copyFileDynamic({
     );
     const absTargetFile = path.join(absTargetDir, fileName ?? path.basename(source));
 
-    console.log(
-      chalk.bold(
-        `🕧 ${chalk.cyanBright("Starting")} ${chalk.underline.blueBright(
-          "Copy File"
-        )} to ${chalk.italic.underline.whiteBright("'dist'")} folder.`
-      )
-    );
+    BUILD_LOGGER.ON_STARTING({
+      actionName: "Copy File",
+      textDirectAction: "action",
+      textDirectFolder: "to"
+    });
 
     await fsExtra.ensureDir(absTargetDir);
     await fsExtra.copy(absSource, absTargetFile);
@@ -58,31 +57,23 @@ async function copyFileDynamic({
     const relSrc = path.relative(process.cwd(), absSource).replace(/\\/g, "/");
     const relDest = path.relative(process.cwd(), absTargetFile).replace(/\\/g, "/");
 
-    console.log(
-      `${chalk.bold("   >")} ${chalk.italic(
-        `${chalk.white("1.")} ${chalk.white("Copying File")} ${chalk.yellow(
-          "from"
-        )} '${chalk.bold.underline.cyanBright(relSrc)}' ${chalk.bold.gray(
-          "➔"
-        )} '${chalk.bold.underline.cyanBright(relDest)}'.`
-      )}`
-    );
+    BUILD_LOGGER.ON_PROCESS_COPY({
+      actionName: "File Copied",
+      count: 1,
+      copyFrom: relSrc,
+      copyTo: relDest
+    });
 
-    console.log(
-      chalk.bold(
-        `✅ ${chalk.greenBright("Success")} ${chalk.underline.blueBright(
-          "Copy File"
-        )} to ${chalk.italic.underline.whiteBright("'dist'")} folder.`
-      )
-    );
-  } catch (e) {
-    console.error(
-      chalk.bold(
-        `❌ ${chalk.redBright("Error")} while ${chalk.underline.blueBright(
-          "Copy File"
-        )} tp ${chalk.cyan("dist")} folder:\n\n > ${chalk.inverse.red(e)}`
-      )
-    );
+    BUILD_LOGGER.ON_FINISH({
+      actionName: "Copying File",
+      textDirectFolder: "to",
+      count: 1
+    });
+  } catch (error) {
+    BUILD_LOGGER.ON_ERROR({
+      actionName: "Copying DTS",
+      error
+    });
   }
 }
 
