@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.3.0...next-kit-v0.3.1) (2025-09-26)
+
+
+### Bug Fixes
+
+* Fixing bundle when build at new category `utils`. ([b9503f4](https://github.com/rzl-zone/next-kit/commit/b9503f48957336878430c07e8554c1c13fc2858b))
+
 ## [0.3.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.2.0...next-kit-v0.3.0) (2025-09-26)
 
 
