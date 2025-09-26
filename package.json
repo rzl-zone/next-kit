@@ -48,12 +48,15 @@
       "import": "./dist/progress-bar/index.js",
       "require": "./dist/progress-bar/index.cjs"
     },
+    "./progress-bar/default.css": "./dist/progress-bar/default.css",
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",
       "require": "./dist/utils/index.cjs"
     },
-    "./progress-bar/default.css": "./dist/progress-bar/default.css"
+    "./types": {
+      "types": "./dist/types/index.d.ts"
+    }
   },
   "typesVersions": {
     "*": {
@@ -83,6 +86,9 @@
       ],
       "utils": [
         "dist/utils/index.d.ts"
+      ],
+      "types": [
+        "dist/types/index.d.ts"
       ]
     }
   },

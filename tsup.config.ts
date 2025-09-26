@@ -64,7 +64,15 @@ const injectUseClient = async (pattern: string | string[]) => {
   }
 };
 
-const onSuccessDefault = async () => {};
+const onSuccessDefault = async () => {
+  const removeJs = await glob([
+    "dist/types/**/*.{js,js.map,cjs}",
+    "dist/types/*.{js,js.map,cjs}"
+  ]);
+  for (const file of removeJs.sort()) {
+    fs.rmSync(file, { force: true });
+  }
+};
 
 const configOptions = (options: ExtendedOptions): Options => {
   const { preserveUseClient, clientFilesPattern, outDir, ...rest } = options;
@@ -114,8 +122,6 @@ export default defineConfig((options) => [
     ...options,
     outDir: "dist",
     entry: [
-      // utils
-      "src/utils/index.ts",
       // extra
       "src/extra/*.ts",
       "src/extra/*.tsx",
@@ -125,7 +131,11 @@ export default defineConfig((options) => [
       // themes
       "src/themes/index.{ts,tsx}",
       // progress-bar
-      "src/progress-bar/index.{ts,tsx}"
+      "src/progress-bar/index.{ts,tsx}",
+      // utils
+      "src/utils/index.ts",
+      // types
+      "src/types/index.ts"
     ],
     preserveUseClient: true,
     clientFilesPattern: [

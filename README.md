@@ -94,8 +94,11 @@
   // For Themes Mode (eg: dark, light, system).
   import { | } from "@rzl-zone/next-kit/themes"; 
  
- // For Utility.
-  import { | } from "@rzl-zone/utils"; 
+  // For Utility.
+  import { | } from "@rzl-zone/next-kit/utils"; 
+  
+  // For Extra Types Helper for TypeScript Dev.
+  import { | } from "@rzl-zone/next-kit/types"; 
   ```
   For Default CSS Progress Bar Loader, this import can be placed in your layout.tsx or global stylesheet entry, for example:
 
