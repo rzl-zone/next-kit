@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.4.0...next-kit-v0.4.1) (2025-09-26)
+
+
+### Bug Fixes
+
+* **chore:** Fixing bug in the lockfile don't match specifiers in package.json. ([f3d5f34](https://github.com/rzl-zone/next-kit/commit/f3d5f3408dd7084f8038d876e929e6bfabce38bf))
+* **chore:** Update devDeps version and fixing some package from devDeps to deps. ([d14ae5a](https://github.com/rzl-zone/next-kit/commit/d14ae5a23f1d203ed8967580b2ddcf4a9c224386))
+
 ## [0.4.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.3.1...next-kit-v0.4.0) (2025-09-26)
 
 
