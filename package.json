@@ -153,14 +153,14 @@
   },
   "dependencies": {
     "@edge-runtime/cookies": "^6.0.0",
+    "@rzl-zone/ts-types-plus": "latest",
     "deepmerge": "^4.3.1",
     "p-safe": "^1.0.0",
     "validate-color": "^2.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@rzl-zone/ts-types-plus": "latest",
-    "@rzl-zone/utils-js": "latest",
+    "@rzl-zone/utils-js": "^3.5.6",
     "@types/chai": "^5.2.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^30.0.0",

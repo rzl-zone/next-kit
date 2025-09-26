@@ -11,6 +11,9 @@ importers:
       '@edge-runtime/cookies':
         specifier: ^6.0.0
         version: 6.0.0
+      '@rzl-zone/ts-types-plus':
+        specifier: ^0.0.14
+        version: 0.0.14
       deepmerge:
         specifier: ^4.3.1
         version: 4.3.1
@@ -24,12 +27,9 @@ importers:
       '@eslint/js':
         specifier: ^9.36.0
         version: 9.36.0
-      '@rzl-zone/ts-types-plus':
-        specifier: latest
-        version: 0.0.14
       '@rzl-zone/utils-js':
-        specifier: latest
-        version: 3.5.4
+        specifier: ^3.5.6
+        version: 3.5.6
       '@types/chai':
         specifier: ^5.2.2
         version: 5.2.2
@@ -675,8 +675,8 @@ packages:
     resolution: {integrity: sha512-s0RDZ8Q7pDm0Rb2hnA2jUfLdV4BPt0AG0WynFWAMFitve3gVa+m0YO/P3NbyhkK3iZxthzdvjvBPt9dyFSBikA==}
     engines: {node: '>=16'}
 
-  '@rzl-zone/utils-js@3.5.4':
-    resolution: {integrity: sha512-jVGoWR99s2jHXK/VLB/CvKZrLzwg6eXOdgqJksMyelLXCnJvCWxoYBJdc3Qts1iIukbP2lTSU5wh3I9I+H0Rzg==}
+  '@rzl-zone/utils-js@3.5.6':
+    resolution: {integrity: sha512-qfJb21OuwGPNXKf7VzBxWIzLjVCcpW8vlne2XlC9I5a2OxEO5Rt8MQkyoigBuWfp5Awp0yt22m1Mw9u6lH9uew==}
     engines: {node: '>=16'}
     peerDependencies:
       tailwindcss: ^3.0.0 || ^4.0.0
@@ -1319,8 +1319,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  libphonenumber-js@1.12.22:
-    resolution: {integrity: sha512-nzdkDyqlcLV754o1RrOJxh8kycG+63odJVUqnK4dxhw7buNkdTqJc/a/CE0h599dTJgFbzvr6GEOemFBSBryAA==}
+  libphonenumber-js@1.12.23:
+    resolution: {integrity: sha512-RN3q3gImZ91BvRDYjWp7ICz3gRn81mW5L4SW+2afzNCC0I/nkXstBgZThQGTE3S/9q5J90FH4dP+TXx8NhdZKg==}
 
   lilconfig@3.1.3:
     resolution: {integrity: sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw==}
@@ -2270,12 +2270,12 @@ snapshots:
 
   '@rzl-zone/ts-types-plus@0.0.14': {}
 
-  '@rzl-zone/utils-js@3.5.4':
+  '@rzl-zone/utils-js@3.5.6':
     dependencies:
       '@rzl-zone/ts-types-plus': 0.0.14
       clsx: 2.1.1
       date-fns: 4.1.0
-      libphonenumber-js: 1.12.22
+      libphonenumber-js: 1.12.23
       server-only: 0.0.1
       tailwind-merge-v3: tailwind-merge@2.6.0
       tailwind-merge-v4: tailwind-merge@3.3.1
@@ -2973,7 +2973,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libphonenumber-js@1.12.22: {}
+  libphonenumber-js@1.12.23: {}
 
   lilconfig@3.1.3: {}
 
