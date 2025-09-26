@@ -114,6 +114,8 @@ export default defineConfig((options) => [
     ...options,
     outDir: "dist",
     entry: [
+      // utils
+      "src/utils/*.ts",
       // extra
       "src/extra/*.ts",
       "src/extra/*.tsx",

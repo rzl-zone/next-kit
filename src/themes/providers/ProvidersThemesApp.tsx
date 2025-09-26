@@ -5,7 +5,7 @@ import InternalThemeProvider from "./InternalThemeProvider";
 
 import type { ThemeProviderProps } from "../types";
 import { assertIsPlainObject } from "@rzl-zone/utils-js/assertions";
-import { isReactNode } from "@/_private/reactNode";
+import { isReactNode } from "@/utils/reactNode";
 
 /** ------------------------------------------------------------
  * * ***Provider wrapper for configuring and supplying the theme system.***

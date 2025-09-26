@@ -1,5 +1,5 @@
 import React, { ComponentType, FC, Suspense, SuspenseProps } from "react";
-import { isProdEnv } from "@/_private/nodeEnv";
+import { isProdEnv } from "@/utils/nodeEnv";
 
 /** ------------------------------------------
  * * ***Higher-Order Component (HOC): `WithSuspense`.***
@@ -25,7 +25,9 @@ export default function WithSuspense<P extends object>(
 
   // Set display name for better debugging at non prod env
   const componentName = Component.displayName || Component.name || "Anonymous";
-  WrappedComponent.displayName = isProdEnv ? undefined : `WithSuspense(${componentName})`;
+  WrappedComponent.displayName = isProdEnv()
+    ? undefined
+    : `WithSuspense(${componentName})`;
 
   return WrappedComponent;
 }

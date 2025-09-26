@@ -7,8 +7,8 @@ import { assertIsPlainObject } from "@rzl-zone/utils-js/assertions";
 import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
 import { getPreciseType, isServer, isString } from "@rzl-zone/utils-js/predicates";
 
-import { isProdEnv } from "@/_private/nodeEnv";
-import { isReactNode } from "@/_private/reactNode";
+import { isProdEnv } from "@/utils/nodeEnv";
+import { isReactNode } from "@/utils/reactNode";
 import { RZL_NEXT_KIT_EXTRA } from "./utils/constants";
 
 const { PROPS_MESSAGE } = RZL_NEXT_KIT_EXTRA.ERROR;
@@ -35,7 +35,7 @@ declare global {
 }
 
 const PageContext = createContext<Context | undefined>(undefined);
-PageContext.displayName = isProdEnv ? undefined : "PageContext";
+PageContext.displayName = isProdEnv() ? undefined : "PageContext";
 
 /** -------------------------------------------------------------------
  * * ***A component that provides context data to its children (can be use in server component).***
