@@ -12,7 +12,7 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       '@rzl-zone/ts-types-plus':
-        specifier: ^0.0.14
+        specifier: latest
         version: 0.0.14
       deepmerge:
         specifier: ^4.3.1
@@ -28,7 +28,7 @@ importers:
         specifier: ^9.36.0
         version: 9.36.0
       '@rzl-zone/utils-js':
-        specifier: ^3.5.6
+        specifier: latest
         version: 3.5.6
       '@types/chai':
         specifier: ^5.2.2
