@@ -17,7 +17,7 @@ import { isReactNode } from "@/utils/reactNode";
  *
  * export default function RootLayout({ children }: { children: ReactNode }) {
  *   return (
- *     <html lang="en">
+ *     <html lang="en" suppressHydrationWarning>
  *       <body>
  *         <ProvidersThemesApp themes={["pink", "blue"]}>
  *           {children}
