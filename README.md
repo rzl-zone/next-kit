@@ -75,7 +75,7 @@
 
 <h2 id="detailed-features">💎 <strong>Detailed Features</strong></h2>
 
-  ### **Full documentation <a href="https://docs-rzl-next-kit.vercel.app" target="_blank" rel="nofollow noreferrer noopener">Rzl Next Kit</a> is **currently under construction** 🏗️.**
+  ### **Full documentation <a href="https://rzlzone.vercel.app/docs/next-kit/0.4.2" target="_blank" rel="nofollow noreferrer noopener">Rzl Next Kit</a> is **currently under construction** 🏗️.**
   #### For now, explore the examples or dive into the source — all utilities are documented via **TSDoc** and typed properly.
 
   ```ts
