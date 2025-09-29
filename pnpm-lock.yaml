@@ -28,8 +28,8 @@ importers:
         specifier: ^9.36.0
         version: 9.36.0
       '@rzl-zone/utils-js':
-        specifier: latest
-        version: 3.5.6
+        specifier: ^3.5.7
+        version: 3.5.7
       '@types/chai':
         specifier: ^5.2.2
         version: 5.2.2
@@ -675,8 +675,8 @@ packages:
     resolution: {integrity: sha512-s0RDZ8Q7pDm0Rb2hnA2jUfLdV4BPt0AG0WynFWAMFitve3gVa+m0YO/P3NbyhkK3iZxthzdvjvBPt9dyFSBikA==}
     engines: {node: '>=16'}
 
-  '@rzl-zone/utils-js@3.5.6':
-    resolution: {integrity: sha512-qfJb21OuwGPNXKf7VzBxWIzLjVCcpW8vlne2XlC9I5a2OxEO5Rt8MQkyoigBuWfp5Awp0yt22m1Mw9u6lH9uew==}
+  '@rzl-zone/utils-js@3.5.7':
+    resolution: {integrity: sha512-Pu0K28W0hXh+cA7TRlaRcEToxQ4QGlhZF6JgdQuAXICO280noz35SwBtgpMV9TeDy4304c0zAbNDPvVuQlZDjA==}
     engines: {node: '>=16'}
     peerDependencies:
       tailwindcss: ^3.0.0 || ^4.0.0
@@ -2270,7 +2270,7 @@ snapshots:
 
   '@rzl-zone/ts-types-plus@0.0.14': {}
 
-  '@rzl-zone/utils-js@3.5.6':
+  '@rzl-zone/utils-js@3.5.7':
     dependencies:
       '@rzl-zone/ts-types-plus': 0.0.14
       clsx: 2.1.1
