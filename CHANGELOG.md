@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.5.0...next-kit-v0.5.1) (2025-09-29)
+
+
+### Bug Fixes
+
+* Clean some unused types wrapped by `Prettify` types. ([3f3b7a1](https://github.com/rzl-zone/next-kit/commit/3f3b7a187317b7117fb35920c7b5485824fdbc21))
+* Fixing tsDoc utilities `isRenderedRzlProgress`, `isStartedRzlProgress`, `pauseRzlProgress`, `resumeRzlProgress` for control `progress-bar`. ([40aa883](https://github.com/rzl-zone/next-kit/commit/40aa883d8e38bc0612382b58f4ca899f3c6f9a79))
+
 ## [0.5.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.4.1...next-kit-v0.5.0) (2025-09-29)
 
 
