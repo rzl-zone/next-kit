@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.0](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.4.1...next-kit-v0.5.0) (2025-09-29)
+
+
+### Features
+
+* Add features utility `isRenderedRzlProgress`, `isStartedRzlProgress`, `pauseRzlProgress`, resumeRzlProgress` for control `progress-bar`. ([a6ef859](https://github.com/rzl-zone/next-kit/commit/a6ef859833bc6fdef9ebec71a51e14b6b9cf07a8))
+
+
+### Bug Fixes
+
+* TsDoc for `ProvidersThemesApp`. ([350f329](https://github.com/rzl-zone/next-kit/commit/350f329ae9f02a905b47d47a1f33ca2f61f01cf4))
+* Update docs at Readme.md. ([9d6d617](https://github.com/rzl-zone/next-kit/commit/9d6d617ac72dc0fbd6d0b63080bf77619d9d8d65))
+
 ## [0.4.1](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.4.0...next-kit-v0.4.1) (2025-09-26)
 
 
