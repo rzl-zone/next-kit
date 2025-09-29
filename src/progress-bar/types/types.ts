@@ -1,4 +1,4 @@
-import type { ColorCssNamed, PickStrict, Prettify } from "@rzl-zone/ts-types-plus";
+import type { ColorCssNamed, PickStrict } from "@rzl-zone/ts-types-plus";
 import type { RzlProgressEasing, RzlProgressOptions } from "../utils/rzlProgress";
 
 type RzlTopLoaderAttribute = {
@@ -37,17 +37,15 @@ export type ColorAdvance = {
   ValueAdvance?: string;
 };
 
-export type RzlProgressType = Prettify<
-  {
-    /** * ***Animation settings using easing (a CSS easing string).***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type {@link RzlProgressEasing}, otherwise will return default value.
-     * @default "ease"
-     */
-    easing?: RzlProgressEasing;
-  } & RzlProgressOptions
->;
+export type RzlProgressType = {
+  /** * ***Animation settings using easing (a CSS easing string).***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type {@link RzlProgressEasing}, otherwise will return default value.
+   * @default "ease"
+   */
+  easing?: RzlProgressEasing;
+} & RzlProgressOptions;
 
 export type RzlNextProgressBarProps = {
   /** * ***CSS class name that will be applied to the loader container
@@ -207,9 +205,8 @@ export type RzlNextProgressBarProps = {
   options?: RzlProgressType;
 };
 
-type OptionsRzlProgress = Prettify<
-  RzlProgressType & Partial<PickStrict<RzlNextProgressBarProps, "startPosition">>
->;
+type OptionsRzlProgress = RzlProgressType &
+  Partial<PickStrict<RzlNextProgressBarProps, "startPosition">>;
 
 export type OptionsUseRouter = {
   /** @default false */

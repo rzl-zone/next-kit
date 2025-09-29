@@ -1,4 +1,3 @@
-import type { Prettify } from "@rzl-zone/ts-types-plus";
 import {
   enableUserInteraction,
   disableUserInteraction,
@@ -25,34 +24,30 @@ import type { RzlNextTopLoader } from "@/progress-bar";
 
 type ClassNameIfLoading = Pick<RzlNextProgressBarProps, "classNameIfLoading">;
 
-type StartRzlProgressProps = Prettify<
-  {
-    /** * Disabled and prevent any actions.
-     *
-     * @default true
-     */
-    withDisableAnyAction?: boolean;
-    /** * Remove focus (blur) from all element actions.
-     *
-     * @default true
-     */
-    withRemoveAllFocusElement?: boolean;
-    optionsProgressBar?: RzlProgressType;
-    withStopDelay?: {
-      /** @default false */
-      enable?: boolean;
-      /** @default 1000 */
-      delayStop?: number;
-    };
-  } & ClassNameIfLoading
->;
-
-type StopRzlProgressProps = Prettify<
-  {
+type StartRzlProgressProps = {
+  /** * Disabled and prevent any actions.
+   *
+   * @default true
+   */
+  withDisableAnyAction?: boolean;
+  /** * Remove focus (blur) from all element actions.
+   *
+   * @default true
+   */
+  withRemoveAllFocusElement?: boolean;
+  optionsProgressBar?: RzlProgressType;
+  withStopDelay?: {
     /** @default false */
-    force?: boolean;
-  } & ClassNameIfLoading
->;
+    enable?: boolean;
+    /** @default 1000 */
+    delayStop?: number;
+  };
+} & ClassNameIfLoading;
+
+type StopRzlProgressProps = {
+  /** @default false */
+  force?: boolean;
+} & ClassNameIfLoading;
 
 const defaultWithStopDelay = {
   enable: false,

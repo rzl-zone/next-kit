@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { AnyFunction, Prettify } from "@rzl-zone/ts-types-plus";
+import type { AnyFunction } from "@rzl-zone/ts-types-plus";
 import {
   isBoolean,
   isFunction,
@@ -79,103 +79,101 @@ export type RzlProgressEasing =
   | "ease-out"
   | "ease-in-out";
 
-export type RzlProgressOptions = Prettify<
-  Pick<RzlNextProgressBarProps, "classNameIfLoading"> & {
-    /** * ***The initial position for the Progress Bar Loader in percentage, 0.08 is 8%.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type number, otherwise will return default value.
-     * @default 0.08
-     */
-    minimum?: number;
-    /** * ***The the maximum percentage used upon finishing, 1 is 100%.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type number, otherwise will return default value.
-     * @default 1
-     */
-    maximum?: number;
-    /** * ***Defines a template for the Progress Bar Loader.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type string, otherwise will return default value.
-     * @default
-     * ```jsx
-     * `<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`
-     * ```
-     */
-    template?: string;
-    /** * ***Animation settings using easing (a CSS easing string).***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type {@link RzlProgressEasing | *`RzlProgressEasing`*}, otherwise will return default value.
-     * @default "linear"
-     */
-    easing?: RzlProgressEasing;
-    /** * ***Animation speed in ms for the Progress Bar Loader.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type integer number, otherwise will return default value.
-     * @default 200
-     */
-    speed?: number;
-    /** * ***Auto incrementing behavior for the Progress Bar Loader.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type boolean, otherwise will return default value.
-     * @default true
-     */
-    trickle?: boolean;
-    /** * ***The increment delay speed in milliseconds.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type integer number, otherwise will return default value.
-     * @default 200
-     */
-    trickleSpeed?: number;
-    /** * ***To show spinner or not.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type boolean, otherwise will return default value.
-     * @default true
-     */
-    showSpinner?: boolean;
-    /** * ***Specify this to change the parent container.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type {@link HTMLElement | *`HTMLElement`*} or string, otherwise will return default value.
-     * @default "body"
-     */
-    parent?: HTMLElement | string;
-    /**
-     * - **⚠️ Warning:**
-     *    - The value must be of type string, otherwise will return default value.
-     * @default ""
-     */
-    positionUsing?: string;
-    /** * ***The selector attribute position.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type string, otherwise will return default value.
-     * @default '[role="bar"]'
-     */
-    barSelector?: string;
-    /** * ***The selector attribute spinner.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type string, otherwise will return default value.
-     * @default '[role="spinner"]'
-     */
-    spinnerSelector?: string;
-    /** * ***The direction bar.***
-     *
-     * - **⚠️ Warning:**
-     *    - The value must be of type {@link RzlProgressDirection | *`RzlProgressDirection`*}, otherwise will return default value.
-     * @default 'ltr'
-     */
-    direction?: RzlProgressDirection;
-  }
->;
+export type RzlProgressOptions = Pick<RzlNextProgressBarProps, "classNameIfLoading"> & {
+  /** * ***The initial position for the Progress Bar Loader in percentage, 0.08 is 8%.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type number, otherwise will return default value.
+   * @default 0.08
+   */
+  minimum?: number;
+  /** * ***The the maximum percentage used upon finishing, 1 is 100%.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type number, otherwise will return default value.
+   * @default 1
+   */
+  maximum?: number;
+  /** * ***Defines a template for the Progress Bar Loader.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type string, otherwise will return default value.
+   * @default
+   * ```jsx
+   * `<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`
+   * ```
+   */
+  template?: string;
+  /** * ***Animation settings using easing (a CSS easing string).***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type {@link RzlProgressEasing | *`RzlProgressEasing`*}, otherwise will return default value.
+   * @default "linear"
+   */
+  easing?: RzlProgressEasing;
+  /** * ***Animation speed in ms for the Progress Bar Loader.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type integer number, otherwise will return default value.
+   * @default 200
+   */
+  speed?: number;
+  /** * ***Auto incrementing behavior for the Progress Bar Loader.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type boolean, otherwise will return default value.
+   * @default true
+   */
+  trickle?: boolean;
+  /** * ***The increment delay speed in milliseconds.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type integer number, otherwise will return default value.
+   * @default 200
+   */
+  trickleSpeed?: number;
+  /** * ***To show spinner or not.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type boolean, otherwise will return default value.
+   * @default true
+   */
+  showSpinner?: boolean;
+  /** * ***Specify this to change the parent container.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type {@link HTMLElement | *`HTMLElement`*} or string, otherwise will return default value.
+   * @default "body"
+   */
+  parent?: HTMLElement | string;
+  /**
+   * - **⚠️ Warning:**
+   *    - The value must be of type string, otherwise will return default value.
+   * @default ""
+   */
+  positionUsing?: string;
+  /** * ***The selector attribute position.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type string, otherwise will return default value.
+   * @default '[role="bar"]'
+   */
+  barSelector?: string;
+  /** * ***The selector attribute spinner.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type string, otherwise will return default value.
+   * @default '[role="spinner"]'
+   */
+  spinnerSelector?: string;
+  /** * ***The direction bar.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type {@link RzlProgressDirection | *`RzlProgressDirection`*}, otherwise will return default value.
+   * @default 'ltr'
+   */
+  direction?: RzlProgressDirection;
+};
 
 export class RzlProgress {
   /** * ***Default options settings.*** */
