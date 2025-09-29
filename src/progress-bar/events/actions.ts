@@ -59,7 +59,7 @@ const defaultWithStopDelay = {
  * ----------------------------------------------------------
  * **Starts the `RzlProgress` (bar-loader) with optional configurations.**
  *
- * **⚠ Note:** This utilities only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
+ * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
  *
  * - **Features**:
  *    - Automatically disables user interaction and removes focus from elements if enabled.
@@ -147,7 +147,7 @@ export const startRzlProgress = (
  * ----------------------------------------------------------
  * **Stops the `RzlProgress` (bar-loader) and re-enables user interactions.**
  *
- * **⚠ Note:** Only effective if {@link RzlNextTopLoader | `RzlNextTopLoader`} is present in the layout.
+ * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
  *
  * - **Features**:
  *    - Stops the progress bar immediately or with force.
@@ -186,7 +186,7 @@ export const stopRzlProgress = (props: StopRzlProgressProps = {}): void => {
  * ----------------------------------------------------------
  * **Checks if the `RzlProgress` is currently started.**
  *
- * **⚠ Note:** Works only if {@link RzlNextTopLoader | `RzlNextTopLoader`} is used.
+ * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
  *
  * @returns {boolean} `true` if progress bar is started, `false` otherwise.
  * @example
@@ -201,7 +201,7 @@ export const isStartedRzlProgress = (): boolean => {
  * ----------------------------------------------------------
  * **Checks if the `RzlProgress` is rendered in the DOM.**
  *
- * **⚠ Note:** Only applicable if {@link RzlNextTopLoader | `RzlNextTopLoader`} exists in the layout.
+ * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
  *
  * @returns {boolean} `true` if progress bar exists in the DOM, `false` otherwise.
  * @example
@@ -218,7 +218,7 @@ export const isRenderedRzlProgress = (): boolean => {
  *
  * Can be resumed later using `resumeRzlProgress`.
  *
- * **⚠ Note:** Only works if layout includes {@link RzlNextTopLoader | `RzlNextTopLoader`}.
+ * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
  *
  * @returns {void} Does not return anything.
  * @example
@@ -233,7 +233,7 @@ export const pauseRzlProgress = (): void => {
  * ----------------------------------------------------------
  * **Resumes the `RzlProgress` bar if it was paused.**
  *
- * **⚠ Note:** Only works if layout includes {@link RzlNextTopLoader | `RzlNextTopLoader`}.
+ * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
  *
  * @returns {void} Does not return anything.
  * @example
