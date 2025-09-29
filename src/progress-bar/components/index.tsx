@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import {
   isBoolean,
   isInteger,
+  isNonEmptyString,
   isNumber,
   isPlainObject,
   isString,
@@ -56,7 +57,7 @@ const ComponentInitRzlNextProgressBar = (
   if (!isUndefined(nonce) && !isString(nonce)) nonce = undefined;
   if (!isUndefined(style) && !isString(style)) style = undefined;
 
-  if (!isUndefined(classNameIfLoading) && !isString(classNameIfLoading))
+  if (!isUndefined(classNameIfLoading) && !isNonEmptyString(classNameIfLoading))
     classNameIfLoading = defaultProps.classNameIfLoading;
 
   if (
@@ -207,7 +208,6 @@ const ComponentInitRzlNextProgressBar = (
   //     await startProgress();
   //     await delaying(showProgressOnInitial.delay);
   //     await stopProgress();
-  //     console.debug({ test: 123 });
   //   }
   // }, []);
 

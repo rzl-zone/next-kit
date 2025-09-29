@@ -72,7 +72,8 @@ export type RzlNextProgressBarProps = {
    * Which defines a class named **`on_processing`**.
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
+   *    - The value must be of type string and cant be empty-string, otherwise will
+   *      return default value.
    *
    * @default "on_processing"
    */

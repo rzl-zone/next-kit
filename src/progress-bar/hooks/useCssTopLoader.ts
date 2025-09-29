@@ -7,7 +7,8 @@ import { validateHTMLColor } from "validate-color";
 
 import { isValidEasingValue, RzlProgressEasing } from "../utils/rzlProgress";
 import type { ColorBase, ColorAdvance, RzlNextProgressBarProps } from "../types/types";
-import { isNonEmptyString } from "@rzl-zone/utils-js/predicates";
+import { isNonEmptyString, isUndefined } from "@rzl-zone/utils-js/predicates";
+import { defaultPropsInitInitRzlNextProgressBar } from "../constants";
 
 type UseCssTopLoader = Prettify<
   {
@@ -19,7 +20,10 @@ type UseCssTopLoader = Prettify<
     showAtBottom: boolean;
     spinnerEase: RzlProgressEasing;
     colorSpinner: ColorBase | ColorAdvance | undefined;
-  } & Pick<RzlNextProgressBarProps, "id" | "name" | "nonce" | "style">
+  } & Pick<
+    RzlNextProgressBarProps,
+    "id" | "name" | "nonce" | "style" | "classNameIfLoading"
+  >
 >;
 
 export const useCssTopLoader = ({
@@ -34,7 +38,8 @@ export const useCssTopLoader = ({
   zIndex,
   spinnerSize,
   spinnerSpeed,
-  showAtBottom
+  showAtBottom,
+  classNameIfLoading = defaultPropsInitInitRzlNextProgressBar["classNameIfLoading"]
 }: UseCssTopLoader) => {
   const positionStyle = showAtBottom ? "bottom: 0;" : "top: 0;";
   const spinnerPositionStyle = showAtBottom ? "bottom: 15px;" : "top: 15px;";
@@ -53,6 +58,9 @@ export const useCssTopLoader = ({
     colorSpinner?.type === "advance" && isNonEmptyString(colorSpinner.ValueAdvance)
       ? colorSpinner.ValueAdvance
       : undefined;
+
+  if (!isUndefined(classNameIfLoading) && !isNonEmptyString(classNameIfLoading))
+    classNameIfLoading = defaultPropsInitInitRzlNextProgressBar["classNameIfLoading"];
 
   const validationOfColorSpinner = React.useCallback(() => {
     if (typeColorBase && typeColorHex) {
@@ -175,6 +183,10 @@ export const useCssTopLoader = ({
 
     // Conditionally set the 'nonce' attributes if they are defined
     if (nonce) styleElement.setAttribute("nonce", nonce);
+
+    // Force set
+    if (classNameIfLoading)
+      styleElement.setAttribute("data-classname-loading", classNameIfLoading);
 
     // Set the CSS content inside the <style> element
     styleElement.innerHTML = styles;

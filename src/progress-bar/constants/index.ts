@@ -88,3 +88,15 @@ export const defaultPropsInitInitRzlNextProgressBar = {
   showForHashAnchor: true,
   options: defaultOptionsProgressBar
 } as const;
+
+export const DATA_RZL_PROGRESS = {
+  MAIN_ID: "rzl-progress",
+  ON_BUSY: "rzl-progress-busy",
+  CUSTOM_PARENT: "rzl-progress-custom-parent",
+  STYLE_ELEMENT: {
+    MAIN_IDENTITY: { KEY: "data-styles", VALUE: "rzl-app-progress_bar" },
+    KEY_DATA: {
+      CLASS_NAME_LOADING: "data-classname-loading"
+    }
+  }
+} as const;
