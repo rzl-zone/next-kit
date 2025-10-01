@@ -19,19 +19,19 @@
       "require": "./dist/extra/index.cjs"
     },
     "./extra/action": {
-      "types": "./dist/extra/action/index.d.ts",
-      "import": "./dist/extra/action/index.js",
-      "require": "./dist/extra/action/index.cjs"
+      "types": "./dist/extra/action.d.ts",
+      "import": "./dist/extra/action.js",
+      "require": "./dist/extra/action.cjs"
     },
     "./extra/context": {
-      "types": "./dist/extra/context/index.d.ts",
-      "import": "./dist/extra/context/index.js",
-      "require": "./dist/extra/context/index.cjs"
+      "types": "./dist/extra/context.d.ts",
+      "import": "./dist/extra/context.js",
+      "require": "./dist/extra/context.cjs"
     },
     "./extra/pathname": {
-      "types": "./dist/extra/pathname/index.d.ts",
-      "import": "./dist/extra/pathname/index.js",
-      "require": "./dist/extra/pathname/index.cjs"
+      "types": "./dist/extra/pathname.d.ts",
+      "import": "./dist/extra/pathname.js",
+      "require": "./dist/extra/pathname.cjs"
     },
     "./hoc": {
       "types": "./dist/hoc/index.d.ts",
@@ -67,13 +67,13 @@
         "dist/extra/index.d.ts"
       ],
       "extra/action": [
-        "dist/extra/action/index.d.ts"
+        "dist/extra/action.d.ts"
       ],
       "extra/context": [
-        "dist/extra/context/index.d.ts"
+        "dist/extra/context.d.ts"
       ],
       "extra/pathname": [
-        "dist/extra/pathname/index.d.ts"
+        "dist/extra/pathname.d.ts"
       ],
       "hoc": [
         "dist/hoc/index.d.ts"
