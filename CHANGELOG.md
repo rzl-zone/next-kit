@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.5.1...next-kit-v0.5.2) (2025-10-01)
+
+
+### Bug Fixes
+
+* Fixing exports path at package.json. ([e678eca](https://github.com/rzl-zone/next-kit/commit/e678eca18461911c6653542ab85620d9bab50d72))
+
 ## [0.5.1](https://github.com/rzl-zone/next-kit/compare/next-kit-v0.5.0...next-kit-v0.5.1) (2025-09-29)
 
 
