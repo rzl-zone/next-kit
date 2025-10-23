@@ -9,7 +9,7 @@
 
 <p align="center" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
   <i>A flexible and extensible toolkit for building fullstack applications with Next.js.<br/>
-  Provides reusable, type-safe utilities to speed up your development workflow and keep your codebase clean.</i>
+  Provides reusable, type-safe utilities to speed up your development workflow and keep your codebase clean.</i><br/>
   <strong><i>Built with ❤️ by <a href="https://github.com/rzl-app" target="_blank" rel="nofollow noreferrer noopener">@rzl-app</a>.</i></strong>
 </p>
 
