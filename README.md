@@ -5,7 +5,7 @@
 
 </div>
 
-<h1 style="width: 100%; display: flex; justify-content: center; align-items: center;">Rzl Next Kit</h1>
+<h1 align="center">Rzl Next Kit</h1>
 
 <p align="center" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
   <i>A flexible and extensible toolkit for building fullstack applications with Next.js.<br/>
