@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/rzl-zone/next-kit/compare/v0.6.1...v0.6.2) (2025-10-23)
+
+
+### Bug Fixes
+
+* **chore:** Fixing README.md ([c087cba](https://github.com/rzl-zone/next-kit/commit/c087cba98dc9e3bac50c6e5b99784b2ded856868))
+
 ## [0.6.1](https://github.com/rzl-zone/next-kit/compare/v0.6.0...v0.6.1) (2025-10-23)
 
 
