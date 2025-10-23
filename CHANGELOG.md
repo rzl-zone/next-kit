@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.4](https://github.com/rzl-zone/next-kit/compare/v0.6.3...v0.6.4) (2025-10-23)
+
+
+### Bug Fixes
+
+* **Chore:** Fixing some tsDoc and CHANGELOG.md ([9e11ab1](https://github.com/rzl-zone/next-kit/commit/9e11ab1ef77e8c7d79521c22ce9ad3de8efafbcc))
+
 ## [0.6.3](https://github.com/rzl-zone/next-kit/compare/v0.6.2...v0.6.3) (2025-10-23)
 
 
