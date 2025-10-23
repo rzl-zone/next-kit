@@ -7,7 +7,6 @@
   "author": "Rizalvin Dwiky <rizalvindwiky1998@gmail.com>",
   "homepage": "https://github.com/rzl-zone/next-kit",
   "engineStrict": true,
-  "packageManager": "pnpm@10.13.1",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -147,7 +146,7 @@
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "test:mocha": "mocha \"**/*.test.ts\" --retries 2",
-    "prepublishOnly": "pnpm run build",
+    "prepublishOnly": "npm run build",
     "check-publish": "npm run build && npm pack --dry-run",
     "release-patch": "npm version patch && git push && git push --tags && npm publish"
   },
