@@ -113,7 +113,7 @@
     "@rzl-zone/next-kit"
   ],
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=20.9.0"
   },
   "repository": {
     "type": "git",
@@ -160,7 +160,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@rzl-zone/utils-js": "^3.5.7",
+    "@rzl-zone/utils-js": "^3.9.1",
     "@types/chai": "^5.2.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^30.0.0",
@@ -186,7 +186,7 @@
     "typescript-eslint": "^8.44.1"
   },
   "peerDependencies": {
-    "next": "14 || 15",
+    "next": "14 || 15 || 16",
     "react": "18 || 19"
   }
 }

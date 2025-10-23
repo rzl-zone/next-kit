@@ -12,7 +12,7 @@ Closes #(issue number), if applicable.
 
 - [ ] My code follows the style guidelines of this project.
 - [ ] I have performed a self-review of my code.
-- [ ] I have run `npm run build` or `pnpm run build` and verified the build works.
+- [ ] I have run `npm run build` and verified the build works.
 - [ ] I have added tests that prove my fix is effective or my feature works (if needed).
 - [ ] I have updated documentation or README (if needed).
 

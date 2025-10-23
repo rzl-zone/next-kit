@@ -1,12 +1,16 @@
-<div align="center">
-  <h1><strong>🧩 <code>@rzl-zone/next-kit</code> 🚀</strong></h1>
+<div align="center" style="display: flex; flex-direction: column; align-items: center;gap: 0rem">
+  <a target="_blank" rel="noopener noreferrer" href="https://raw.githubusercontent.com/rzl-zone/next-kit/main/logo-circle.png">
+    <img src="https://raw.githubusercontent.com/rzl-zone/next-kit/main/logo-circle.png" align="middle" alt="RzlZone Logo" width="110" style="max-width: 100%;">
+  </a>
+
 </div>
 
-<p align="center">
-  <strong>Rzl Next Kit</strong><br/>
-  A flexible and extensible toolkit for building fullstack applications with Next.js.<br/>
-  Provides reusable, type-safe utilities to speed up your development workflow and keep your codebase clean.<br/>
-  <strong>Crafted with care by <a href="https://github.com/rzl-app">@rzl-app</a></strong>
+<h1 style="width: 100%; display: flex; justify-content: center; align-items: center;">Rzl Next Kit</h1>
+
+<p align="center" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
+  <i>A flexible and extensible toolkit for building fullstack applications with Next.js.<br/>
+  Provides reusable, type-safe utilities to speed up your development workflow and keep your codebase clean.</i>
+  <strong><i>Built with ❤️ by <a href="https://github.com/rzl-app" target="_blank" rel="nofollow noreferrer noopener">@rzl-app</a>.</i></strong>
 </p>
 
 <div align="center">
@@ -17,7 +21,7 @@
     <img src="https://img.shields.io/npm/dt/@rzl-zone/next-kit?style=flat-rounded" alt="Downloads" />
   </a>
   <a href="https://nodejs.org/en/">
-    <img src="https://img.shields.io/badge/node-%3E%3D18.18.0-blue.svg?logo=node.js&style=flat-rounded" alt="Node Version" />
+    <img src="https://img.shields.io/badge/node-%3E%3D20.9.0-blue.svg?logo=node.js&style=flat-rounded" alt="Node Version" />
   </a>
   <a href="https://github.com/rzl-zone/next-kit/blob/main/CONTRIBUTING.md">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome" />
@@ -75,7 +79,7 @@
 
 <h2 id="detailed-features">💎 <strong>Detailed Features</strong></h2>
 
-  ### **Full documentation <a href="https://rzlzone.vercel.app/docs/next-kit/0.4.2" target="_blank" rel="nofollow noreferrer noopener">Rzl Next Kit</a> is **currently under construction** 🏗️.**
+  ### **Full documentation <a href="https://rzlzone.pages.dev/docs/next-kit" target="_blank" rel="nofollow noreferrer noopener">Rzl Next Kit</a> is **currently under construction** 🏗️.**
   #### For now, explore the examples or dive into the source — all utilities are documented via **TSDoc** and typed properly.
 
   ```ts

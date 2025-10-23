@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - beta
 
   workflow_dispatch:
     inputs:
@@ -12,43 +13,7 @@ on:
         required: false
         default: "false"
 
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
-
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-
-  test:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-
-      - run: pnpm install --frozen-lockfile
-
   release-please:
     runs-on: ubuntu-latest
     permissions:
@@ -63,7 +28,9 @@ jobs:
       - id: release
         uses: googleapis/release-please-action@v4
         with:
+          release-type: node
           token: ${{ secrets.RELEASE_PAT }}
+          target-branch: ${{ github.ref_name || 'main' }}
           config-file: .release-please-config.json
           manifest-file: .release-please-manifest.json
 
@@ -77,10 +44,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v2
         with:
-          version: 10
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -99,17 +64,44 @@ jobs:
         env:
           PACKAGE_NAME: "@rzl-zone/next-kit"
 
-      - run: pnpm install --frozen-lockfile
+      - run: npm ci
 
-      - run: pnpm publish --provenance --access public --no-git-checks
+      - name: Publish package
+        run: |
+          BRANCH_NAME="${GITHUB_REF##refs/heads/}"
+          BRANCH_NAME="${BRANCH_NAME:-${GITHUB_REF_NAME:-main}}"
+
+          if [[ "$BRANCH_NAME" == "beta" ]]; then
+            echo "Publishing package with tag beta..."
+            npm publish --provenance --access public --tag beta
+          else
+            echo "Publishing package with tag latest..."
+            npm publish --provenance --access public
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Deprecate previous version
         if: steps.prev.outputs.prev_version != '0.0.0'
         run: |
-          echo "Marking previous version ${{ steps.prev.outputs.prev_version }} as deprecated..."
-          npm deprecate "$PACKAGE_NAME@${{ steps.prev.outputs.prev_version }}" "Deprecated. Please upgrade to the latest version by running '$PACKAGE_NAME@latest'."
+          BRANCH_NAME="${GITHUB_REF##refs/heads/}"
+          BRANCH_NAME="${BRANCH_NAME:-${GITHUB_REF_NAME:-main}}"
+          PREV_VERSION="${{ steps.prev.outputs.prev_version }}"
+
+          if [ "$PREV_VERSION" != "0.0.0" ]; then
+            if [[ "$BRANCH_NAME" == "beta" && "$PREV_VERSION" == *"-beta."* ]]; then
+              echo "Marking previous beta version $PREV_VERSION as deprecated..."
+              npm deprecate "$PACKAGE_NAME@$PREV_VERSION" "Deprecated beta. Please upgrade to the latest beta with 'npm install $PACKAGE_NAME@beta'."
+            elif [[ "$BRANCH_NAME" != "beta" && "$PREV_VERSION" != *"-beta."* ]]; then
+              echo "Marking previous stable version $PREV_VERSION as deprecated..."
+              npm deprecate "$PACKAGE_NAME@$PREV_VERSION" "Deprecated stable. Please upgrade to the latest version with 'npm install $PACKAGE_NAME@latest'."
+            else
+              echo "Skipping deprecation (branch=$BRANCH_NAME, version=$PREV_VERSION)"
+            fi
+          else
+            echo "No previous version found, skipping deprecation."
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           PACKAGE_NAME: "@rzl-zone/next-kit"
+          BRANCH_NAME: ${{ github.ref_name }}
