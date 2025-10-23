@@ -9,7 +9,7 @@
  *    - May be any string or `undefined` if not set at runtime.
  *
  * @example
- * if (nodeEnv === "production") {
+ * if (nodeEnv() === "production") {
  *   console.log("Running in production mode");
  * }
  */
