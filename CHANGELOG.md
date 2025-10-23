@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/rzl-zone/next-kit/compare/v0.6.0...v0.6.1) (2025-10-23)
+
+
+### Bug Fixes
+
+* **chore:** Fixing script prepublishOnly at package.json ([20394f0](https://github.com/rzl-zone/next-kit/commit/20394f0f47dc9f2c3837c2e4b5eb3e5617300f87))
+
 ## [0.6.0](https://github.com/rzl-zone/next-kit/compare/v0.5.2...v0.6.0) (2025-10-23)
 
 
