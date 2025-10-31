@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.6](https://github.com/rzl-zone/next-kit/compare/v0.6.5...v0.6.6) (2025-10-31)
+
+
+### Bug Fixes
+
+* **DevDeps:** Update `@rzl-zone/utils-js` version. ([db1b742](https://github.com/rzl-zone/next-kit/commit/db1b74277ec6d053a8b22f71e781a2c26f7e0560))
+
 ## [0.6.5](https://github.com/rzl-zone/next-kit/compare/v0.6.4...v0.6.5) (2025-10-31)
 
 
