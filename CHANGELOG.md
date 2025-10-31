@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.5](https://github.com/rzl-zone/next-kit/compare/v0.6.4...v0.6.5) (2025-10-31)
+
+
+### Bug Fixes
+
+* Fixing node env runtime checker. ([c43631d](https://github.com/rzl-zone/next-kit/commit/c43631db5908ea94149204eeb04214bbc1a5c0b3))
+
 ## [0.6.4](https://github.com/rzl-zone/next-kit/compare/v0.6.3...v0.6.4) (2025-10-23)
 
 
