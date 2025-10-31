@@ -13,7 +13,22 @@
  *   console.log("Running in production mode");
  * }
  */
-export const nodeEnv = (): NodeJS.ProcessEnv["NODE_ENV"] => process?.env["NODE_ENV"];
+export const nodeEnv = (() => {
+  // Resolve once at build-time to ensure SSR + client hydration consistency
+  const env =
+    typeof process !== "undefined"
+      ? (process.env.NODE_ENV ?? "unknown")
+      : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        typeof import.meta !== "undefined" && (import.meta as any).env
+        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ((import.meta as any).env.MODE ??
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (import.meta as any).env.NODE_ENV ??
+          "unknown")
+        : "unknown";
+
+  return () => env;
+})();
 
 /** -------------------------------------------------------------------------
  * * **Environment Flag: `isQaEnv`.**
@@ -28,7 +43,7 @@ export const nodeEnv = (): NodeJS.ProcessEnv["NODE_ENV"] => process?.env["NODE_E
  *   enableQaFeatures();
  * }
  */
-export const isQaEnv = () => process?.env["NODE_ENV"] === "qa";
+export const isQaEnv = () => nodeEnv() === "qa";
 
 /** -------------------------------------------------------------------------
  * * **Environment Flag: `isTestEnv`.**
@@ -43,7 +58,7 @@ export const isQaEnv = () => process?.env["NODE_ENV"] === "qa";
  *   runIntegrationTests();
  * }
  */
-export const isTestEnv = () => process?.env["NODE_ENV"] === "test";
+export const isTestEnv = () => nodeEnv() === "test";
 
 /** -------------------------------------------------------------------------
  * * **Environment Flag: `isPreviewEnv`.**
@@ -58,7 +73,7 @@ export const isTestEnv = () => process?.env["NODE_ENV"] === "test";
  *   console.log("Preview deployment features enabled");
  * }
  */
-export const isPreviewEnv = () => process?.env["NODE_ENV"] === "preview";
+export const isPreviewEnv = () => nodeEnv() === "preview";
 
 /** -------------------------------------------------------------------------
  * * **Environment Flag: `isStagingEnv`.**
@@ -73,7 +88,7 @@ export const isPreviewEnv = () => process?.env["NODE_ENV"] === "preview";
  *   console.log("Running in staging environment");
  * }
  */
-export const isStagingEnv = () => process?.env["NODE_ENV"] === "staging";
+export const isStagingEnv = () => nodeEnv() === "staging";
 
 /** -------------------------------------------------------------------------
  * * **Environment Flag: `isDevEnv`.**
@@ -88,7 +103,7 @@ export const isStagingEnv = () => process?.env["NODE_ENV"] === "staging";
  *   enableHotReload();
  * }
  */
-export const isDevEnv = () => process?.env["NODE_ENV"] === "development";
+export const isDevEnv = () => nodeEnv() === "development";
 
 /** -------------------------------------------------------------------------
  * * **Environment Flag: `isProdEnv`.**
@@ -103,4 +118,4 @@ export const isDevEnv = () => process?.env["NODE_ENV"] === "development";
  *   enableProductionOptimizations();
  * }
  */
-export const isProdEnv = () => process?.env["NODE_ENV"] === "production";
+export const isProdEnv = () => nodeEnv() === "production";

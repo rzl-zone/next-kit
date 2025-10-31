@@ -49,9 +49,9 @@
     },
     "./progress-bar/default.css": "./dist/progress-bar/default.css",
     "./utils": {
+      "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",
-      "require": "./dist/utils/index.cjs",
-      "types": "./dist/utils/index.d.ts"
+      "require": "./dist/utils/index.cjs"
     },
     "./types": {
       "types": "./dist/types/index.d.ts"
