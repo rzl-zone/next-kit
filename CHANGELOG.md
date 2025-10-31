@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.7](https://github.com/rzl-zone/next-kit/compare/v0.6.6...v0.6.7) (2025-10-31)
+
+
+### Bug Fixes
+
+* Fixing return types for `nodeEnv`. ([a481ce1](https://github.com/rzl-zone/next-kit/commit/a481ce176a87551cbb67bbf1099d798bfb5eb997))
+
 ## [0.6.6](https://github.com/rzl-zone/next-kit/compare/v0.6.5...v0.6.6) (2025-10-31)
 
 
