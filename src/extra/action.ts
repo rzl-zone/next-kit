@@ -18,7 +18,7 @@ import { ActionError, type ActionErrorJson } from "@/extra/utils/errors";
 // -- Types ---------------------------
 
 // eslint-disable-next-line no-unused-vars
-type AnyFunc<This = void> = (this: This, ...args: readonly any[]) => unknown;
+type AnyFn<This = void> = (this: This, ...args: readonly any[]) => unknown;
 
 // eslint-disable-next-line no-unused-vars
 type ActionFunc<T> = T extends (...args: infer Args) => infer Return
@@ -35,11 +35,11 @@ interface ActionContext<Return> {
 
 // -- Internal ------------------------
 
-class ActionClass<Return extends AnyFunc<ActionContext<any>>> {
-  #fn: AnyFunc<ActionContext<any>> | undefined;
-  private fn: AnyFunc<ActionContext<any>> | undefined;
+class ActionClass<Return extends AnyFn<ActionContext<any>>> {
+  #fn: AnyFn<ActionContext<any>> | undefined;
+  private fn: AnyFn<ActionContext<any>> | undefined;
 
-  constructor(fn: AnyFunc<ActionContext<any>>) {
+  constructor(fn: AnyFn<ActionContext<any>>) {
     if (typeof globalThis?.Reflect?.ownKeys === "function") {
       // ES2022+ environment
       this.#fn = fn;
@@ -130,7 +130,7 @@ function getClientIpFromXForwardedFor(value: null | undefined | string) {
 
 // -- Exported ------------------------
 
-export type Action<Return extends AnyFunc<ActionContext<any>>> = InstanceType<
+export type Action<Return extends AnyFn<ActionContext<any>>> = InstanceType<
   typeof ActionClass<Return>
 >;
 
@@ -142,13 +142,13 @@ export type Action<Return extends AnyFunc<ActionContext<any>>> = InstanceType<
  * @example
  * * ***`actions.ts:`***
  * ```tsx
- * 'use server';
+ * "use server";
  *
- * import { actionError, createAction } from '@/lib/next-extra';
+ * import { actionError, createAction } from "@rzl-zone/next-kit/extra/action";
  *
  * export const hello = createAction(async (name: string) => {
  *    if (!name) {
- *      actionError('NAME_REQUIRED', 'Name is required');
+ *      actionError("NAME_REQUIRED", "Name is required");
  *    }
  *    return `Hello, ${name}!`;
  * });
@@ -156,24 +156,20 @@ export type Action<Return extends AnyFunc<ActionContext<any>>> = InstanceType<
  * ---
  * * ***`page.tsx (server-component):`***
  * ```tsx
- * import { hello } from './actions';
+ * import { hello } from "./actions";
  *
  * export default async function Page() {
- *    const { data, error } = await hello('John');
- *    if (error) {
- *      return <h1>ERROR: {error.message}</h1>;
- *    }
+ *    const { data, error } = await hello("John");
+ *    if (error) return <h1>ERROR: {error.message}</h1>;
  *    return <h1>{data}</h1>;
  * }
  * ```
  */
-export function createAction<T extends AnyFunc<ActionContext<any>>>(
-  fn: T
-): ActionFunc<T> {
+export function createAction<T extends AnyFn<ActionContext<any>>>(fn: T): ActionFunc<T> {
   const action = new ActionClass<T>(fn);
 
   return new Proxy(fn as any, {
-    apply: (_target, _thisArg, argumentsList) => {
+    apply: (target, thisArg, argumentsList) => {
       return action.run(...argumentsList);
     }
   });
@@ -187,13 +183,13 @@ export function createAction<T extends AnyFunc<ActionContext<any>>>(
  * @example
  * * ***`actions.ts:`***
  * ```ts
- * 'use server';
+ * "use server";
  *
- * import { actionError, createAction } from '@/lib/next-extra';
+ * import { actionError, createAction } from "@rzl-zone/next-kit/extra/action";
  *
  * export const hello = createAction(async (name: string) => {
  *    if (!name) {
- *      actionError('NAME_REQUIRED', 'Name is required');
+ *      actionError("NAME_REQUIRED", "Name is required");
  *    }
  *    return `Hello, ${name}!`;
  * });
@@ -201,13 +197,11 @@ export function createAction<T extends AnyFunc<ActionContext<any>>>(
  * ---
  * * ***`page.tsx (server-component):`***
  * ```tsx
- * import { hello } from './actions';
+ * import { hello } from "./actions";
  *
  * export default async function Page() {
- *    const { data, error } = await hello('John');
- *    if (error) {
- *      return <h1>ERROR: {error.message}</h1>;
- *    }
+ *    const { data, error } = await hello("John");
+ *    if (error) return <h1>ERROR: {error.message}</h1>;
  *    return <h1>{data}</h1>;
  * }
  * ```
@@ -234,23 +228,35 @@ export function actionError(code: string, message: string): never {
  *
  * @example
  * // Reading cookies in a Server Component
- * const requestCookies = cookies();
- * console.log(requestCookies.get('sessionId'));
+ * import { cookies } from "@rzl-zone/next-kit/extra/action";
+ *
+ * export default function Page() {
+ *   const requestCookies = cookies();
+ *   console.log(requestCookies.get("sessionId"));
+ *
+ *   return (
+ *     //...
+ *   );
+ * }
  *
  * @example
  * // Writing cookies in a Server Action
+ * import { cookies } from "@rzl-zone/next-kit/extra/action";
+ *
  * export function myAction() {
  *   const responseCookies = cookies();
- *   responseCookies.set('sessionId', 'abc123', { httpOnly: true });
- * }
+ *   responseCookies.set("sessionId", "abc123", { httpOnly: true });
+ * };
  *
  * @example
  * // Modifying cookies in a Route Handler
+ * import { cookies } from "@rzl-zone/next-kit/extra/action";
+ *
  * export default async function handler(req, res) {
  *   const responseCookies = cookies();
- *   responseCookies.delete('sessionId');
- *   res.end('Cookie deleted');
- * }
+ *   responseCookies.delete("sessionId");
+ *   res.end("Cookie deleted");
+ * };
  */
 export function cookies(): ResponseCookies {
   const expression = "cookies";
@@ -265,7 +271,7 @@ export function cookies(): ResponseCookies {
  * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * ***The function checks various headers commonly used by different cloud providers and proxies to find the client's IP address.***
- * ***It prioritizes the 'x-forwarded-for' header, which may contain multiple IP addresses, and extracts the first one.***
+ * ***It prioritizes the `x-forwarded-for` header, which may contain multiple IP addresses, and extracts the first one.***
  *
  * ***If no valid IP is found, it return null.***
  *

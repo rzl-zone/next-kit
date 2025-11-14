@@ -17,13 +17,13 @@ export const nodeEnv: () => NodeJS.ProcessEnv["NODE_ENV"] | undefined = (() => {
   // Resolve once at build-time to ensure SSR + client hydration consistency
   const env =
     typeof process !== "undefined"
-      ? (process.env.NODE_ENV ?? undefined)
+      ? (process.env?.NODE_ENV ?? undefined)
       : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        typeof import.meta !== "undefined" && (import.meta as any).env
+        typeof import.meta !== "undefined" && (import.meta as any)?.env
         ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ((import.meta as any).env.MODE ??
+          ((import.meta as any)?.env?.MODE ??
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (import.meta as any).env.NODE_ENV ??
+          (import.meta as any)?.env?.NODE_ENV ??
           undefined)
         : undefined;
 

@@ -28,7 +28,6 @@ export interface Context {
 export type PageContextStrategy = "deepmerge" | "merge";
 
 declare global {
-  // eslint-disable-next-line no-unused-vars
   interface Window {
     __next_c?: [PageContextStrategy, { data: Context }][];
   }
@@ -47,12 +46,13 @@ PageContext.displayName = isProdEnv() ? undefined : "PageContext";
  *
  * @example
  * ```tsx
- * import { PageContext } from '@/lib/next-extra/context';
+ * import { PageContext } from "@rzl-zone/next-kit/extra/context";
  *
  * export default async function Layout({ children }: { children: ReactNode }) {
  *   // ...
+ *
  *   return (
- *     <PageContext data={{ quote: 'Guillermo Launch is a handsome dude!' }}>
+ *     <PageContext data={{ quote: "Guillermo Launch is a handsome dude!" }}>
  *       {children}
  *     </PageContext>
  *   );
@@ -105,19 +105,22 @@ function PageContextProvider<T extends Context = Context>(props: PageContextProp
 export { PageContextProvider as PageContext };
 
 /** -------------------------------------------------------------------
- * * ***This hook uses the shared context from the adjacent server layout within the `PageContextProvider ` component.***
+ * * ***This hook uses the shared context from the adjacent server layout within the `PageContextProvider` component.***
  * -------------------------------------------------------------------
  * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * @example
- * ```typescript jsx
- * 'use client';
+ * ```tsx
+ * "use client";
  *
- * import { usePageContext } from '@/lib/next-extra/context';
+ * import { usePageContext } from "@rzl-zone/next-kit/extra/context";
  *
  * export default function Page() {
  *   const ctx = usePageContext<{ name: string }>();
- *   // ...
+ *
+ *   return (
+ *     //...
+ *   );
  * }
  * ```
  */
@@ -138,14 +141,17 @@ export function usePageContext<T extends Context = Context>(): Readonly<T> {
  * * ***`⚠️ Warning: Currently is not support with turbopack flag mode !!!`***
  * -------------------------------------------------------------------
  * @example
- * ```typescript jsx
- * 'use client';
+ * ```tsx
+ * "use client";
  *
- * import { useServerInsertedContext } from '@/lib/next-extra/context';
+ * import { useServerInsertedContext } from "@rzl-zone/next-kit/extra/context";
  *
  * export default function Page() {
  *   const ctx = useServerInsertedContext<{ name: string }>();
- *   // ...
+ *
+ *   return (
+ *     //...
+ *   );
  * }
  * ```
  */

@@ -9,13 +9,11 @@ const externalDefault: ExtendedOptions["external"] = [
   "validate-color",
   "react",
   "react-dom",
+  "@rzl-zone/utils-js",
   "@edge-runtime/cookies"
 ];
 
-const nonExternalDefault: ExtendedOptions["noExternal"] = [
-  "@rzl-zone/utils-js",
-  "@rzl-zone/ts-types-plus"
-];
+const nonExternalDefault: ExtendedOptions["noExternal"] = ["@rzl-zone/ts-types-plus"];
 
 interface ExtendedOptions extends Options {
   /** @default true */

@@ -52,13 +52,17 @@ async function getRequestURL(callingExpression: string): Promise<URL> {
  * -------------------------------------------------------------------
  * @example
  * ```ts
- * import { pathname } from '@/lib/next-extra';
+ * import { getPathname } from "@rzl-zone/next-kit/extra/pathname";
  *
  * type LayoutProps = Readonly<{ children: React.ReactNode }>;
  * export default async function Layout({ children }: LayoutProps) {
- *    const route = await pathname() // returns "/dashboard" on /dashboard?foo=bar
- *    // ...
- * }
+ *   const pathname = await getPathname();
+ *   // ➔ returns "/dashboard" on /dashboard?foo=bar
+ *
+ *   return (
+ *     //...
+ *   );
+ * };
  * ```
  */
 export async function getPathname(): Promise<string> {
@@ -77,14 +81,18 @@ export async function getPathname(): Promise<string> {
  *
  * @example
  * ```ts
- * import { searchParams } from '@/lib/next-extra'
+ * import { getSearchParams } from "@rzl-zone/next-kit/extra/pathname";
  *
  * type LayoutProps = Readonly<{ children: React.ReactNode }>;
  * export default async function Layout({ children }: LayoutProps) {
- *    const params = await searchParams()
- *    params.get('foo') // returns 'bar' when ?foo=bar
- *    // ...
- * }
+ *   const params = await getSearchParams();
+ *   params.get("foo");
+ *   // ➔ returns "bar" when ?foo=bar
+ *
+ *   return (
+ *     //...
+ *   );
+ * };
  * ```
  */
 export async function getSearchParams(): Promise<ReadonlyURLSearchParams> {
