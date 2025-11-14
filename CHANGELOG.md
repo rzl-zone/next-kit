@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.8](https://github.com/rzl-zone/next-kit/compare/v0.6.7...v0.6.8) (2025-11-14)
+
+
+### Bug Fixes
+
+* **`Chore`:** Update `@rzl-zone/utils-js` version and moving to main deps, fix `README.md`, fix some tsDoc. ([cd0af23](https://github.com/rzl-zone/next-kit/commit/cd0af2357c18895bf70e61c5dd9af1803b5c18b8))
+
 ## [0.6.7](https://github.com/rzl-zone/next-kit/compare/v0.6.6...v0.6.7) (2025-10-31)
 
 ### Bug Fixes
