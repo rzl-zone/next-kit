@@ -58,7 +58,7 @@
 
 - ✅ Type-safe server actions with helpers.  
 - 🚀 API response formatter for consistent client/server comms.  
-- 🛠️ Utility functions for common patterns (top-loader, hoc, themes, etc.).  
+- 🛠️ Utility functions for common patterns (progress-bar-loader, hoc, themes, etc.).  
 - ⚙️ Designed for scalability and convention.  
 
 ---
@@ -87,7 +87,7 @@ pnpm add @rzl-zone/next-kit
 
 <h2 id="detailed-features">💎 <strong>Detailed Features</strong></h2>
 
-### The full <a href="https://rzlzone.pages.dev/docs/next-kit" target="_blank" rel="nofollow noreferrer noopener">Next KIT</a> documentation is **currently under construction** 🏗️.
+### The full <a href="https://rzlzone.vercel.app/docs/next-kit" target="_blank" rel="nofollow noreferrer noopener">Next KIT</a> documentation is **currently under construction** 🏗️.
 
 #### For now, explore the examples or dive into the source — all utilities are documented via **TSDoc** and typed properly.
 
