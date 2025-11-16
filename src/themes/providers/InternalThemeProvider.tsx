@@ -345,7 +345,7 @@ const ThemeScript = memo(
   }: Omit<ThemeProviderProps, "children">) => {
     const isServerInserted = useRef(false);
 
-    const scriptArgs = [
+    const scriptArgs = JSON.stringify([
       attribute,
       storageKey,
       defaultTheme,
@@ -355,9 +355,7 @@ const ThemeScript = memo(
       enableSystem,
       enableColorScheme,
       enableMetaColorScheme
-    ]
-      .map((a) => JSON.stringify(a))
-      .join(",");
+    ]).slice(1, -1);
 
     useServerInsertedHTML(() => {
       if (!isServerInserted?.current) {
