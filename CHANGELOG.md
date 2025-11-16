@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.10](https://github.com/rzl-zone/next-kit/compare/v0.6.9...v0.6.10) (2025-11-16)
+
+
+### Bug Fixes
+
+* **`themes`:** Fixing some bug `scriptArgs` at `themes` category util. ([ea375de](https://github.com/rzl-zone/next-kit/commit/ea375de6754d94dcbef4f788dac0934a40b9269d))
+
 ## [0.6.9](https://github.com/rzl-zone/next-kit/compare/v0.6.8...v0.6.9) (2025-11-16)
 
 
