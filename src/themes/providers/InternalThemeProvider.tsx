@@ -24,13 +24,14 @@ import {
 import { assertIsBoolean } from "@rzl-zone/utils-js/assertions";
 import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
 
-import type { ThemeMode, ThemeProviderProps, UseTheme } from "../types";
+import type { ThemeProviderProps, UseTheme } from "../types";
 
 import {
   disableAnimation,
   getSystemTheme,
   getTheme,
   handlingApplyTheme,
+  normalizeThemes,
   saveToLS,
   updateMetaThemeColor,
   validatePropsAttribute
@@ -40,7 +41,7 @@ import { cleaningScriptFuncToString } from "../internals/helper";
 import LocalStorageRefresherTheme from "../internals/ls-refresher";
 
 import { ThemeContext } from "../contexts/ThemeContext";
-import { defaultThemes, MEDIA_SCHEME_THEME } from "../configs/default";
+import { defaultThemes, MEDIA_SCHEME_THEME } from "../configs";
 
 const InternalThemeProvider = (props: ThemeProviderProps) => {
   const context = useContext(ThemeContext);
@@ -53,11 +54,11 @@ const InternalThemeProvider = (props: ThemeProviderProps) => {
 const ThemeInternal = (props: ThemeProviderProps) => {
   const {
     forcedTheme,
-    disableTransitionOnChange = false,
+    disableTransitionOnChange = true,
     enableSystem = true,
     enableColorScheme = "html",
     enableMetaColorScheme = true,
-    storageKey = "theme",
+    storageKey = "rzl-theme",
     defaultTheme: _defaultTheme,
     attribute = "data-theme",
     value,
@@ -97,7 +98,7 @@ const ThemeInternal = (props: ThemeProviderProps) => {
 
   if (!isUndefined(_defaultTheme) && !isString(_defaultTheme)) {
     throw new TypeError(
-      `Props \`_defaultTheme\` for 'ProvidersThemesApp' must be of type \`string\` or \`undefined\` as types from 'ThemeProviderProps', but received: \`${getPreciseType(_defaultTheme)}\`.`
+      `Props \`defaultTheme\` for 'ProvidersThemesApp' must be of type \`string\` or \`undefined\` as types from 'ThemeProviderProps', but received: \`${getPreciseType(_defaultTheme)}\`.`
     );
   }
   if (!isUndefined(storageKey) && !isNonEmptyString(storageKey)) {
@@ -123,19 +124,21 @@ const ThemeInternal = (props: ThemeProviderProps) => {
 
   assertIsBoolean(disableTransitionOnChange, {
     message({ currentType, validType }) {
-      return `Props \`disableTransitionOnChange\` for 'ProvidersThemesApp' must be of type \`${currentType}\` or \`undefined\` as types from 'ThemeProviderProps', but received: \`${validType}\`.`;
+      return `Props \`disableTransitionOnChange\` for 'ProvidersThemesApp' must be of type \`${validType}\` or \`undefined\` as types from 'ThemeProviderProps', but received: \`${currentType}\`.`;
     }
   });
   assertIsBoolean(enableSystem, {
     message({ currentType, validType }) {
-      return `Props \`enableSystem\` for 'ProvidersThemesApp' must be of type \`${currentType}\` or \`undefined\` as types from 'ThemeProviderProps', but received: \`${validType}\`.`;
+      return `Props \`enableSystem\` for 'ProvidersThemesApp' must be of type \`${validType}\` or \`undefined\` as types from 'ThemeProviderProps', but received: \`${currentType}\`.`;
     }
   });
   assertIsBoolean(enableMetaColorScheme, {
     message({ currentType, validType }) {
-      return `Props \`enableMetaColorScheme\` for 'ProvidersThemesApp' must be of type \`${currentType}\` or \`undefined\` as types from 'ThemeProviderProps', but received: \`${validType}\`.`;
+      return `Props \`enableMetaColorScheme\` for 'ProvidersThemesApp' must be of type \`${validType}\` or \`undefined\` as types from 'ThemeProviderProps', but received: \`${currentType}\`.`;
     }
   });
+
+  themes = normalizeThemes(themes, enableSystem);
 
   // Set Default Props Values;
   const defaultTheme = enableSystem
@@ -146,16 +149,15 @@ const ThemeInternal = (props: ThemeProviderProps) => {
       ? _defaultTheme
       : "light";
 
-  const [theme, setThemeState] = useState(() =>
+  const [theme, setThemeState] = useState<UseTheme["theme"]>(() =>
     getTheme(storageKey, themes, defaultTheme)
   );
 
-  themes = themes.filter((theme) => theme !== "system");
+  const [resolvedTheme, setResolvedTheme] = useState<
+    Exclude<UseTheme["theme"], "system">
+  >(() => (theme === "system" ? getSystemTheme() : theme));
 
-  const [resolvedTheme, setResolvedTheme] = useState(() =>
-    theme === "system" ? getSystemTheme() : theme
-  );
-  const attrs = !value ? themes : Object.values(value);
+  const attrs = useMemo(() => (!value ? themes : Object.values(value)), [value, themes]);
 
   const applyTheme = useCallback(
     (theme?: string) => {
@@ -173,7 +175,7 @@ const ThemeInternal = (props: ThemeProviderProps) => {
       handlingApplyTheme({
         attribute,
         attributes: attrs,
-        defaultTheme,
+        defaultTheme: defaultTheme === "system" ? getSystemTheme() : defaultTheme,
         enableColorScheme,
         name,
         resolved
@@ -182,23 +184,39 @@ const ThemeInternal = (props: ThemeProviderProps) => {
       updateMetaThemeColor({ theme, enableMetaColorScheme });
       enable?.();
     },
-    [nonce]
+    [
+      nonce,
+      attribute,
+      attrs,
+      defaultTheme,
+      enableColorScheme,
+      value,
+      enableMetaColorScheme,
+      enableSystem
+    ]
   );
 
   const setTheme = useCallback(
-    (value: SetStateAction<(string & {}) | ThemeMode> | string) => {
+    (value: SetStateAction<NonNullable<UseTheme["theme"]>>) => {
       if (isFunction(value)) {
-        setThemeState((prevTheme?: string) => {
-          const newTheme = isNonEmptyString(prevTheme) ? value(prevTheme) : undefined;
+        setThemeState((prevTheme) => {
+          const prev = isNonEmptyString(prevTheme) ? prevTheme : defaultTheme;
+          const candidate = value(prev);
+
+          if (!isNonEmptyString(candidate) || !themes.includes(candidate)) {
+            // invalid value -> keep previous theme
+            return prevTheme;
+          }
+          const newTheme = candidate;
           saveToLS(storageKey, newTheme);
           return newTheme;
         });
-      } else if (isString(value)) {
+      } else if (isNonEmptyString(value)) {
         setThemeState(value);
         saveToLS(storageKey, value);
       }
     },
-    []
+    [storageKey, defaultTheme]
   );
 
   const handleMediaQuery = useCallback(
@@ -210,18 +228,29 @@ const ThemeInternal = (props: ThemeProviderProps) => {
         applyTheme("system");
       }
     },
-    [theme, forcedTheme]
+    [theme, forcedTheme, applyTheme, enableSystem]
   );
 
   // Always listen to System preference
   useEffect(() => {
     const media = window.matchMedia(MEDIA_SCHEME_THEME);
 
-    // Intentionally use deprecated listener methods to support iOS & old browsers
-    media.addListener(handleMediaQuery);
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", handleMediaQuery);
+    } else {
+      // Intentionally use deprecated listener methods to support iOS & old browsers
+      media.addListener(handleMediaQuery);
+    }
+
     handleMediaQuery(media);
 
-    return () => media.removeListener(handleMediaQuery);
+    return () => {
+      if (typeof media.removeEventListener === "function") {
+        media.removeEventListener("change", handleMediaQuery);
+      } else {
+        media.removeListener(handleMediaQuery);
+      }
+    };
   }, [handleMediaQuery]);
 
   // localStorage event handling
@@ -234,28 +263,36 @@ const ThemeInternal = (props: ThemeProviderProps) => {
       // If default theme set, use it if localstorage === null (happens on local storage manual deletion)
       if (!e.newValue) {
         setTheme(defaultTheme);
+        return;
+      }
+
+      // validate stored theme is allowed
+      if (themes.includes(e.newValue)) {
+        // update directly to avoid saving again to localStorage loop
+        setThemeState(e.newValue);
       } else {
-        setThemeState(e.newValue); // Direct state update to avoid loops
+        // fallback to default
+        setTheme(defaultTheme);
       }
     };
 
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
-  }, [setTheme]);
+  }, [storageKey, themes, setTheme, defaultTheme]);
 
   // Whenever theme or forcedTheme changes, apply it
   useEffect(() => {
     applyTheme(forcedTheme ?? theme);
-  }, [forcedTheme, theme]);
+  }, [forcedTheme, theme, applyTheme]);
 
   const providerValue = useMemo(
     () => ({
       theme,
+      themes,
       setTheme,
       forcedTheme,
-      resolvedTheme: theme === "system" ? resolvedTheme : theme,
-      themes: enableSystem ? [...themes, "system"] : themes,
-      systemTheme: (enableSystem ? resolvedTheme : undefined) as UseTheme["systemTheme"]
+      systemTheme: enableSystem ? resolvedTheme : undefined,
+      resolvedTheme: theme === "system" ? resolvedTheme : theme
     }),
     [theme, setTheme, forcedTheme, resolvedTheme, enableSystem, themes]
   );
@@ -308,7 +345,7 @@ const ThemeScript = memo(
   }: Omit<ThemeProviderProps, "children">) => {
     const isServerInserted = useRef(false);
 
-    const scriptArgs = JSON.stringify([
+    const scriptArgs = [
       attribute,
       storageKey,
       defaultTheme,
@@ -318,7 +355,9 @@ const ThemeScript = memo(
       enableSystem,
       enableColorScheme,
       enableMetaColorScheme
-    ]).slice(1, -1);
+    ]
+      .map((a) => JSON.stringify(a))
+      .join(",");
 
     useServerInsertedHTML(() => {
       if (!isServerInserted?.current) {
@@ -328,7 +367,7 @@ const ThemeScript = memo(
           <script
             {...scriptProps}
             suppressHydrationWarning
-            {...(nonce ? { nonce: typeof window === "undefined" ? nonce : "" } : {})}
+            {...(nonce ? { nonce } : {})}
             dangerouslySetInnerHTML={{
               __html: `(${cleaningScriptFuncToString(scriptThemesApp)})(${scriptArgs})`
             }}

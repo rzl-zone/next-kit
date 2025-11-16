@@ -5,13 +5,14 @@ import type {
   ScriptHTMLAttributes,
   SetStateAction
 } from "react";
-import type { CONFIG_THEME } from "../configs";
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 import type { useTheme } from "..";
+import { defaultThemes } from "../configs";
+import { AnyString as AnyThemeAsString } from "@rzl-zone/ts-types-plus";
 
 /** * The default themes fetched from the main config. */
-type _DefaultThemes = typeof CONFIG_THEME.themes;
+type _DefaultThemes = typeof defaultThemes;
 
 interface ValueObject {
   [themeName: string]: string;
@@ -57,7 +58,7 @@ export interface ScriptPropsThemesProps
  * }
  * ```
  *
- * If no override is provided, default themes from CONFIG_THEME will be used.
+ * If no override is provided, default themes from defaultTheme will be used.
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ThemeOverrideConfig {}
@@ -92,7 +93,7 @@ type ThemesMode = ThemeOverrideConfig extends { themes: infer T }
 /** ------------------------------------------------------------
  * * ***Represents the valid individual theme mode, extracted from the {@link ThemesMode | `ThemesMode`} array.***
  * ------------------------------------------------------------
- * **This can be a string literal type like `"pink" | "blue"`, or `undefined` if `themes` is optional.**
+ * **This can be a string literal type like `"dark" | "light" | "pink" | "blue"`, or `undefined` if `themes` is optional.**
  */
 export type ThemeMode = ThemesMode extends readonly (infer T)[] ? T : undefined;
 
@@ -111,7 +112,27 @@ export type ThemeProviderProps = {
   children: ReactNode;
   /** ***List of all available theme names.***
    *
-   * - **Default value:** `["light", "dark"]`.
+   * - **Default value:**
+   *     - If **`enableSystem`** is **true**, then **`["dark", "light", "system"]`**.
+   *     - If **`enableSystem`** is **false**, then **`["dark", "light"]`**.
+   *
+   * - **⚠️ Note:**
+   *     - If **`enableSystem`** is **false** and your `themes` array includes `"system"`,
+   *       it will be removed automatically.
+   *
+   * - **ℹ️ Tip ***(Recommended)***:**
+   *    - If you pass custom themes (e.g. `themes={["pink","blue"]}`),
+   *      remember to add a corresponding override for type-safety:
+   *      ```ts
+   *
+   *      import "@rzl-zone/next-kit/themes";
+   *
+   *      declare module "@rzl-zone/next-kit/themes" {
+   *        interface ThemeOverrideConfig {
+   *          themes: ["pink", "blue"]; // or themes?: [...];
+   *        }
+   *      }
+   *      ```
    */
   themes?: string[] | undefined;
   /** ***Forced theme name for the current page.***
@@ -130,7 +151,7 @@ export type ThemeProviderProps = {
   enableSystem?: boolean | undefined;
   /** ***Disable all CSS transitions when switching themes.***
    *
-   * - **Default value:** `false`.
+   * - **Default value:** `true`.
    * - ***⚠️ Warning:***
    *    - **Will throw TypeError if value is not `undefined` or `not a boolean`.**
    */
@@ -154,7 +175,7 @@ export type ThemeProviderProps = {
   enableMetaColorScheme?: boolean | undefined;
   /** ***Key used to store theme setting in localStorage.***
    *
-   * - **Default value:** `"theme"`
+   * - **Default value:** `"rzl-theme"`
    * - ***⚠️ Warning:***
    *    - **Will throw TypeError if value is not `undefined` or `not a string` and value `is empty-string`**
    */
@@ -163,6 +184,8 @@ export type ThemeProviderProps = {
    *
    * - **Default value:**
    *    - If `enableSystem` is `true` then `system` otherwise `light`.
+   * - **ℹ️ Note:**
+   *    - If you set this value, value must be one of `themes` property value, otherwise will keep to default value.
    * - ***⚠️ Warning:***
    *    - **Will throw TypeError if value is not `undefined` or `not a string`.**
    */
@@ -185,7 +208,7 @@ export type ThemeProviderProps = {
   attribute?: Attribute | Attribute[] | undefined;
   /** ***Mapping of theme name to HTML attribute value.***
    *
-   * - **Type:** {@link ValueObject | `ValueObject`} | `undefined`
+   * - **Type:** {@link ValueObject | **`ValueObject`**} | `undefined`
    * - **Structure:** An object where each key is a theme name (`string`) and the value is a string representing the attribute value.
    *
    * - ⚠️ **Warning:**
@@ -212,7 +235,10 @@ export type ThemeProviderProps = {
    *    - **Will throw TypeError if value is not `undefined` or `not a string`.**
    */
   nonce?: string;
-  /** ***Props to pass the inline script.*** */
+  /** ***Props to pass the inline script.***
+   *
+   * @default undefined
+   */
   scriptProps?: ScriptPropsThemesProps;
 };
 
@@ -224,15 +250,15 @@ export type ThemeProviderProps = {
  */
 export type UseTheme = {
   /** ***List of all available theme names.*** */
-  themes: string[];
+  themes: Array<AnyThemeAsString | ThemeMode>;
   /** ***Forced theme name for the current page.*** */
-  forcedTheme?: string | undefined;
+  forcedTheme?: AnyThemeAsString | ThemeMode | undefined;
   /** ***Update the theme.*** */
-  setTheme: Dispatch<SetStateAction<(string & {}) | ThemeMode>>;
+  setTheme: Dispatch<SetStateAction<AnyThemeAsString | ThemeMode>>;
   /** ***Active theme name.*** */
-  theme?: string | undefined;
+  theme?: AnyThemeAsString | ThemeMode | undefined;
   /** ***If `enableSystem` is `true` and the active theme is `"system"`, this returns whether the system preference resolved to` "dark" or "light"`. Otherwise, identical to `theme`.*** */
-  resolvedTheme?: string | undefined;
+  resolvedTheme?: AnyThemeAsString | Exclude<ThemeMode, "system"> | undefined;
   /** ***If enableSystem is true, returns the System theme preference (`"dark"` or `"light"`), regardless what the active theme is.*** */
-  systemTheme?: "dark" | "light" | undefined;
+  systemTheme?: AnyThemeAsString | Exclude<ThemeMode, "system"> | undefined;
 };

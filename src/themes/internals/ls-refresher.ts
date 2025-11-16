@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 
-import { ThemeMode } from "../types";
+import { ThemeMode, UseTheme } from "../types";
 import { usePathname } from "next/navigation";
 
 type LocalStorageRefresherThemeProps = {
@@ -11,7 +11,7 @@ type LocalStorageRefresherThemeProps = {
   /**
    * @default "light"
    */
-  defaultTheme: (string & {}) | ThemeMode;
+  defaultTheme: NonNullable<UseTheme["theme"]>;
   /** Whether to switch between dark and light themes based on prefers-color-scheme, DefaultValue: `true`. */
   enableSystem: boolean | undefined;
   /** List of all available theme names
@@ -20,8 +20,8 @@ type LocalStorageRefresherThemeProps = {
    */
   themes: string[];
   /** Update the theme */
-  setTheme: Dispatch<SetStateAction<(string & {}) | ThemeMode>>;
-  /** Active theme name */
+  setTheme: Dispatch<SetStateAction<NonNullable<UseTheme["theme"]>>>;
+  /** Active current theme */
   theme: string | undefined;
 };
 

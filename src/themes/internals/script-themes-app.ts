@@ -21,7 +21,7 @@ export const scriptThemesApp = (
       const isClass = attr === "class";
       const classes = isClass && value ? themes.map((t) => value[t] || t) : themes;
       if (isClass) {
-        el.classList.remove(...classes);
+        if (classes.length > 0) el.classList.remove(...classes);
         el.classList.add(value && value[theme] ? value[theme] : theme);
       } else {
         el.setAttribute(attr, theme);
@@ -40,31 +40,37 @@ export const scriptThemesApp = (
     /** Whether to indicate to browsers which color scheme in meta head, is used (dark or light) for built-in UI like inputs and buttons */
     enableMetaColorScheme: boolean | undefined;
   }) => {
-    if (document !== undefined && enableMetaColorScheme) {
-      // eslint-disable-next-line quotes
-      document.querySelectorAll('meta[name="theme-color"]').forEach((el) => el.remove());
+    if (typeof document !== "undefined" && enableMetaColorScheme === true) {
+      document
+        // eslint-disable-next-line quotes
+        .querySelectorAll('meta[name="theme-color"][data-rzl-theme]')
+        .forEach((el) => el.remove());
 
       if (theme === "dark") {
         const meta = document.createElement("meta");
         meta.name = "theme-color";
         meta.content = "oklch(.13 .028 261.692)";
+        meta.setAttribute("data-rzl-theme", "dark");
         document.head.appendChild(meta);
       } else if (theme === "light") {
         const meta = document.createElement("meta");
         meta.name = "theme-color";
-        meta.content = "white";
+        meta.content = "#ffffff";
+        meta.setAttribute("data-rzl-theme", "light");
         document.head.appendChild(meta);
       } else {
         const meta1 = document.createElement("meta");
         meta1.name = "theme-color";
         meta1.content = "oklch(.13 .028 261.692)";
         meta1.media = "(prefers-color-scheme: dark)";
+        meta1.setAttribute("data-rzl-theme", "dark");
         document.head.appendChild(meta1);
 
         const meta2 = document.createElement("meta");
         meta2.name = "theme-color";
-        meta2.content = "white";
+        meta2.content = "#ffffff";
         meta2.media = "(prefers-color-scheme: light)";
+        meta2.setAttribute("data-rzl-theme", "light");
         document.head.appendChild(meta2);
       }
     }
@@ -91,12 +97,13 @@ export const scriptThemesApp = (
     updateDOM(forcedTheme);
   } else {
     try {
-      const getTheme = localStorage.getItem(storageKey);
-      const themeName = getTheme && themes.includes(getTheme) ? getTheme : defaultTheme;
+      const storedTheme = localStorage.getItem(storageKey);
+      const themeName =
+        storedTheme && themes.includes(storedTheme) ? storedTheme : defaultTheme;
       const isSystem = enableSystem && themeName === "system";
       const theme = isSystem ? getSystemTheme() : themeName;
       updateDOM(theme);
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (e) {
       // mean is not support, so const skip.
     }

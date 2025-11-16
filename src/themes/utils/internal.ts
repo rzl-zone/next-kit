@@ -8,16 +8,16 @@ import {
 } from "@rzl-zone/utils-js/predicates";
 import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
 
-import type { Attribute, ThemeProviderProps } from "../types";
-import { defaultColorSchemes, MEDIA_SCHEME_THEME } from "../configs/default";
+import type { Attribute, ThemeProviderProps, UseTheme } from "../types";
+import { defaultColorSchemes, MEDIA_SCHEME_THEME } from "../configs";
 
 export const saveToLS = (storageKey: string, value?: string): void => {
   if (isServer()) return undefined;
   // Save to storage
-  if (isString(storageKey) && isNonEmptyString(value)) {
+  if (isNonEmptyString(storageKey) && isNonEmptyString(value)) {
     try {
       localStorage.setItem(storageKey, value);
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (e) {
       // Unsupported
     }
@@ -26,20 +26,20 @@ export const saveToLS = (storageKey: string, value?: string): void => {
 
 export const getTheme = (
   key: string,
-  validTheme: string[],
-  fallback?: string
-): string | undefined => {
+  validTheme: UseTheme["themes"],
+  fallback?: UseTheme["theme"]
+): UseTheme["theme"] => {
   if (isServer()) return undefined;
 
-  let theme: string | undefined;
+  let theme: UseTheme["theme"] | undefined;
   try {
-    const getTheme = localStorage.getItem(key);
-    theme = getTheme && validTheme.includes(getTheme) ? getTheme : fallback;
-    // eslint-disable-next-line no-unused-vars
+    const stored = localStorage.getItem(key);
+    theme = stored && validTheme.includes(stored) ? stored : fallback;
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   } catch (e) {
     // Unsupported
   }
-  return theme || fallback;
+  return theme ?? fallback;
 };
 
 export const disableAnimation = (nonce?: string): VoidFunction | undefined => {
@@ -86,44 +86,50 @@ export const updateMetaThemeColor = ({
     isBoolean(enableMetaColorScheme) &&
     enableMetaColorScheme === true
   ) {
-    // eslint-disable-next-line quotes
-    document.querySelectorAll('meta[name="theme-color"]').forEach((el) => el.remove());
+    document
+      // eslint-disable-next-line quotes
+      .querySelectorAll('meta[name="theme-color"][data-rzl-theme]')
+      .forEach((el) => el.remove());
 
     if (theme === "dark") {
       const meta = document.createElement("meta");
       meta.name = "theme-color";
       meta.content = "oklch(.13 .028 261.692)";
+      meta.setAttribute("data-rzl-theme", "dark");
       document.head.appendChild(meta);
     } else if (theme === "light") {
       const meta = document.createElement("meta");
       meta.name = "theme-color";
-      meta.content = "white";
+      meta.content = "#ffffff";
+      meta.setAttribute("data-rzl-theme", "light");
       document.head.appendChild(meta);
     } else {
       const meta1 = document.createElement("meta");
       meta1.name = "theme-color";
       meta1.content = "oklch(.13 .028 261.692)";
       meta1.media = "(prefers-color-scheme: dark)";
+      meta1.setAttribute("data-rzl-theme", "dark");
       document.head.appendChild(meta1);
 
       const meta2 = document.createElement("meta");
       meta2.name = "theme-color";
-      meta2.content = "white";
+      meta2.content = "#ffffff";
       meta2.media = "(prefers-color-scheme: light)";
+      meta2.setAttribute("data-rzl-theme", "light");
       document.head.appendChild(meta2);
     }
   }
 };
 
 export const validatePropsAttribute = (val: Attribute | Attribute[]): void => {
-  if (!isString(val) || !isNonEmptyString(val)) {
+  if (!isNonEmptyString(val)) {
     throw new TypeError(
-      `Props \`storageKey\` for 'ProvidersThemesApp' must be of type \`string\` or \`undefined\` and value can't be empty-string as types from 'ThemeProviderProps', but received: \`${getPreciseType(val)}\`.`
+      `Props \`attribute\` for 'ProvidersThemesApp' must be of type \`string\` or \`undefined\` and value can't be empty-string as types from 'ThemeProviderProps', but received: \`${getPreciseType(val)}\`.`
     );
   }
   if (val !== "class" && !val.startsWith("data-")) {
     throw new TypeError(
-      `Props \`storageKey\` for 'ProvidersThemesApp' must be \`"class"\` or start with \`"data-"\`, but received value: \`${safeStableStringify(val)}\`.`
+      `Props \`attribute\` for 'ProvidersThemesApp' must be \`"class"\` or start with \`"data-"\`, but received value: \`${safeStableStringify(val, { keepUndefined: true })}\`.`
     );
   }
 };
@@ -152,7 +158,7 @@ export const handlingApplyTheme = ({
 
   const handleAttribute = (attr: Attribute) => {
     if (attr === "class") {
-      docEl.classList.remove(...attributes);
+      if (attributes.length > 0) docEl.classList.remove(...attributes);
       if (name) docEl.classList.add(name);
     } else if (attr.startsWith("data-")) {
       if (name) {
@@ -167,13 +173,29 @@ export const handlingApplyTheme = ({
 
   if (enableColorScheme !== false) {
     const fallback = defaultColorSchemes.includes(defaultTheme) ? defaultTheme : null;
-    const colorScheme = defaultColorSchemes.includes(resolved) ? resolved : fallback;
+    let colorScheme = defaultColorSchemes.includes(resolved) ? resolved : fallback;
     if (colorScheme) {
+      if (colorScheme === "system") colorScheme = getSystemTheme();
+
       if (enableColorScheme === "body") {
         bodyEl.style.colorScheme = colorScheme;
-      } else {
+      } else if (enableColorScheme === "html") {
         docEl.style.colorScheme = colorScheme;
       }
     }
   }
 };
+
+export function normalizeThemes<T extends unknown[]>(
+  themes: T,
+  enableSystem: boolean
+): T {
+  const cleaned = themes.filter((t) => t !== "system");
+
+  const set = new Set(cleaned);
+
+  if (enableSystem) set.add("system");
+  else set.delete("system");
+
+  return Array.from(set) as T;
+}

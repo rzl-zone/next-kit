@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 
 import type { UseTheme } from "../types";
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 import type { ProvidersThemesApp } from "../providers/ProvidersThemesApp";
 
 /** ------------------------------------------------------------
@@ -14,7 +14,7 @@ import type { ProvidersThemesApp } from "../providers/ProvidersThemesApp";
  * switching themes, including system-level theme support.**
  *
  * ⚠️ ***Must be used inside `<ProvidersThemesApp>` or it will throw.***
- * @throws {Error} If the hook is called outside of the `<ProvidersThemesApp>` provider.
+ * @throws If the hook is called outside of the `<ProvidersThemesApp>` provider, will throw {@link Error | `Error`} .
  * @returns {UseTheme} Object containing current theme data and setter.
  * @see {@link ProvidersThemesApp | `ProvidersThemesApp`}.
  */

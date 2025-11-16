@@ -1,13 +1,10 @@
 import type { ThemeProviderProps } from "../types";
 
-export const CONFIG_THEME = {
-  attribute: "data-theme",
-  storageKey: "rzl-theme",
-  themes: ["dark", "light", "system"],
-  enableSystem: true,
-  forcedTheme: undefined,
-  defaultTheme: undefined,
-  enableColorScheme: false,
-  enableMetaColorScheme: false,
-  disableTransitionOnChange: true
-} as const satisfies Omit<ThemeProviderProps, "children">;
+/** @deprecated It used for internal-only use `defaultThemes` directly. */
+const CONFIG_THEME = {
+  themes: ["dark", "light", "system"]
+} as const satisfies Pick<ThemeProviderProps, "themes">;
+
+export const defaultThemes = CONFIG_THEME.themes;
+export const defaultColorSchemes = ["light", "dark"];
+export const MEDIA_SCHEME_THEME = "(prefers-color-scheme: dark)";

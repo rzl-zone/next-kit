@@ -1,9 +1,9 @@
 import { createContext } from "react";
-import type { UseTheme } from "../types";
 
-// eslint-disable-next-line no-unused-vars
+import type { UseTheme } from "../types";
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 import type { useTheme } from "../hooks/useTheme";
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 import type { ProvidersThemesApp } from "../providers/ProvidersThemesApp";
 
 /** ------------------------------------------------------------
@@ -16,7 +16,6 @@ import type { ProvidersThemesApp } from "../providers/ProvidersThemesApp";
  * `<ProvidersThemesApp>` tree.***, directly calling `React.useContext(ThemeContext)` outside the provider
  * will return `undefined`.
  *
- * @type {React.Context<UseTheme | undefined>}
  * @remarks
  * This context is intentionally exported to support advanced use-cases
  * (e.g., custom hooks), prefer the `useTheme()` hook for typical usage.
