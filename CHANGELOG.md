@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.11](https://github.com/rzl-zone/next-kit/compare/v0.6.10...v0.6.11) (2025-11-16)
+
+
+### Bug Fixes
+
+* **`themes`:** Fixing some bug in internal `cleaningScriptFuncToString` at `themes` category util. ([8e3e0bd](https://github.com/rzl-zone/next-kit/commit/8e3e0bd4e189e405074bd95f20b5c4980f42ddd5))
+
 ## [0.6.10](https://github.com/rzl-zone/next-kit/compare/v0.6.9...v0.6.10) (2025-11-16)
 
 
