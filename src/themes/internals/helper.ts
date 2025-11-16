@@ -1,7 +1,7 @@
-import { isNonEmptyString } from "@rzl-zone/utils-js/predicates";
+import { isNil } from "@rzl-zone/utils-js/predicates";
 
 export function cleaningScriptFuncToString<T>(script: T): string {
-  if (!isNonEmptyString(script)) return "";
+  if (isNil(script)) return "";
 
   return (
     String(script)
