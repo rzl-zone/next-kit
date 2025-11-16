@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.9](https://github.com/rzl-zone/next-kit/compare/v0.6.8...v0.6.9) (2025-11-16)
+
+
+### Bug Fixes
+
+* **`Chore`:** Update README.md. ([3cee898](https://github.com/rzl-zone/next-kit/commit/3cee898a8b91567695e71ac21c7666d8daf5289c))
+* **`themes`:** Fixing some bug, types and tsDoc at `themes` category util. ([b9258b7](https://github.com/rzl-zone/next-kit/commit/b9258b7a2e457bb02b495da8863a5c71b48f5941))
+
 ## [0.6.8](https://github.com/rzl-zone/next-kit/compare/v0.6.7...v0.6.8) (2025-11-14)
 
 
