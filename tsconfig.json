@@ -2,6 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.rzl.json",
   "compilerOptions": {
+    "isolatedModules": true,
     "stripInternal": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,

@@ -17,19 +17,14 @@ import { ActionError, type ActionErrorJson } from "@/extra/utils/errors";
 
 // -- Types ---------------------------
 
-// eslint-disable-next-line no-unused-vars
 type AnyFn<This = void> = (this: This, ...args: readonly any[]) => unknown;
 
-// eslint-disable-next-line no-unused-vars
 type ActionFunc<T> = T extends (...args: infer Args) => infer Return
-  ? // eslint-disable-next-line no-unused-vars
-    (this: any, ...args: Args) => Promise<SafeReturn<Awaited<Return>, ActionError>>
+  ? (this: any, ...args: Args) => Promise<SafeReturn<Awaited<Return>, ActionError>>
   : never;
 
 interface ActionContext<Return> {
-  // eslint-disable-next-line no-unused-vars
   resolve: (result: Return) => never;
-  // eslint-disable-next-line no-unused-vars
   reject: (error: ActionErrorJson | ActionError) => never;
 }
 

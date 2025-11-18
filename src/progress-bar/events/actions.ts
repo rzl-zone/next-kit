@@ -19,7 +19,7 @@ import {
 
 import type { RzlNextProgressBarProps, RzlProgressType } from "../types/types";
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { RzlNextTopLoader } from "@/progress-bar";
 
 type ClassNameIfLoading = Pick<RzlNextProgressBarProps, "classNameIfLoading">;
@@ -87,7 +87,6 @@ const defaultWithStopDelay = {
  */
 export const startRzlProgress = (
   props: StartRzlProgressProps = {}
-  // eslint-disable-next-line no-unused-vars
 ): ((forceStop?: boolean) => void) => {
   if (!isPlainObject(props)) props = {};
 

@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 
 import type { UseTheme } from "../types";
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { ProvidersThemesApp } from "../providers/ProvidersThemesApp";
 
 /** ------------------------------------------------------------

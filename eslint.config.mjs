@@ -31,14 +31,6 @@ export default tsEslint.config(
       ],
       "prefer-const": "warn",
       "no-unreachable": "warn",
-      "no-unused-vars": [
-        "warn",
-        {
-          vars: "all",
-          varsIgnorePattern: "^_",
-          argsIgnorePattern: "^_"
-        }
-      ],
       "@typescript-eslint/semi": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",

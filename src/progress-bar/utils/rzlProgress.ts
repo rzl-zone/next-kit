@@ -196,7 +196,6 @@ export class RzlProgress {
 
   static status: number | null = null;
   /** * ***Queue for animation functions.*** */
-  // eslint-disable-next-line no-unused-vars
   private static pending: Array<(next: VoidFunction) => void> = [];
   private static isPaused: boolean = false;
 
@@ -487,7 +486,6 @@ export class RzlProgress {
   }
 
   /** * ***Queue function for animations.*** */
-  // eslint-disable-next-line no-unused-vars
   static queue(callback: (next: VoidFunction) => void): void {
     if (isFunction(callback)) {
       this.pending.push(callback);

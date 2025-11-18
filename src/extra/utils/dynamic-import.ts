@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export function safeImport<T = object>(path: string): T | undefined {
   try {

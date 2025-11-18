@@ -6,7 +6,7 @@ import type {
   SetStateAction
 } from "react";
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { useTheme } from "..";
 import { defaultThemes } from "../configs";
 import { AnyString as AnyThemeAsString } from "@rzl-zone/ts-types-plus";

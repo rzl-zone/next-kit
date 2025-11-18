@@ -103,7 +103,7 @@ export const scriptThemesApp = (
       const isSystem = enableSystem && themeName === "system";
       const theme = isSystem ? getSystemTheme() : themeName;
       updateDOM(theme);
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       // mean is not support, so const skip.
     }
