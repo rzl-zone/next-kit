@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/rzl-zone/next-kit/compare/v0.6.11...v0.7.0) (2025-11-20)
+
+
+### Features
+
+* **`themes`:** Add new options `metaColorSchemeValue` for `ProvidersThemesApp` and fixing some bugs. ([9745543](https://github.com/rzl-zone/next-kit/commit/97455435855d95a289f78aeb5eb1e29f1dc14a97))
+
 ## [0.6.11](https://github.com/rzl-zone/next-kit/compare/v0.6.10...v0.6.11) (2025-11-16)
 
 
