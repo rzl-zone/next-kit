@@ -1,10 +1,10 @@
 import React from "react";
 import { assertIsPlainObject } from "@rzl-zone/utils-js/assertions";
 
-import { isReactNode } from "@/utils/reactNode";
 import InternalThemeProvider from "./InternalThemeProvider";
 
 import type { ThemeProviderProps } from "../types";
+import { isReactNode } from "@/utils";
 
 /** ------------------------------------------------------------
  * * ***Provider wrapper for configuring and supplying the theme system.***
@@ -44,10 +44,12 @@ import type { ThemeProviderProps } from "../types";
  * @throws Will throw an error if `children` is not provided.
  * @returns A `<ProvidersThemesApp>` wrapping the passed children.
  */
-export const ProvidersThemesApp = (props: ThemeProviderProps) => {
+export const ProvidersThemesApp = <EnablingSystem extends boolean = true>(
+  props: ThemeProviderProps<EnablingSystem>
+) => {
   assertIsPlainObject(props, {
     message({ currentType, validType }) {
-      return `Props 'ProvidersThemesApp' must be of type \`${currentType}\` as types 'ThemeProviderProps', but received: \`${validType}\`.`;
+      return `Props 'ProvidersThemesApp' must be of type \`${validType}\` as types 'ThemeProviderProps', but received: \`${currentType}\`.`;
     }
   });
 
@@ -57,5 +59,7 @@ export const ProvidersThemesApp = (props: ThemeProviderProps) => {
 
   const config = { ..._restProps };
 
-  return <InternalThemeProvider {...config}>{children}</InternalThemeProvider>;
+  return (
+    <InternalThemeProvider<EnablingSystem> {...config}>{children}</InternalThemeProvider>
+  );
 };

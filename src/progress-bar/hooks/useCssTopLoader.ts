@@ -173,7 +173,7 @@ export const useCssTopLoader = ({
     const styleElement = document.createElement("style");
 
     styleElement.setAttribute("type", "text/css");
-    styleElement.setAttribute("data-styles", "rzl-app-progress_bar");
+    styleElement.setAttribute("data-style", "rzlzone-progress_bar");
 
     // Set the 'id' only if it's provided, otherwise it will be undefined
     if (id) styleElement.id = id;

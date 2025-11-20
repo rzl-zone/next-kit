@@ -1,18 +1,20 @@
 export const scriptThemesApp = (
-  attribute: string | string[],
   storageKey: string,
+  attribute: string | string[],
   defaultTheme: string,
-  forcedTheme: string,
+  forcedTheme: string | null | undefined,
   themes: string[],
   value: { [x: string]: string },
   enableSystem: boolean | undefined,
+  metaColorSchemeValue: {
+    light: string;
+    dark: string;
+  },
   enableColorScheme?: "html" | "body" | false | undefined,
-  /** Whether to indicate to browsers which color scheme in meta head, is used (dark or light) for built-in UI like inputs and buttons */
   enableMetaColorScheme?: boolean | undefined
 ) => {
-  const el = document.documentElement;
+  const docEl = document.documentElement;
   const bodyEl = document.body;
-  const systemThemes = ["light", "dark"];
 
   const updateDOM = (theme: string) => {
     const attributes = Array.isArray(attribute) ? attribute : [attribute];
@@ -21,24 +23,28 @@ export const scriptThemesApp = (
       const isClass = attr === "class";
       const classes = isClass && value ? themes.map((t) => value[t] || t) : themes;
       if (isClass) {
-        if (classes.length > 0) el.classList.remove(...classes);
-        el.classList.add(value && value[theme] ? value[theme] : theme);
+        if (classes.length > 0) docEl.classList.remove(...classes);
+        docEl.classList.add(value && value[theme] ? value[theme] : theme);
       } else {
-        el.setAttribute(attr, theme);
+        docEl.setAttribute(attr, theme);
       }
     });
 
     setColorScheme(theme, enableColorScheme);
-    updateMetaThemeColor({ theme, enableMetaColorScheme });
+    updateMetaThemeColor({ theme, enableMetaColorScheme, metaColorSchemeValue });
   };
 
   const updateMetaThemeColor = ({
     theme,
-    enableMetaColorScheme
+    enableMetaColorScheme,
+    metaColorSchemeValue
   }: {
     theme: string | undefined;
-    /** Whether to indicate to browsers which color scheme in meta head, is used (dark or light) for built-in UI like inputs and buttons */
     enableMetaColorScheme: boolean | undefined;
+    metaColorSchemeValue: {
+      light: string;
+      dark: string;
+    };
   }) => {
     if (typeof document !== "undefined" && enableMetaColorScheme === true) {
       document
@@ -46,32 +52,36 @@ export const scriptThemesApp = (
         .querySelectorAll('meta[name="theme-color"][data-rzl-theme]')
         .forEach((el) => el.remove());
 
-      if (theme === "dark") {
+      if (theme === "dark" && metaColorSchemeValue.dark) {
         const meta = document.createElement("meta");
         meta.name = "theme-color";
-        meta.content = "oklch(.13 .028 261.692)";
+        meta.content = metaColorSchemeValue.dark;
         meta.setAttribute("data-rzl-theme", "dark");
         document.head.appendChild(meta);
-      } else if (theme === "light") {
+      } else if (theme === "light" && metaColorSchemeValue.light) {
         const meta = document.createElement("meta");
         meta.name = "theme-color";
-        meta.content = "#ffffff";
+        meta.content = metaColorSchemeValue.light;
         meta.setAttribute("data-rzl-theme", "light");
         document.head.appendChild(meta);
       } else {
-        const meta1 = document.createElement("meta");
-        meta1.name = "theme-color";
-        meta1.content = "oklch(.13 .028 261.692)";
-        meta1.media = "(prefers-color-scheme: dark)";
-        meta1.setAttribute("data-rzl-theme", "dark");
-        document.head.appendChild(meta1);
+        if (metaColorSchemeValue.dark) {
+          const meta1 = document.createElement("meta");
+          meta1.name = "theme-color";
+          meta1.content = metaColorSchemeValue.dark;
+          meta1.media = "(prefers-color-scheme: dark)";
+          meta1.setAttribute("data-rzl-theme", "dark");
+          document.head.appendChild(meta1);
+        }
 
-        const meta2 = document.createElement("meta");
-        meta2.name = "theme-color";
-        meta2.content = "#ffffff";
-        meta2.media = "(prefers-color-scheme: light)";
-        meta2.setAttribute("data-rzl-theme", "light");
-        document.head.appendChild(meta2);
+        if (metaColorSchemeValue.light) {
+          const meta2 = document.createElement("meta");
+          meta2.name = "theme-color";
+          meta2.content = metaColorSchemeValue.light;
+          meta2.media = "(prefers-color-scheme: light)";
+          meta2.setAttribute("data-rzl-theme", "light");
+          document.head.appendChild(meta2);
+        }
       }
     }
   };
@@ -80,11 +90,36 @@ export const scriptThemesApp = (
     theme: string,
     enableColorScheme?: "html" | "body" | false | undefined
   ) => {
-    if (enableColorScheme && systemThemes.includes(theme)) {
-      if (enableColorScheme === "body") {
-        bodyEl.style.colorScheme = theme;
-      } else {
-        el.style.colorScheme = theme;
+    if (enableColorScheme !== false) {
+      const defaultColorSchemes = ["light", "dark"];
+
+      const fallback = defaultColorSchemes.includes(defaultTheme) ? defaultTheme : null;
+      let colorScheme = defaultColorSchemes.includes(theme) ? theme : fallback;
+      if (colorScheme) {
+        const defaultValidColorScheme = ["light", "dark", "system"];
+        if (colorScheme === "system") colorScheme = getSystemTheme();
+
+        if (enableColorScheme === "body") {
+          if (theme && defaultValidColorScheme.includes(theme)) {
+            bodyEl.style.colorScheme = colorScheme;
+          } else {
+            bodyEl.style.removeProperty("color-scheme");
+
+            if (bodyEl.getAttribute("style")?.trim() === "") {
+              bodyEl.removeAttribute("style");
+            }
+          }
+        } else if (enableColorScheme === "html") {
+          if (theme && defaultValidColorScheme.includes(theme)) {
+            docEl.style.colorScheme = colorScheme;
+          } else {
+            docEl.style.removeProperty("color-scheme");
+
+            if (docEl.getAttribute("style")?.trim() === "") {
+              docEl.removeAttribute("style");
+            }
+          }
+        }
       }
     }
   };
@@ -93,11 +128,14 @@ export const scriptThemesApp = (
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   };
 
-  if (forcedTheme) {
+  if (typeof forcedTheme === "string" && storageKey.trim().length) {
     updateDOM(forcedTheme);
   } else {
     try {
-      const storedTheme = localStorage.getItem(storageKey);
+      const storedTheme =
+        typeof storageKey === "string" && storageKey.trim().length
+          ? localStorage.getItem(storageKey)
+          : null;
       const themeName =
         storedTheme && themes.includes(storedTheme) ? storedTheme : defaultTheme;
       const isSystem = enableSystem && themeName === "system";

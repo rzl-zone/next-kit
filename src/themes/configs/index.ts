@@ -8,3 +8,8 @@ const CONFIG_THEME = {
 export const defaultThemes = CONFIG_THEME.themes;
 export const defaultColorSchemes = ["light", "dark"];
 export const MEDIA_SCHEME_THEME = "(prefers-color-scheme: dark)";
+
+export const defaultMetaColorSchemeValue = {
+  light: "#ffffff",
+  dark: "oklch(.13 .028 261.692)"
+};

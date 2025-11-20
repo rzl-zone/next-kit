@@ -1,6 +1,6 @@
 import { isNil } from "@rzl-zone/utils-js/predicates";
 
-export function cleaningScriptFuncToString<T>(script: T): string {
+export function minifyInnerHTMLScript<T>(script: T): string {
   if (isNil(script)) return "";
 
   return (

@@ -9,7 +9,11 @@ import {
 import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
 
 import type { Attribute, ThemeProviderProps, UseTheme } from "../types";
-import { defaultColorSchemes, MEDIA_SCHEME_THEME } from "../configs";
+import {
+  defaultColorSchemes,
+  defaultMetaColorSchemeValue,
+  MEDIA_SCHEME_THEME
+} from "../configs";
 
 export const saveToLS = (storageKey: string, value?: string): void => {
   if (isServer()) return undefined;
@@ -17,7 +21,7 @@ export const saveToLS = (storageKey: string, value?: string): void => {
   if (isNonEmptyString(storageKey) && isNonEmptyString(value)) {
     try {
       localStorage.setItem(storageKey, value);
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       // Unsupported
     }
@@ -35,10 +39,11 @@ export const getTheme = (
   try {
     const stored = localStorage.getItem(key);
     theme = stored && validTheme.includes(stored) ? stored : fallback;
-    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     // Unsupported
   }
+
   return theme ?? fallback;
 };
 
@@ -65,20 +70,22 @@ export const disableAnimation = (nonce?: string): VoidFunction | undefined => {
   };
 };
 
-export const getSystemTheme = (ev?: MediaQueryList | MediaQueryListEvent) => {
-  if (!ev) ev = window?.matchMedia(MEDIA_SCHEME_THEME);
-  const isDark = ev.matches;
-  const systemTheme = isDark ? "dark" : "light";
-  return systemTheme;
+export const getSystemTheme = (mql?: MediaQueryList | MediaQueryListEvent) => {
+  if (!mql) mql = window?.matchMedia(MEDIA_SCHEME_THEME);
+  return mql?.matches ? "dark" : "light";
 };
 
 export const updateMetaThemeColor = ({
   theme,
-  enableMetaColorScheme
+  enableMetaColorScheme,
+  metaColorSchemeValue
 }: {
   theme: string | undefined;
-  /** Whether to indicate to browsers which color scheme in meta head, is used (dark or light) for built-in UI like inputs and buttons */
   enableMetaColorScheme: boolean | undefined;
+  metaColorSchemeValue: {
+    light: string;
+    dark: string;
+  };
 }): void => {
   if (
     !isServer() &&
@@ -94,26 +101,26 @@ export const updateMetaThemeColor = ({
     if (theme === "dark") {
       const meta = document.createElement("meta");
       meta.name = "theme-color";
-      meta.content = "oklch(.13 .028 261.692)";
+      meta.content = metaColorSchemeValue.dark;
       meta.setAttribute("data-rzl-theme", "dark");
       document.head.appendChild(meta);
     } else if (theme === "light") {
       const meta = document.createElement("meta");
       meta.name = "theme-color";
-      meta.content = "#ffffff";
+      meta.content = metaColorSchemeValue.light;
       meta.setAttribute("data-rzl-theme", "light");
       document.head.appendChild(meta);
     } else {
       const meta1 = document.createElement("meta");
       meta1.name = "theme-color";
-      meta1.content = "oklch(.13 .028 261.692)";
+      meta1.content = metaColorSchemeValue.dark;
       meta1.media = "(prefers-color-scheme: dark)";
       meta1.setAttribute("data-rzl-theme", "dark");
       document.head.appendChild(meta1);
 
       const meta2 = document.createElement("meta");
       meta2.name = "theme-color";
-      meta2.content = "#ffffff";
+      meta2.content = metaColorSchemeValue.light;
       meta2.media = "(prefers-color-scheme: light)";
       meta2.setAttribute("data-rzl-theme", "light");
       document.head.appendChild(meta2);
@@ -121,15 +128,20 @@ export const updateMetaThemeColor = ({
   }
 };
 
-export const validatePropsAttribute = (val: Attribute | Attribute[]): void => {
+export const validatePropsAttribute = (val: Attribute | Attribute[]): void | never => {
   if (!isNonEmptyString(val)) {
     throw new TypeError(
-      `Props \`attribute\` for 'ProvidersThemesApp' must be of type \`string\` or \`undefined\` and value can't be empty-string as types from 'ThemeProviderProps', but received: \`${getPreciseType(val)}\`.`
+      `Props \`attribute\` for 'ProvidersThemesApp' must be of type \`string\` or \`undefined\` and value can't be empty-string as types from 'ThemeProviderProps', but received: \`${getPreciseType(
+        val
+      )}\`.`
     );
   }
   if (val !== "class" && !val.startsWith("data-")) {
     throw new TypeError(
-      `Props \`attribute\` for 'ProvidersThemesApp' must be \`"class"\` or start with \`"data-"\`, but received value: \`${safeStableStringify(val, { keepUndefined: true })}\`.`
+      `Props \`attribute\` for 'ProvidersThemesApp' must be \`"class"\` or start with \`"data-"\`, but received value: \`${safeStableStringify(
+        val,
+        { keepUndefined: true }
+      )}\`.`
     );
   }
 };
@@ -139,6 +151,7 @@ type NonUndefThemeProviderProps = Required<ThemeProviderProps>;
 export const handlingApplyTheme = ({
   attribute,
   attributes,
+  theme,
   defaultTheme,
   enableColorScheme,
   name,
@@ -146,6 +159,7 @@ export const handlingApplyTheme = ({
 }: {
   name: string | undefined;
   resolved: string;
+  theme: string | undefined;
   defaultTheme: string;
   attributes: string[];
   attribute: NonUndefThemeProviderProps["attribute"];
@@ -169,18 +183,40 @@ export const handlingApplyTheme = ({
     }
   };
 
-  isArray(attribute) ? attribute.forEach(handleAttribute) : handleAttribute(attribute);
+  if (isArray(attribute)) {
+    attribute.forEach(handleAttribute);
+  } else {
+    handleAttribute(attribute);
+  }
 
   if (enableColorScheme !== false) {
     const fallback = defaultColorSchemes.includes(defaultTheme) ? defaultTheme : null;
     let colorScheme = defaultColorSchemes.includes(resolved) ? resolved : fallback;
     if (colorScheme) {
+      const defaultValidColorScheme = ["light", "dark", "system"];
+
       if (colorScheme === "system") colorScheme = getSystemTheme();
 
       if (enableColorScheme === "body") {
-        bodyEl.style.colorScheme = colorScheme;
+        if (theme && defaultValidColorScheme.includes(theme)) {
+          bodyEl.style.colorScheme = colorScheme;
+        } else {
+          bodyEl.style.removeProperty("color-scheme");
+
+          if (bodyEl.getAttribute("style")?.trim() === "") {
+            bodyEl.removeAttribute("style");
+          }
+        }
       } else if (enableColorScheme === "html") {
-        docEl.style.colorScheme = colorScheme;
+        if (theme && defaultValidColorScheme.includes(theme)) {
+          docEl.style.colorScheme = colorScheme;
+        } else {
+          docEl.style.removeProperty("color-scheme");
+
+          if (docEl.getAttribute("style")?.trim() === "") {
+            docEl.removeAttribute("style");
+          }
+        }
       }
     }
   }
@@ -199,3 +235,12 @@ export function normalizeThemes<T extends unknown[]>(
 
   return Array.from(set) as T;
 }
+
+export const setMetaColorSchemeValue = (
+  metaColorSchemeValue?: ThemeProviderProps["metaColorSchemeValue"]
+) => {
+  return {
+    ...defaultMetaColorSchemeValue,
+    ...metaColorSchemeValue
+  };
+};

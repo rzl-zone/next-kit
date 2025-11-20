@@ -1,6 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
     /* Projects */
     "incremental": true,
     "tsBuildInfoFile": "${configDir}/.tsbuildinfo",

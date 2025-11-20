@@ -8,6 +8,9 @@
   "homepage": "https://github.com/rzl-zone/next-kit",
   "engineStrict": true,
   "types": "./dist/index.d.ts",
+  "typescript": {
+    "projectRoot": "."
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts"
@@ -152,14 +155,15 @@
   },
   "dependencies": {
     "@edge-runtime/cookies": "^6.0.0",
-    "@rzl-zone/utils-js": "latest",
     "@rzl-zone/ts-types-plus": "latest",
+    "@rzl-zone/utils-js": "latest",
     "deepmerge": "^4.3.1",
     "p-safe": "^1.0.0",
     "validate-color": "^2.2.4"
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
+    "@eslint-react/eslint-plugin": "^2.3.5",
+    "@eslint/js": "^9.39.1",
     "@types/chai": "^5.2.2",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^30.0.0",
@@ -170,7 +174,7 @@
     "chalk": "^5.6.2",
     "del-cli": "^6.0.0",
     "dts-bundle-generator": "^9.5.1",
-    "eslint": "^9.36.0",
+    "eslint": "^9.39.1",
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.2",
     "mocha": "^10.8.2",
@@ -182,7 +186,7 @@
     "tsx": "^4.20.6",
     "type-fest": "^5.0.1",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.1"
+    "typescript-eslint": "^8.47.0"
   },
   "peerDependencies": {
     "next": "14 || 15 || 16",

@@ -1,9 +1,9 @@
 "use client";
 
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
-
-import { ThemeMode, UseTheme } from "../types";
 import { usePathname } from "next/navigation";
+
+import type { UseTheme } from "../types";
 
 type LocalStorageRefresherThemeProps = {
   /** Key used to store theme setting in localStorage, DefaultValue: `"rzl-theme"`. */
@@ -36,7 +36,7 @@ const LocalStorageRefresherTheme = ({
   const pathname = usePathname();
 
   const StorageRefresher = useCallback(() => {
-    const getCurrentStorageTheme = (): (string & {}) | ThemeMode | null | "" => {
+    const getCurrentStorageTheme = (): UseTheme["theme"] | null => {
       return localStorage.getItem(storageKey);
     };
 
@@ -64,7 +64,7 @@ const LocalStorageRefresherTheme = ({
       localStorage.setItem(storageKey, validValTheme);
       return setTheme(validValTheme);
     }
-  }, [theme, storageKey, enableSystem]);
+  }, [themes, theme, defaultTheme, setTheme, storageKey, enableSystem]);
 
   useEffect(() => {
     StorageRefresher();

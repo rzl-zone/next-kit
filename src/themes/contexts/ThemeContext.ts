@@ -24,3 +24,4 @@ import type { ProvidersThemesApp } from "../providers/ProvidersThemesApp";
 export const ThemeContext: React.Context<UseTheme | undefined> = createContext<
   UseTheme | undefined
 >(undefined);
+ThemeContext.displayName = "RzlzoneThemeContext";
