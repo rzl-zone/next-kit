@@ -88,6 +88,9 @@
       "themes": [
         "dist/themes/index.d.ts"
       ],
+      "themes/pages-dir": [
+        "dist/themes/pages-dir.d.ts"
+      ],
       "progress-bar": [
         "dist/progress-bar/index.d.ts"
       ],
