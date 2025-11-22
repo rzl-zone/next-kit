@@ -20,7 +20,6 @@ import {
  * ⚠️ ***Must be used inside `<RzlThemeProvider>` for (`App Dir`), or it will throw.***
  * @throws If the hook is called outside of the **`<RzlThemeProvider>`** component, will throw {@link Error | **`Error`**} .
  * @returns {ThemeCtx} Object containing current theme data and setter.
- * @see {@link RzlThemeProvider | **`RzlThemeProvider`**}.
  */
 export const useTheme = (): ThemeCtx => {
   const themeContext = useContext(ThemeContext);
@@ -41,7 +40,6 @@ export const useTheme = (): ThemeCtx => {
  * ⚠️ ***Must be used inside `<RzlThemePagesDirProvider>` for (`Pages Dir`), otherwise will throw.***
  * @throws If the hook is called outside of the **`<RzlThemePagesDirProvider>`** component, will throw {@link Error | **`Error`**} .
  * @returns {ThemeCtx} Object containing current theme data and setter.
- * @see {@link RzlThemePagesDirProvider | **`RzlThemePagesDirProvider`**}.
  */
 export const useThemePagesDir = (): ThemeCtx => {
   const themeContext = useContext(ThemePagesDirContext);
