@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.0](https://github.com/rzl-zone/next-kit/compare/v0.7.0...v0.8.0) (2025-11-22)
+
+
+### Features
+
+* **`themes`:** Add support for **`Pages Dir`** and fixing some bug at utility `isReactNode`. ([11fd241](https://github.com/rzl-zone/next-kit/commit/11fd241feab5478ae14ab3582663bb20e88b30ad))
+
+
+### Bug Fixes
+
+* **`package.json`:** Add new `themes/pages-dir` path to `typesVersions`. ([d8b947b](https://github.com/rzl-zone/next-kit/commit/d8b947b7b056baefb3b560775be2cca1ef119394))
+
 ## [0.7.0](https://github.com/rzl-zone/next-kit/compare/v0.6.11...v0.7.0) (2025-11-20)
 
 
