@@ -1,4 +1,24 @@
-import { isNil } from "@rzl-zone/utils-js/predicates";
+import {
+  assertIsBoolean,
+  assertIsPlainObject,
+  assertIsString
+} from "@rzl-zone/utils-js/assertions";
+import {
+  getPreciseType,
+  isArray,
+  isBoolean,
+  isNil,
+  isNonEmptyString,
+  isString,
+  isUndefined
+} from "@rzl-zone/utils-js/predicates";
+import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
+
+import { RzlThemeProviderProps } from "..";
+import { setMetaColorSchemeValue } from "../utils/internal";
+import { defaultMetaColorSchemeValue, defaultThemes } from "../configs";
+
+import type { Attribute } from "../types";
 
 export function minifyInnerHTMLScript<T>(script: T): string {
   if (isNil(script)) return "";
@@ -40,3 +60,183 @@ export function minifyInnerHTMLScript<T>(script: T): string {
       .trim()
   );
 }
+
+export const validateAttributeProps = (attr: Attribute | Attribute[]): void | never => {
+  if (!isNonEmptyString(attr)) {
+    throw new TypeError(
+      `Props \`attribute\` for 'RzlThemeProvider' must be of type \`string\` or \`undefined\` and value can't be empty-string as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+        attr
+      )}\`.`
+    );
+  }
+  if (attr !== "class" && !attr.startsWith("data-")) {
+    throw new TypeError(
+      `Props \`attribute\` for 'RzlThemeProvider' must be \`"class"\` or start with \`"data-"\`, but received value: \`${safeStableStringify(
+        attr,
+        { keepUndefined: true }
+      )}\`.`
+    );
+  }
+};
+
+export const validateProps = <EnablingSystem extends boolean = true>(
+  props: RzlThemeProviderProps<EnablingSystem>
+) => {
+  const {
+    forcedTheme,
+    disableTransitionOnChange = true,
+    enableSystem = true,
+    enableColorScheme = "html",
+    enableMetaColorScheme = true,
+    storageKey = "rzl-theme",
+    defaultTheme: _defaultTheme,
+    attribute = "data-theme",
+    value,
+    children,
+    nonce,
+    scriptProps,
+    themes = defaultThemes
+  } = props;
+
+  let { metaColorSchemeValue = defaultMetaColorSchemeValue } = props;
+
+  if (!isUndefined(nonce)) {
+    assertIsString(nonce, {
+      message({ currentType, validType }) {
+        return `Props \`nonce\` for 'RzlThemeProvider' must be of type \`${validType}\` as types from 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+      }
+    });
+  }
+
+  if (!isUndefined(value)) {
+    assertIsPlainObject(value, {
+      message({ currentType, validType }) {
+        return `Props \`value\` for 'RzlThemeProvider' must be a \`${validType}\`, but received: \`${currentType}\`.`;
+      }
+    });
+
+    for (const [themeName, themeValue] of Object.entries(value)) {
+      if (!isNonEmptyString(themeName)) {
+        throw new TypeError(
+          `Props \`value\` at 'RzlThemeProvider', the key name theme "${themeName}" must be of type a \`string\` and \`non-empty string\`, but received: \`${getPreciseType(
+            themeName
+          )}\`, with current value: \`${safeStableStringify(themeName, {
+            keepUndefined: true
+          })}\`.`
+        );
+      }
+      if (!isNonEmptyString(themeValue)) {
+        throw new TypeError(
+          `Props \`value\` at 'RzlThemeProvider', the value for theme key "${themeName}" must be of type a \`string\` and \`non-empty string\`, but received: \`${getPreciseType(
+            themeValue
+          )}\`, with current value: \`${safeStableStringify(themeValue, {
+            keepUndefined: true
+          })}\`.`
+        );
+      }
+    }
+  }
+
+  if (!isUndefined(attribute)) {
+    if (isArray(attribute)) {
+      attribute.forEach(validateAttributeProps);
+    } else {
+      validateAttributeProps(attribute);
+    }
+  }
+
+  if (!isUndefined(_defaultTheme) && !isNonEmptyString(_defaultTheme)) {
+    throw new TypeError(
+      `Props \`defaultTheme\` for 'RzlThemeProvider' must be of type a \`string\` and \`non-empty string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+        _defaultTheme
+      )}\`.`
+    );
+  }
+  if (!isUndefined(storageKey) && !isNonEmptyString(storageKey)) {
+    throw new TypeError(
+      `Props \`storageKey\` for 'RzlThemeProvider' must be of type \`string\` and value cant be \`empty-string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+        storageKey
+      )}\`.`
+    );
+  }
+
+  if (
+    (isBoolean(enableColorScheme) && enableColorScheme !== false) ||
+    (isString(enableColorScheme) && !["html", "body"].includes(enableColorScheme))
+  ) {
+    throw new TypeError(
+      `Props \`enableColorScheme\` for 'RzlThemeProvider' must be of type \`string\`, \`boolean\` and if value is a string must one of ("body" or "html") if \`boolean\` valid value only \`false\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+        enableColorScheme
+      )}\`, with current value: \`${safeStableStringify(enableColorScheme, {
+        keepUndefined: true
+      })}\`.`
+    );
+  }
+
+  if (!isUndefined(forcedTheme) && !isString(forcedTheme)) {
+    throw new TypeError(
+      `Props \`forcedTheme\` for 'RzlThemeProvider' must be of type \`string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+        forcedTheme
+      )}\`.`
+    );
+  }
+
+  if (!isUndefined(metaColorSchemeValue)) {
+    assertIsPlainObject(metaColorSchemeValue, {
+      message({ currentType, validType }) {
+        return `Props \`metaColorSchemeValue\` for 'RzlThemeProvider' must be a \`${validType}\`, but received: \`${currentType}\`.`;
+      }
+    });
+
+    metaColorSchemeValue = setMetaColorSchemeValue(metaColorSchemeValue);
+
+    if (!isNonEmptyString(metaColorSchemeValue.light)) {
+      throw new TypeError(
+        `Props \`metaColorSchemeValue.light\` for 'RzlThemeProvider' must be of type \`string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+          metaColorSchemeValue.light
+        )}\`.`
+      );
+    }
+
+    if (!isNonEmptyString(metaColorSchemeValue.dark)) {
+      throw new TypeError(
+        `Props \`metaColorSchemeValue.dark\` for 'RzlThemeProvider' must be of type \`string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+          metaColorSchemeValue.dark
+        )}\`.`
+      );
+    }
+  }
+
+  assertIsBoolean(enableSystem, {
+    message({ currentType, validType }) {
+      return `Props \`enableSystem\` for 'RzlThemeProvider' must be of type \`${validType}\` as types from 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+    }
+  });
+  assertIsBoolean(enableMetaColorScheme, {
+    message({ currentType, validType }) {
+      return `Props \`enableMetaColorScheme\` for 'RzlThemeProvider' must be of type \`${validType}\` as types from 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+    }
+  });
+  assertIsBoolean(disableTransitionOnChange, {
+    message({ currentType, validType }) {
+      return `Props \`disableTransitionOnChange\` for 'RzlThemeProvider' must be of type \`${validType}\` as types from 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+    }
+  });
+
+  return {
+    forcedTheme,
+    disableTransitionOnChange,
+    enableSystem,
+    enableColorScheme,
+    enableMetaColorScheme,
+    storageKey,
+    defaultTheme: _defaultTheme,
+    attribute,
+    value,
+    children,
+    nonce,
+    scriptProps,
+    metaColorSchemeValue,
+    themes
+  };
+};

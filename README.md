@@ -104,8 +104,11 @@ pnpm add @rzl-zone/next-kit
   // Progress Bar Loader
   import { /* … */ } from "@rzl-zone/next-kit/progress-bar";
 
-  // Theme Modes (dark, light, system)
+  // Themes Mode (dark, light, system)
+  // (for App Directory)
   import { /* … */ } from "@rzl-zone/next-kit/themes";
+  // (for Pages Directory)
+  import { /* … */ } from "@rzl-zone/next-kit/themes/pages-dir";
 
   // General Utilities
   import { /* … */ } from "@rzl-zone/next-kit/utils";

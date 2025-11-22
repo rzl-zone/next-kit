@@ -85,10 +85,10 @@ type ThemesMode = ThemeOverrideConfig extends { themes: infer T }
     ? readonly U[]
     : _DefaultThemes
   : ThemeOverrideConfig extends { themes?: infer T }
-  ? T extends readonly (infer U)[]
-    ? readonly (U | undefined)[]
-    : _DefaultThemes
-  : _DefaultThemes;
+    ? T extends readonly (infer U)[]
+      ? readonly (U | undefined)[]
+      : _DefaultThemes
+    : _DefaultThemes;
 
 /** ------------------------------------------------------------
  * * ***Represents the valid individual theme mode, extracted from the {@link ThemesMode | `ThemesMode`} array.***
@@ -98,18 +98,19 @@ type ThemesMode = ThemeOverrideConfig extends { themes: infer T }
 export type ThemeMode = ThemesMode extends readonly (infer T)[] ? T : undefined;
 
 /** ------------------------------------------------------------
- * * ***Props accepted by `<ProvidersThemesApp />`, used to configure how theming behaves on the page.***
+ * * ***Props accepted by `<RzlThemeProvider />`, used to configure how theming behaves on the page.***
  * ------------------------------------------------------------
- * **You usually place this provider at the root of your application (e.g. in `app/layout.tsx`).**
+ * **You usually place this provider at the root of your application (e.g. in `app/layout.tsx`, or in `pages/_app.tsx`).**
  */
-export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
+export type RzlThemeProviderProps<EnabledSystem extends boolean = true> = {
   /** ***Children React Node.***
    *
    * - **Default value:** `undefined`.
    * - ***⚠️ Warning:***
-   *    - **Will throw TypeError if value is `undefined` or `not valid React Children`.**
+   *    - **Will throw TypeError if the value is `not valid React Children` (except when it is `undefined` or `null`).**
    */
   children: ReactNode;
+
   /** ***List of all available theme names.***
    *
    * - **Default value:**
@@ -135,6 +136,7 @@ export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
    *      ```
    */
   themes?: string[];
+
   /** ***Forced theme name for the current page.***
    *
    * - **Default value:** `undefined`.
@@ -142,20 +144,23 @@ export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
    *    - **Will throw TypeError if value is not `undefined` or `not a string`.**
    */
   forcedTheme?: string;
+
   /** ***Whether to switch between dark and light themes based on prefers-color-scheme.***
    *
    * - **Default value:** `true`.
    * - ***⚠️ Warning:***
-   *    - **Will throw TypeError if value is not `undefined` or `not a boolean`.**
+   *    - **Will throw TypeError if the value is not a boolean (except when it is `undefined`).**
    */
   enableSystem?: EnabledSystem;
+
   /** ***Disable all CSS transitions when switching themes.***
    *
    * - **Default value:** `true`.
    * - ***⚠️ Warning:***
-   *    - **Will throw TypeError if value is not `undefined` or `not a boolean`.**
+   *    - **Will throw TypeError if the value is not a boolean (except when it is `undefined`).**
    */
   disableTransitionOnChange?: boolean;
+
   /** ***Whether to indicate to browsers which color scheme (dark or light) should be used
    * for built-in UI elements such as inputs, buttons, scrollbars, and form controls.***
    *
@@ -176,11 +181,12 @@ export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
    *    to avoid inconsistent browser UI styling.
    */
   enableColorScheme?: "html" | "body" | false;
+
   /** ***Whether to indicate to browsers which color scheme in meta head, is used (dark or light) for built-in UI like inputs and buttons.***
    *
    * - **Default value:** `true`.
    * - ***⚠️ Warning:***
-   *    - **Will throw TypeError if value is not `undefined` or `not a boolean`.**
+   *    - **Will throw TypeError if the value is not a boolean (except when it is `undefined`).**
    */
   enableMetaColorScheme?: boolean;
 
@@ -334,6 +340,7 @@ export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
    *    - **Will throw TypeError if value is not `undefined` or `not a string` and value `is empty-string`**
    */
   storageKey?: string;
+
   /** ***Default theme.***
    *
    * - **Default value:**
@@ -346,6 +353,7 @@ export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
   defaultTheme?: EnabledSystem extends true
     ? Exclude<ThemeMode, "system"> | "system"
     : Exclude<ThemeMode, "system">;
+
   /** ***HTML attribute modified based on the active theme.***
    *
    * - **Default value:** `"data-theme"`
@@ -362,6 +370,7 @@ export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
    *         - The value is an array that contains elements not matching `"class"` or `"data-*"`.
    */
   attribute?: Attribute | Attribute[];
+
   /** ***Mapping of theme name to HTML attribute value.***
    *
    * - **Type:** {@link ValueObject | **`ValueObject`**} | `undefined`
@@ -384,6 +393,7 @@ export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
    * value = { light: 123 }    // TypeError
    */
   value?: ValueObject;
+
   /** ***Nonce string to pass to the inline script and style elements for CSP headers.***
    *
    * - **Default value:** `undefined`.
@@ -391,6 +401,7 @@ export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
    *    - **Will throw TypeError if value is not `undefined` or `not a string`.**
    */
   nonce?: string;
+
   /** ***Props to pass the inline script.***
    *
    * @default undefined
@@ -404,7 +415,7 @@ export type ThemeProviderProps<EnabledSystem extends boolean = true> = {
  * **Contains the current theme information and helper utilities for manually
  * updating the active theme, including support for system-based themes.**
  */
-export type UseTheme = {
+export type ThemeCtx = {
   /** ***List of all available theme names.*** */
   themes: Array<AnyThemeAsString | ThemeMode>;
   /** ***Forced theme name for the current page.*** */

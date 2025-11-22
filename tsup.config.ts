@@ -128,6 +128,7 @@ export default defineConfig((options) => [
       "src/hoc/*.{ts,tsx}",
       // themes
       "src/themes/index.{ts,tsx}",
+      "src/themes/pages-dir.{ts,tsx}",
       // progress-bar
       "src/progress-bar/index.{ts,tsx}",
       // utils
@@ -141,6 +142,7 @@ export default defineConfig((options) => [
       "dist/extra/context.*(js|cjs|mjs)",
       //themes
       "dist/themes/index.*(js|cjs|mjs)",
+      "dist/themes/pages-dir.*(js|cjs|mjs)",
       // progress-bar
       "dist/progress-bar/index.*(js|cjs|mjs)"
     ]

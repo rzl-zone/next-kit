@@ -45,6 +45,11 @@
       "import": "./dist/themes/index.js",
       "require": "./dist/themes/index.cjs"
     },
+    "./themes/pages-dir": {
+      "types": "./dist/themes/pages-dir.d.ts",
+      "import": "./dist/themes/pages-dir.js",
+      "require": "./dist/themes/pages-dir.cjs"
+    },
     "./progress-bar": {
       "types": "./dist/progress-bar/index.d.ts",
       "import": "./dist/progress-bar/index.js",

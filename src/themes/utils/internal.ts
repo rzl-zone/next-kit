@@ -1,14 +1,12 @@
 import {
-  getPreciseType,
   isArray,
   isNonEmptyString,
   isString,
   isServer,
   isBoolean
 } from "@rzl-zone/utils-js/predicates";
-import { safeStableStringify } from "@rzl-zone/utils-js/conversions";
 
-import type { Attribute, ThemeProviderProps, UseTheme } from "../types";
+import type { Attribute, RzlThemeProviderProps, ThemeCtx } from "../types";
 import {
   defaultColorSchemes,
   defaultMetaColorSchemeValue,
@@ -30,12 +28,12 @@ export const saveToLS = (storageKey: string, value?: string): void => {
 
 export const getTheme = (
   key: string,
-  validTheme: UseTheme["themes"],
-  fallback?: UseTheme["theme"]
-): UseTheme["theme"] => {
+  validTheme: ThemeCtx["themes"],
+  fallback?: ThemeCtx["theme"]
+): ThemeCtx["theme"] => {
   if (isServer()) return undefined;
 
-  let theme: UseTheme["theme"] | undefined;
+  let theme: ThemeCtx["theme"] | undefined;
   try {
     const stored = localStorage.getItem(key);
     theme = stored && validTheme.includes(stored) ? stored : fallback;
@@ -128,25 +126,7 @@ export const updateMetaThemeColor = ({
   }
 };
 
-export const validatePropsAttribute = (val: Attribute | Attribute[]): void | never => {
-  if (!isNonEmptyString(val)) {
-    throw new TypeError(
-      `Props \`attribute\` for 'ProvidersThemesApp' must be of type \`string\` or \`undefined\` and value can't be empty-string as types from 'ThemeProviderProps', but received: \`${getPreciseType(
-        val
-      )}\`.`
-    );
-  }
-  if (val !== "class" && !val.startsWith("data-")) {
-    throw new TypeError(
-      `Props \`attribute\` for 'ProvidersThemesApp' must be \`"class"\` or start with \`"data-"\`, but received value: \`${safeStableStringify(
-        val,
-        { keepUndefined: true }
-      )}\`.`
-    );
-  }
-};
-
-type NonUndefThemeProviderProps = Required<ThemeProviderProps>;
+type NonUndefRzlThemeProviderProps = Required<RzlThemeProviderProps>;
 
 export const handlingApplyTheme = ({
   attribute,
@@ -162,8 +142,8 @@ export const handlingApplyTheme = ({
   theme: string | undefined;
   defaultTheme: string;
   attributes: string[];
-  attribute: NonUndefThemeProviderProps["attribute"];
-  enableColorScheme: NonUndefThemeProviderProps["enableColorScheme"];
+  attribute: NonUndefRzlThemeProviderProps["attribute"];
+  enableColorScheme: NonUndefRzlThemeProviderProps["enableColorScheme"];
 }): void => {
   if (isServer()) return undefined;
 
@@ -237,7 +217,7 @@ export function normalizeThemes<T extends unknown[]>(
 }
 
 export const setMetaColorSchemeValue = (
-  metaColorSchemeValue?: ThemeProviderProps["metaColorSchemeValue"]
+  metaColorSchemeValue?: RzlThemeProviderProps["metaColorSchemeValue"]
 ) => {
   return {
     ...defaultMetaColorSchemeValue,

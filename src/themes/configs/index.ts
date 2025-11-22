@@ -1,9 +1,9 @@
-import type { ThemeProviderProps } from "../types";
+import type { RzlThemeProviderProps } from "../types";
 
-/** @deprecated It used for internal-only use `defaultThemes` directly. */
+/** @deprecated It used for internal-only, use `defaultThemes` directly. */
 const CONFIG_THEME = {
   themes: ["dark", "light", "system"]
-} as const satisfies Pick<ThemeProviderProps, "themes">;
+} as const satisfies Pick<RzlThemeProviderProps, "themes">;
 
 export const defaultThemes = CONFIG_THEME.themes;
 export const defaultColorSchemes = ["light", "dark"];

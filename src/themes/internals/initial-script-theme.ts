@@ -1,4 +1,4 @@
-export const scriptThemesApp = (
+export const initialScriptTheme = (
   storageKey: string,
   attribute: string | string[],
   defaultTheme: string,
