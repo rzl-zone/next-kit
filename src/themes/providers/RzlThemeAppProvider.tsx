@@ -6,20 +6,20 @@ import ContainerThemeAppDir from "../internals/container/ProviderAppDir";
 import type { RzlThemeProviderProps } from "../types";
 
 /** ------------------------------------------------------------
- * * ***Provider wrapper for configuring and supplying the theme system (App Dir).***
+ * * ***Provider wrapper for configuring and supplying the theme system (App Router).***
  * ------------------------------------------------------------
  * **Usage example in your `app/layout.tsx`:**
  *
  * ```tsx
- * import { RzlThemeProvider } from "@rzl-zone/next-kit/themes";
+ * import { RzlThemeAppProvider } from "@rzl-zone/next-kit/themes/app";
  *
  * export default function RootLayout({ children }: { children: ReactNode }) {
  *   return (
  *     <html lang="en" suppressHydrationWarning>
  *       <body>
- *         <RzlThemeProvider disableTransitionOnChange>
+ *         <RzlThemeAppProvider disableTransitionOnChange>
  *           {children}
- *         </RzlThemeProvider>
+ *         </RzlThemeAppProvider>
  *       </body>
  *     </html>
  *   );
@@ -39,11 +39,11 @@ import type { RzlThemeProviderProps } from "../types";
  *        }
  *      }
  *      ```
- * @param props - Property options of `RzlThemeProvider`.
+ * @param props - Property options of `RzlThemeAppProvider`.
  * @throws Will throw an error if `children` is not provided.
- * @returns A `<RzlThemeProvider>` wrapping the passed children.
+ * @returns A `<RzlThemeAppProvider>` wrapping the passed children.
  */
-export const RzlThemeProvider = <EnablingSystem extends boolean = true>(
+export const RzlThemeAppProvider = <EnablingSystem extends boolean = true>(
   props: RzlThemeProviderProps<EnablingSystem>
 ): React.JSX.Element => {
   return (
@@ -52,8 +52,3 @@ export const RzlThemeProvider = <EnablingSystem extends boolean = true>(
     </ContainerThemeAppDir>
   );
 };
-
-/** ------------------------------------------------------------
- * @deprecated This component has been renamed to {@link RzlThemeProvider | **`RzlThemeProvider`**}, **`ProvidersThemesApp`** will be removed in the next release, please update your imports to use ***`RzlThemeProvider`*** from `"@rzl-zone/next-kit/themes"` instead.
- */
-export const ProvidersThemesApp = RzlThemeProvider;

@@ -1,1 +1,2 @@
-export { default as WithSuspense } from "./withSuspense";
+export { WithSuspense } from "./withSuspense";
+export { withMemo } from "./withMemo";

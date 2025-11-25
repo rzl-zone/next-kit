@@ -6,19 +6,20 @@ import type { RzlThemeProviderProps } from "../types";
 import ContainerThemePagesDir from "../internals/container/ProviderPagesDir";
 
 /** ------------------------------------------------------------
- * * ***Provider wrapper for configuring and supplying the theme system (Pages Dir).***
+ * * ***Provider wrapper for configuring and supplying the theme system (Pages Router).***
  * ------------------------------------------------------------
  * **Usage example in your `pages/_app.tsx`:**
  *
  * ```tsx
- * import { RzlThemePagesDirProvider } from "@rzl-zone/next-kit/themes/pages-dir";
+ * import type { AppProps } from "next/app";
+ * import { RzlThemePagesProvider } from "@rzl-zone/next-kit/themes/pages";
  *
- * export default function MyApp({ Component, pageProps }) {
+ * export default function MyApp({ Component, pageProps }: AppProps) {
  *   return (
  *     <>
- *       <RzlThemePagesDirProvider disableTransitionOnChange>
+ *       <RzlThemePagesProvider disableTransitionOnChange>
  *         <Component {...pageProps} />
- *       </RzlThemePagesDirProvider>
+ *       </RzlThemePagesProvider>
  *     </>
  *   );
  * };
@@ -29,19 +30,19 @@ import ContainerThemePagesDir from "../internals/container/ProviderPagesDir";
  *      remember to add a corresponding override for type-safety:
  *      ```ts
  *
- *      import "@rzl-zone/next-kit/themes/pages-dir";
+ *      import "@rzl-zone/next-kit/themes";
  *
- *      declare module "@rzl-zone/next-kit/themes/pages-dir" {
+ *      declare module "@rzl-zone/next-kit/themes" {
  *        interface ThemeOverrideConfig {
  *          themes: ["pink", "blue"]; // or themes?: [...];
  *        }
  *      }
  *      ```
- * @param props - Property options of `RzlThemePagesDirProvider`.
+ * @param props - Property options of `RzlThemePagesProvider`.
  * @throws Will throw an error if `children` is not provided.
- * @returns A `<RzlThemePagesDirProvider>` wrapping the passed children.
+ * @returns A `<RzlThemePagesProvider>` wrapping the passed children.
  */
-export const RzlThemePagesDirProvider = <EnablingSystem extends boolean = true>(
+export const RzlThemePagesProvider = <EnablingSystem extends boolean = true>(
   props: RzlThemeProviderProps<EnablingSystem>
 ): React.JSX.Element => {
   return (

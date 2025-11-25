@@ -1,5 +1,5 @@
 /** -------------------------------------------------------------------
- * * ***Props definition for a Server Component Page in Next.js (app dir).***
+ * * ***Props definition for a Server Component Page in Next.js (App Router).***
  * -------------------------------------------------------------------
  *
  * This type is **only applicable for Server Components** (`page.tsx`)
@@ -14,7 +14,7 @@ export type SearchParamsQueryPageApp = {
 };
 
 /** -----------------------------------------------------------------------------
- * * ***📌 `SegmentParams` — Optional dynamic route parameters passed by Next.js (app dir).***
+ * * ***📌 `SegmentParams` — Optional dynamic route parameters passed by Next.js (App Router).***
  * -----------------------------------------------------------------------------
  *
  * This type provides support for dynamic route parameters (`params`)
@@ -47,7 +47,7 @@ export type SegmentParams<T extends object | unknown = unknown> =
     : { params: Promise<never> };
 
 /** -------------------------------------------------------------------
- * * ***Generic type for **Server Component Page** props in Next.js (app dir).***
+ * * ***Generic type for **Server Component Page** props in Next.js (App Router).***
  * -------------------------------------------------------------------
  *
  * This type should **only be used in Server Components (`page.tsx`)**,

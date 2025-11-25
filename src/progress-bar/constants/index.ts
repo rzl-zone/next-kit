@@ -1,4 +1,4 @@
-import type { RzlProgressType } from "../types/types";
+import type { RzlProgressType, ElementProgress } from "../types/types";
 
 export const defaultOptionsProgressBar = {
   easing: "ease",
@@ -19,7 +19,6 @@ export const defaultOptionsProgressBar = {
   direction: "ltr"
 } as const satisfies RzlProgressType;
 
-type ElementProgress = HTMLElement | HTMLAnchorElement;
 export const DATA_ATTRIBUTE = {
   BUTTON_SUBMIT: "data-submit-rzl-progress-bar",
   CHILD_BUTTON_SUBMIT: "data-child-submit-rzl-progress-bar",
@@ -69,7 +68,7 @@ export const SETTING_CONFIGS_PROGRESS_BAR = {
   MAXIMUM_COUNT_LIMIT_INTERVAL: 200
 } as const;
 
-export const defaultPropsInitInitRzlNextProgressBar = {
+export const defaultPropsInitRzlNextProgressBar = {
   // showProgressOnInitial = {
   //   delay: 100,
   //   enabled: true
@@ -86,7 +85,11 @@ export const defaultPropsInitInitRzlNextProgressBar = {
   delay: 0,
   stopDelay: 0,
   showForHashAnchor: true,
-  options: defaultOptionsProgressBar
+  options: defaultOptionsProgressBar,
+
+  //? Options for PagesDir type.
+  disableSameURL: false,
+  shallowRouting: false
 } as const;
 
 export const DATA_RZL_PROGRESS = {
@@ -94,7 +97,7 @@ export const DATA_RZL_PROGRESS = {
   ON_BUSY: "rzl-progress-busy",
   CUSTOM_PARENT: "rzl-progress-custom-parent",
   STYLE_ELEMENT: {
-    MAIN_IDENTITY: { KEY: "data-styles", VALUE: "rzl-app-progress_bar" },
+    MAIN_IDENTITY: { KEY: "data-styles", VALUE: "rzlzone-progress_bar" },
     KEY_DATA: {
       CLASS_NAME_LOADING: "data-classname-loading"
     }

@@ -1,8 +1,128 @@
-import type { ColorCssNamed, PickStrict } from "@rzl-zone/ts-types-plus";
-import type { RzlProgressEasing, RzlProgressOptions } from "../utils/rzlProgress";
+import type { ColorCssNamed, PickStrict, Prettify } from "@rzl-zone/ts-types-plus";
+
+export type ElementProgress = HTMLElement | HTMLAnchorElement;
+
+export type UseCssTopLoader = Prettify<
+  {
+    color: string;
+    height: string;
+    zIndex: number;
+    spinnerSize: string;
+    spinnerSpeed: number;
+    showAtBottom: boolean;
+    spinnerEase: RzlProgressEasing;
+    colorSpinner: ColorBase | ColorAdvance | undefined;
+  } & Pick<
+    RzlNextProgressBarProps,
+    "id" | "name" | "nonce" | "style" | "classNameIfLoading"
+  >
+>;
+
+export type RzlProgressDirection = "ltr" | "rtl";
+export type RzlProgressEasing =
+  | "linear"
+  | "ease"
+  | "ease-in"
+  | "ease-out"
+  | "ease-in-out";
+
+export type RzlProgressOptions = Pick<RzlNextProgressBarProps, "classNameIfLoading"> & {
+  /** * ***The initial position for the Progress Bar Loader in percentage, 0.08 is 8%.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type number, otherwise will return default value.
+   * @default 0.08
+   */
+  minimum?: number;
+  /** * ***The the maximum percentage used upon finishing, 1 is 100%.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type number, otherwise will return default value.
+   * @default 1
+   */
+  maximum?: number;
+  /** * ***Defines a template for the Progress Bar Loader.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type string, otherwise will return default value.
+   * @default
+   * ```jsx
+   * `<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`
+   * ```
+   */
+  template?: string;
+  /** * ***Animation settings using easing (a CSS easing string).***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type {@link RzlProgressEasing | *`RzlProgressEasing`*}, otherwise will return default value.
+   * @default "linear"
+   */
+  easing?: RzlProgressEasing;
+  /** * ***Animation speed in ms for the Progress Bar Loader.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type integer number, otherwise will return default value.
+   * @default 200
+   */
+  speed?: number;
+  /** * ***Auto incrementing behavior for the Progress Bar Loader.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type boolean, otherwise will return default value.
+   * @default true
+   */
+  trickle?: boolean;
+  /** * ***The increment delay speed in milliseconds.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type integer number, otherwise will return default value.
+   * @default 200
+   */
+  trickleSpeed?: number;
+  /** * ***To show spinner or not.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type boolean, otherwise will return default value.
+   * @default true
+   */
+  showSpinner?: boolean;
+  /** * ***Specify this to change the parent container.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type {@link HTMLElement | *`HTMLElement`*} or string, otherwise will return default value.
+   * @default "body"
+   */
+  parent?: HTMLElement | string;
+  /**
+   * - **⚠️ Warning:**
+   *    - The value must be of type string, otherwise will return default value.
+   * @default ""
+   */
+  positionUsing?: string;
+  /** * ***The selector attribute position.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type string, otherwise will return default value.
+   * @default '[role="bar"]'
+   */
+  barSelector?: string;
+  /** * ***The selector attribute spinner.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type string, otherwise will return default value.
+   * @default '[role="spinner"]'
+   */
+  spinnerSelector?: string;
+  /** * ***The direction bar.***
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type {@link RzlProgressDirection | *`RzlProgressDirection`*}, otherwise will return default value.
+   * @default 'ltr'
+   */
+  direction?: RzlProgressDirection;
+};
 
 type RzlTopLoaderAttribute = {
-  // add new attribute for loader
   /** * Force trigger loader bar on action.
    *
    * @deprecated Unused anymore.
@@ -11,6 +131,8 @@ type RzlTopLoaderAttribute = {
    */
   "data-submit-rzl-progress-bar"?: boolean;
   /** * Prevent triggering loader bar on action.
+   *
+   * @note Only work for ***`App Router`*** only.
    * @default false
    */
   "data-prevent-rzl-progress-bar"?: boolean;
@@ -79,7 +201,7 @@ export type RzlNextProgressBarProps = {
   /** * ***Color for the TopLoader.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
+   *    - The value must be of type string and cant be empty-string, otherwise will return default value.
    * @default "linear-gradient(45deg, #b656cb, #29f)"
    */
   color?: string;
@@ -121,7 +243,7 @@ export type RzlNextProgressBarProps = {
   /** * ***The id attribute to use for the `style` tag.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
+   *    - The value must be of type string and cant be empty-string, otherwise will return default value.
    * @default undefined
    */
   id?: string;
@@ -135,7 +257,7 @@ export type RzlNextProgressBarProps = {
   /** * ***The name attribute to use for the `style` tag.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
+   *    - The value must be of type string and cant be empty-string, otherwise will return default value.
    * @default undefined
    */
   name?: string;
@@ -149,14 +271,14 @@ export type RzlNextProgressBarProps = {
   /** * ***Custom CSS.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
+   *    - The value must be of type string and cant be empty-string, otherwise will return default value.
    * @default undefined
    */
   style?: string;
   /** * ***Height of the progress bar.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
+   *    - The value must be of type string and cant be empty-string, otherwise will return default value.
    * @default "3px"
    */
   height?: string;
@@ -170,7 +292,7 @@ export type RzlNextProgressBarProps = {
   /** * ***The size of the spinner.***
    *
    * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
+   *    - The value must be of type string and cant be empty-string, otherwise will return default value.
    * @default "3px"
    */
   spinnerSize?: string;
@@ -205,6 +327,26 @@ export type RzlNextProgressBarProps = {
   options?: RzlProgressType;
 };
 
+export type ProgressBarPagesComponentProps = Omit<
+  RzlNextProgressBarProps,
+  "showForHashAnchor"
+> & {
+  /** Disable triggering progress bar on the same URL
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type boolean, otherwise will return default value.
+   * @default false
+   */
+  disableSameURL?: boolean;
+  /** If the progress bar is not displayed when you use shallow routing
+   *
+   * - **⚠️ Warning:**
+   *    - The value must be of type boolean, otherwise will return default value.
+   * @default false
+   */
+  shallowRouting?: boolean;
+};
+
 type OptionsRzlProgress = RzlProgressType &
   Partial<PickStrict<RzlNextProgressBarProps, "startPosition">>;
 
@@ -217,19 +359,19 @@ export type OptionsUseRouter = {
   options?: OptionsRzlProgress;
 };
 
-export interface NavigateOptionsUseRouter extends OptionsUseRouter {
+export type NavigateOptionsUseRouter = OptionsUseRouter & {
   /** * ***Scrolling to top of page.***
    *
    * @default true
    */
   scroll?: boolean;
-}
-export interface NavigateFwdOptionsUseRouter extends OptionsUseRouter {
+};
+export type NavigateFwdOptionsUseRouter = OptionsUseRouter & {
   /** @default 100 */
   delayStops?: number;
-}
+};
 
-export interface UseAppRouterInstance {
+export type AppRouterInstance = {
   /** * ***Navigate to the previous history entry.*** */
   back(options?: OptionsUseRouter): void;
   /** * ***Navigate to the next history entry.*** */
@@ -246,4 +388,4 @@ export interface UseAppRouterInstance {
    * **Replaces the current history entry.**
    */
   replace(href: string, options?: NavigateOptionsUseRouter): void;
-}
+};

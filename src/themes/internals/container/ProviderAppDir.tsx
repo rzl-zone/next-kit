@@ -42,7 +42,7 @@ export const ContainerThemeAppDir = <EnablingSystem extends boolean = true>(
 ) => {
   assertIsPlainObject(props, {
     message({ currentType, validType }) {
-      return `Props 'RzlThemeProvider' must be of type \`${validType}\` as types 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+      return `Props 'RzlThemeAppProvider' must be of type \`${validType}\`, but received: \`${currentType}\`.`;
     }
   });
 
@@ -80,7 +80,7 @@ const InternalAppDirTheme = <EnablingSystem extends boolean = true>(
     nonce,
     scriptProps,
     metaColorSchemeValue
-  } = validateProps(props);
+  } = validateProps({ ...props, dir: "app" });
 
   const themes = normalizeThemes(_themes, enableSystem);
 

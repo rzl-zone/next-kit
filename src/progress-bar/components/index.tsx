@@ -1,105 +1,72 @@
 "use client";
 
-import React, { type EffectCallback, useCallback, useEffect, useRef } from "react";
+import React, { type EffectCallback, memo, useCallback, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-import {
-  isBoolean,
-  isInteger,
-  isNonEmptyString,
-  isNumber,
-  isPlainObject,
-  isString,
-  isUndefined
-} from "@rzl-zone/utils-js/predicates";
 import { delay as delaying } from "@rzl-zone/utils-js/promises";
+import { isBoolean, isString } from "@rzl-zone/utils-js/predicates";
 import { disableUserInteraction, enableUserInteraction } from "@rzl-zone/utils-js/events";
 
 import {
   DATA_ATTRIBUTE,
-  defaultPropsInitInitRzlNextProgressBar,
+  DATA_RZL_PROGRESS,
   SETTING_CONFIGS_PROGRESS_BAR
 } from "../constants";
+import { RzlProgress } from "../utils/rzlProgress";
+import { validationPropsPgBar } from "../utils/validation";
 import { useCssTopLoader } from "../hooks/useCssTopLoader";
-import { RzlProgress, isValidEasingValue } from "../utils/rzlProgress";
 
 import type { RzlNextProgressBarProps } from "../types/types";
+import {
+  isAnchorOfCurrentUrl,
+  isHashAnchor,
+  isSameHostName,
+  toAbsoluteURL
+} from "../utils/pathURL";
+import { setAttributeChildSubmitBtn } from "../utils/attributes";
+import { findClosestAnchor } from "../utils/anchor";
 
-const defaultProps = defaultPropsInitInitRzlNextProgressBar;
-const ComponentInitRzlNextProgressBar = (
-  props: RzlNextProgressBarProps = defaultProps
-) => {
-  if (!isPlainObject(props)) props = {};
+const {
+  FORM,
+  BUTTON_SUBMIT,
+  IS_BTN_SUBMIT_RZL_PROGRESS,
+  IS_PREVENT_RZL_PROGRESS,
+  IS_VALID_BTN_SUBMIT_RZL_PROGRESS
+} = DATA_ATTRIBUTE;
+const { MAXIMUM_COUNT_LIMIT_INTERVAL } = SETTING_CONFIGS_PROGRESS_BAR;
+const { IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION, IS_METHOD_POST_FORM } = FORM;
 
-  let {
+/** ------------------------------------------------------------------
+ * * ***Don't use import from here, because need Suspense (App Router).***
+ * ------------------------------------------------------------------
+ * **If you forcing to use from this components, you need wrapping with Suspense.**
+ *
+ * ⚠️ **Deprecated:**
+ *    - Use `import { RzlNextAppProgressBar } from "@rzl-zone/next-kit/progress-bar/app";` instead, because include `WithSuspense` in there.
+ */
+const InitNextAppProgressBar = memo((props: RzlNextProgressBarProps) => {
+  const {
     id,
     name,
     nonce,
     style,
     colorSpinner,
-    classNameIfLoading = defaultProps.classNameIfLoading,
-    spinnerSpeed = defaultProps.spinnerSpeed,
-    spinnerSize = defaultProps.spinnerSize,
-    spinnerEase = defaultProps.spinnerEase,
-    color = defaultProps.color,
-    height = defaultProps.height,
-    zIndex = defaultProps.zIndex,
-    showAtBottom = defaultProps.showAtBottom,
-    startPosition = defaultProps.startPosition,
-    delay = defaultProps.delay,
-    stopDelay = defaultProps.stopDelay,
-    showForHashAnchor = defaultProps.showForHashAnchor,
-    options = defaultProps.options
-  } = props;
+    classNameIfLoading,
+    spinnerSpeed,
+    spinnerSize,
+    spinnerEase,
+    color,
+    height,
+    zIndex,
+    showAtBottom,
+    startPosition,
+    delay,
+    stopDelay,
+    showForHashAnchor,
+    options
+  } = validationPropsPgBar(props);
 
-  if (!isUndefined(id) && !isString(id)) id = undefined;
-  if (!isUndefined(name) && !isString(name)) name = undefined;
-  if (!isUndefined(nonce) && !isString(nonce)) nonce = undefined;
-  if (!isUndefined(style) && !isString(style)) style = undefined;
-
-  if (!isUndefined(classNameIfLoading) && !isNonEmptyString(classNameIfLoading))
-    classNameIfLoading = defaultProps.classNameIfLoading;
-
-  if (
-    !isUndefined(colorSpinner) &&
-    (!isPlainObject(colorSpinner) ||
-      (colorSpinner.type !== "base" && colorSpinner.type !== "advance") ||
-      (colorSpinner.type === "base" &&
-        !isUndefined(colorSpinner.ValueBase) &&
-        !isString(colorSpinner.ValueBase)) ||
-      (colorSpinner.type === "advance" &&
-        !isUndefined(colorSpinner.ValueAdvance) &&
-        !isString(colorSpinner.ValueAdvance)))
-  ) {
-    colorSpinner = undefined;
-  }
-
-  if (!isInteger(spinnerSpeed)) spinnerSpeed = defaultProps.spinnerSpeed;
-  if (!isString(spinnerSize)) spinnerSize = defaultProps.spinnerSize;
-  if (!isValidEasingValue(spinnerEase)) spinnerEase = defaultProps.spinnerEase;
-  if (!isString(color)) color = defaultProps.color;
-  if (!isString(height)) height = defaultProps.height;
-  if (!isInteger(zIndex)) zIndex = defaultProps.zIndex;
-  if (!isBoolean(showAtBottom)) showAtBottom = defaultProps.showAtBottom;
-  if (!isNumber(startPosition)) startPosition = defaultProps.startPosition;
-  if (!isInteger(delay)) delay = defaultProps.delay;
-  if (!isInteger(stopDelay)) stopDelay = defaultProps.stopDelay;
-  if (!isBoolean(showForHashAnchor)) showForHashAnchor = defaultProps.showForHashAnchor;
-  if (!isPlainObject(options)) options = defaultProps.options;
-
-  const {
-    FORM,
-    BUTTON_SUBMIT,
-    CHILD_BUTTON_SUBMIT,
-    IS_BTN_SUBMIT_RZL_PROGRESS,
-    IS_CHILD_BTN_SUBMIT_RZL_PROGRESS,
-    IS_PREVENT_RZL_PROGRESS,
-    IS_VALID_BTN_SUBMIT_RZL_PROGRESS
-  } = DATA_ATTRIBUTE;
-  const { MAXIMUM_COUNT_LIMIT_INTERVAL } = SETTING_CONFIGS_PROGRESS_BAR;
-  const { IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION, IS_METHOD_POST_FORM } = FORM;
-
-  let timer: NodeJS.Timeout | number = 0;
+  const timer = React.useRef<NodeJS.Timeout | number>(0);
   const searchCounting = useRef<number>(1);
 
   const pathname = usePathname();
@@ -120,48 +87,19 @@ const ComponentInitRzlNextProgressBar = (
     showAtBottom
   });
 
-  /** * Convert the url to Absolute URL based on the current window location.
-   *
-   * @param url {string}
-   * @returns {string}
-   */
-  const toAbsoluteURL = (url: string): string => {
-    return new URL(url, window.location.href).href;
-  };
-
-  /** * Check if it is hash anchor or same page anchor
-   *
-   * @param currentUrl {string} Current Url Location
-   * @param newUrl {string} New Url detected with each anchor
-   * @returns {boolean}
-   */
-  const isHashAnchor = (currentUrl: string, newUrl: string): boolean => {
-    const current = new URL(toAbsoluteURL(currentUrl));
-    const next = new URL(toAbsoluteURL(newUrl));
-    return current.href.split("#")[0] === next.href.split("#")[0];
-  };
-
-  /** * Check if it is Same Host name
-   *
-   * @param currentUrl {string} Current Url Location
-   * @param newUrl {string} New Url detected with each anchor
-   * @returns {boolean}
-   */
-  const isSameHostName = (currentUrl: string, newUrl: string): boolean => {
-    const current = new URL(toAbsoluteURL(currentUrl));
-    const next = new URL(toAbsoluteURL(newUrl));
-    return current.hostname.replace(/^www\./, "") === next.hostname.replace(/^www\./, "");
-  };
-
   const startProgress = useCallback(
-    async (withDelay = true) => {
+    (
+      /** @default true */
+      withDelay = true
+    ) => {
       if (!isBoolean(withDelay)) withDelay = true;
       if (RzlProgress.isStarted() || RzlProgress.isRendered()) return;
 
       RzlProgress.configure(options);
 
-      timer = setTimeout(
-        async () => {
+      if (timer.current) clearTimeout(timer.current);
+      timer.current = setTimeout(
+        () => {
           if (startPosition > 0) RzlProgress.set(startPosition);
 
           RzlProgress.start();
@@ -174,7 +112,7 @@ const ComponentInitRzlNextProgressBar = (
   );
 
   const stopProgress = useCallback(
-    async (
+    (
       /** @default true */
       withDelay = true,
       /** @default false */
@@ -183,12 +121,10 @@ const ComponentInitRzlNextProgressBar = (
       if (!isBoolean(withDelay)) withDelay = true;
       if (!isBoolean(force)) force = false;
 
-      if (timer) {
-        clearTimeout(timer);
-      }
+      if (timer.current) clearTimeout(timer.current);
 
-      timer = setTimeout(
-        async () => {
+      timer.current = setTimeout(
+        () => {
           enableUserInteraction(classNameIfLoading);
 
           if (!(RzlProgress.isStarted() || RzlProgress.isRendered())) return;
@@ -203,6 +139,7 @@ const ComponentInitRzlNextProgressBar = (
     [options]
   );
 
+  //todo: DEPRECATED - unused anymore
   // const showingInitial = useCallback(async () => {
   //   if (showProgressOnInitial?.enabled) {
   //     await startProgress();
@@ -211,54 +148,9 @@ const ComponentInitRzlNextProgressBar = (
   //   }
   // }, []);
 
-  const setNestedAttribute = useCallback(
-    (
-      node: ChildNode | Element,
-      type: "delete" | "add",
-      attr: { qualifiedName: string; value: string }
-    ) => {
-      if (node.childNodes.length && node instanceof Element && node.children.length) {
-        node.childNodes.forEach((child) => {
-          if (child.nodeName === "#text") return;
-          if (node instanceof Element) {
-            if (type === "add") {
-              node.setAttribute(CHILD_BUTTON_SUBMIT, "true");
-            } else {
-              node.removeAttribute(CHILD_BUTTON_SUBMIT);
-            }
-          }
-
-          setNestedAttribute(child, type, attr);
-        });
-      } else {
-        if (node instanceof Element) {
-          if (type === "add") {
-            node.setAttribute(CHILD_BUTTON_SUBMIT, "true");
-          } else {
-            node.removeAttribute(CHILD_BUTTON_SUBMIT);
-          }
-        }
-      }
-    },
-    []
-  );
-
   const setAttrChildSubmitBtn = useCallback(
     (docs: Document, type: "delete" | "add" = "add") => {
-      docs?.querySelectorAll("button")?.forEach((doc) => {
-        if (
-          doc.type === "submit" &&
-          IS_BTN_SUBMIT_RZL_PROGRESS(doc) &&
-          (IS_METHOD_POST_FORM(doc.form) ||
-            IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION(doc.form))
-        )
-          doc.childNodes.forEach((e) => {
-            setNestedAttribute(e, type, {
-              value: "true",
-              qualifiedName: CHILD_BUTTON_SUBMIT
-            });
-          });
-      });
+      return setAttributeChildSubmitBtn(docs, type);
     },
     []
   );
@@ -307,189 +199,152 @@ const ComponentInitRzlNextProgressBar = (
     };
   }, [pathname, searchParams]);
 
+  //todo: DEPRECATED - unused anymore
   /** * ref for start initial loader only */
   // useEffect(() => {
   //   showingInitial();
   // }, []);
 
-  useEffect((): ReturnType<EffectCallback> => {
-    /** * Check if the Current Url is same as New Url
-     *
-     * @param currentUrl {string}
-     * @param newUrl {string}
-     * @returns {boolean}
-     */
-    function isAnchorOfCurrentUrl(currentUrl: string, newUrl: string): boolean {
-      const currentUrlObj = new URL(currentUrl);
-      const newUrlObj = new URL(newUrl);
-      // Compare hostname, pathname, and search parameters
-      if (
-        currentUrlObj.hostname === newUrlObj.hostname &&
-        currentUrlObj.pathname === newUrlObj.pathname &&
-        currentUrlObj.search === newUrlObj.search
-      ) {
-        // Check if the new URL is just an anchor of the current URL page
-        const currentHash = currentUrlObj.hash;
-        const newHash = newUrlObj.hash;
-        return (
-          currentHash !== newHash &&
-          currentUrlObj.href.replace(currentHash, "") ===
-            newUrlObj.href.replace(newHash, "")
-        );
-      }
-      return false;
-    }
+  /** * ClickHandler To Trigger RzlProgress
+   *
+   * @param event {MouseEvent}
+   * @returns {void}
+   */
+  const handleClick = useCallback(async (event: MouseEvent) => {
+    try {
+      const target = event.target as HTMLElement;
+      const anchor = findClosestAnchor(target);
+      const newUrl = anchor?.href;
 
-    const nProgressClass: NodeListOf<HTMLHtmlElement> = document.querySelectorAll("html");
+      let preventProgress =
+        IS_PREVENT_RZL_PROGRESS(target) || IS_PREVENT_RZL_PROGRESS(anchor);
 
-    const removeRzlProgressClass = (): void =>
-      nProgressClass.forEach((el: Element) => el.classList.remove("rzl-progress-busy"));
+      let isButtonSubmitForm = IS_BTN_SUBMIT_RZL_PROGRESS(target);
 
-    /** * Find the closest anchor to trigger
-     *
-     * @param element {HTMLElement | null}
-     * @returns element {Element}
-     */
-    function findClosestAnchor(element: HTMLElement | null): HTMLAnchorElement | null {
-      while (element && element.tagName.toLowerCase() !== "a") {
-        element = element.parentElement;
-      }
-      return element as HTMLAnchorElement;
-    }
+      //todo: DEPRECATED - unused anymore
+      // let isButtonChildSubmitForm = IS_CHILD_BTN_SUBMIT_RZL_PROGRESS(target);
 
-    /** * ClickHandler To Trigger RzlProgress
-     *
-     * @param event {MouseEvent}
-     * @returns {void}
-     */
-    async function handleClick(event: MouseEvent): Promise<void> {
-      try {
-        const target = event.target as HTMLElement;
-        const anchor = findClosestAnchor(target);
-        const newUrl = anchor?.href;
+      if (!preventProgress || !isButtonSubmitForm) {
+        let element: HTMLButtonElement | HTMLElement | Element | null = target;
 
-        let preventProgress =
-          IS_PREVENT_RZL_PROGRESS(target) || IS_PREVENT_RZL_PROGRESS(anchor);
+        if (isButtonSubmitForm && IS_VALID_BTN_SUBMIT_RZL_PROGRESS(element)) {
+          const isBtnSubmitForm =
+            IS_METHOD_POST_FORM(element.form) ||
+            IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION(element.form);
 
-        let isButtonSubmitForm = IS_BTN_SUBMIT_RZL_PROGRESS(target);
-        let isButtonChildSubmitForm = IS_CHILD_BTN_SUBMIT_RZL_PROGRESS(target);
-
-        if (!preventProgress || !isButtonSubmitForm) {
-          let element: HTMLButtonElement | HTMLElement | Element | null = target;
-
-          if (isButtonSubmitForm && IS_VALID_BTN_SUBMIT_RZL_PROGRESS(element)) {
-            const isBtnSubmitForm =
-              IS_METHOD_POST_FORM(element.form) ||
-              IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION(element.form);
-
-            while (element) {
-              if (isBtnSubmitForm) {
-                preventProgress = false;
-                isButtonSubmitForm = true;
-                break;
-              } else {
-                preventProgress = true;
-                isButtonSubmitForm = false;
-
-                element = element.parentElement as unknown as HTMLButtonElement;
-              }
-            }
-          } else {
-            if (element.hasAttribute(DATA_ATTRIBUTE.CHILD_BUTTON_SUBMIT)) {
-              while (element && element.tagName.toLowerCase() !== "a") {
-                if (IS_BTN_SUBMIT_RZL_PROGRESS(element.parentElement)) {
-                  if (
-                    element.parentElement instanceof HTMLButtonElement &&
-                    (IS_METHOD_POST_FORM(element.parentElement.form) ||
-                      IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION(
-                        element.parentElement.form
-                      ))
-                  ) {
-                    preventProgress = false;
-                    isButtonSubmitForm = true;
-                    isButtonChildSubmitForm = true;
-                    break;
-                  } else {
-                    preventProgress = true;
-                    isButtonSubmitForm = false;
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    isButtonChildSubmitForm = false;
-                    break;
-                  }
-                }
-                element = element.parentElement;
-              }
+          while (element) {
+            if (isBtnSubmitForm) {
+              preventProgress = false;
+              isButtonSubmitForm = true;
+              break;
             } else {
-              while (element && element.tagName.toLowerCase() !== "a") {
-                if (IS_PREVENT_RZL_PROGRESS(element.parentElement)) {
+              preventProgress = true;
+              isButtonSubmitForm = false;
+
+              element = element.parentElement as unknown as HTMLButtonElement;
+            }
+          }
+        } else {
+          if (element.hasAttribute(DATA_ATTRIBUTE.CHILD_BUTTON_SUBMIT)) {
+            while (element && element.tagName.toLowerCase() !== "a") {
+              if (IS_BTN_SUBMIT_RZL_PROGRESS(element.parentElement)) {
+                if (
+                  element.parentElement instanceof HTMLButtonElement &&
+                  (IS_METHOD_POST_FORM(element.parentElement.form) ||
+                    IS_AUTO_GENERATE_ERROR_NEXTJS_SERVER_ACTION(
+                      element.parentElement.form
+                    ))
+                ) {
+                  preventProgress = false;
+                  isButtonSubmitForm = true;
+                  // isButtonChildSubmitForm = true;
+                  break;
+                } else {
                   preventProgress = true;
+                  isButtonSubmitForm = false;
+                  // isButtonChildSubmitForm = false;
                   break;
                 }
-                element = element.parentElement;
               }
+              element = element.parentElement;
+            }
+          } else {
+            while (element && element.tagName.toLowerCase() !== "a") {
+              if (IS_PREVENT_RZL_PROGRESS(element.parentElement)) {
+                preventProgress = true;
+                break;
+              }
+              element = element.parentElement;
             }
           }
         }
-
-        if (preventProgress) return;
-
-        // if ((isButtonSubmitForm || isButtonChildSubmitForm) && !newUrl) {
-        //   await startProgress();
-        //   await delaying(30000);
-        //   return await stopProgress();
-        // }
-
-        if (newUrl && isString(newUrl)) {
-          const currentUrl = window.location.href;
-          const isExternalLink = anchor.target === "_blank";
-
-          // Check for Special Schemes
-          const isSpecialScheme = ["tel:", "mailto:", "sms:", "blob:", "download:"].some(
-            (scheme) => newUrl.startsWith(scheme)
-          );
-
-          const notSameHost = !isSameHostName(window.location.href, anchor.href);
-          if (notSameHost) {
-            return;
-          }
-
-          const isAnchorOrHashAnchor =
-            isAnchorOfCurrentUrl(currentUrl, newUrl) ||
-            isHashAnchor(window.location.href, anchor.href);
-          if (!showForHashAnchor && isAnchorOrHashAnchor) {
-            return;
-          }
-
-          if (
-            newUrl === currentUrl ||
-            isExternalLink ||
-            isSpecialScheme ||
-            isAnchorOrHashAnchor ||
-            event.ctrlKey ||
-            event.metaKey ||
-            event.shiftKey ||
-            event.altKey ||
-            !toAbsoluteURL(anchor.href).startsWith("http")
-          ) {
-            await startProgress();
-            await delaying(100);
-            await stopProgress();
-          } else {
-            await startProgress();
-          }
-        }
-      } catch (err) {
-        // Log the error in development only!
-        if (process.env["NODE_ENV"] === "development") {
-          console.error("ComponentInitRzlNextProgressBar error: ", err);
-        }
-
-        await startProgress();
-        await stopProgress();
-      } finally {
-        // setAttrChildSubmitBtn(document, "delete");
       }
+
+      if (preventProgress) return;
+
+      //todo: DEPRECATED - unused anymore
+      // if ((isButtonSubmitForm || isButtonChildSubmitForm) && !newUrl) {
+      //   await startProgress();
+      //   await delaying(30000);
+      //   return await stopProgress();
+      // }
+
+      if (newUrl && isString(newUrl)) {
+        const currentUrl = window.location.href;
+        const isExternalLink = anchor.target === "_blank";
+
+        // Check for Special Schemes
+        const isSpecialScheme = ["tel:", "mailto:", "sms:", "blob:", "download:"].some(
+          (scheme) => newUrl.startsWith(scheme)
+        );
+
+        const notSameHost = !isSameHostName(window.location.href, anchor.href);
+        if (notSameHost) return;
+
+        const isAnchorOrHashAnchor =
+          isAnchorOfCurrentUrl(currentUrl, newUrl) ||
+          isHashAnchor(window.location.href, anchor.href);
+        if (!showForHashAnchor && isAnchorOrHashAnchor) return;
+
+        if (
+          newUrl === currentUrl ||
+          isExternalLink ||
+          isSpecialScheme ||
+          isAnchorOrHashAnchor ||
+          event.ctrlKey ||
+          event.metaKey ||
+          event.shiftKey ||
+          event.altKey ||
+          !toAbsoluteURL(anchor.href).startsWith("http")
+        ) {
+          startProgress();
+          await delaying(100);
+          stopProgress();
+        } else {
+          startProgress();
+        }
+      }
+    } catch (err) {
+      // Log the error in development only!
+      if (process.env["NODE_ENV"] === "development") {
+        console.error("ComponentInitRzlNextProgressBar error: ", err);
+      }
+
+      startProgress();
+      stopProgress();
+    } finally {
+      // setAttrChildSubmitBtn(document, "delete");
     }
+  }, []);
+
+  useEffect((): ReturnType<EffectCallback> => {
+    const nProgressClass: NodeListOf<HTMLHtmlElement> = document.querySelectorAll("html");
+
+    const removeRzlProgressClass = (): void => {
+      return nProgressClass.forEach((el: Element) =>
+        el.classList.remove(DATA_RZL_PROGRESS.ON_BUSY)
+      );
+    };
 
     /** * Complete TopLoader Progress on adding new entry to history stack
      *
@@ -498,15 +353,13 @@ const ComponentInitRzlNextProgressBar = (
      */
     ((history: History): void => {
       const pushState = history.pushState;
-      history.pushState = async (...args) => {
-        await stopProgress();
-
+      history.pushState = (...args) => {
+        stopProgress();
         removeRzlProgressClass();
-
         setAttrChildSubmitBtn(document);
         return pushState.apply(history, args);
       };
-    })((window as Window).history);
+    })(window.history);
 
     /** * Complete TopLoader Progress on replacing current entry of history
      * stack
@@ -515,25 +368,22 @@ const ComponentInitRzlNextProgressBar = (
      */
     ((history: History): void => {
       const replaceState = history.replaceState;
-      history.replaceState = async (...args) => {
-        await stopProgress();
-
+      history.replaceState = (...args) => {
+        stopProgress();
         removeRzlProgressClass();
-
         setAttrChildSubmitBtn(document);
         return replaceState.apply(history, args);
       };
-    })((window as Window).history);
+    })(window.history);
 
-    async function handlePageHide() {
-      await stopProgress();
+    function handlePageHide() {
+      stopProgress();
       removeRzlProgressClass();
     }
 
     /** * Handle Browser Back and Forth Navigation  */
-    async function handleBackAndForth() {
-      await stopProgress();
-
+    function handleBackAndForth() {
+      stopProgress();
       setAttrChildSubmitBtn(document);
     }
 
@@ -544,10 +394,7 @@ const ComponentInitRzlNextProgressBar = (
 
     // Clean up the global click event listener when the component is unmounted
     return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-
+      if (timer.current) clearTimeout(timer.current);
       document.removeEventListener("click", handleClick);
       window.removeEventListener("pagehide", handlePageHide);
       window.removeEventListener("popstate", handleBackAndForth);
@@ -556,15 +403,10 @@ const ComponentInitRzlNextProgressBar = (
 
   // No need to return anything since the style is applied directly
   return null;
-};
+});
 
-/** ------------------------------------------------------------------
- * * ***Don't use import from here, because need Suspense.***
- * ------------------------------------------------------------------
- * **If you forcing to use from this components, you need wrapping with Suspense.**
- *
- * ⚠️ **Deprecated:**
- *    - Use `import { RzlNextTopLoader } from "@rzl-zone/next-kit/progress-bar";` instead, because include `WithSuspense` in there.
- */
-const InitNextProgressBarComponent = React.memo(ComponentInitRzlNextProgressBar);
-export default InitNextProgressBarComponent;
+InitNextAppProgressBar.displayName = `InitRzlzoneNextAppProgressBar(${
+  InitNextAppProgressBar.displayName ?? InitNextAppProgressBar.name ?? "Component"
+})`;
+
+export default InitNextAppProgressBar;

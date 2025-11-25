@@ -1,30 +1,14 @@
 "use client";
 
-import type { Prettify } from "@rzl-zone/ts-types-plus";
-
 import React from "react";
 import { validateHTMLColor } from "validate-color";
 
-import { isValidEasingValue, RzlProgressEasing } from "../utils/rzlProgress";
-import type { ColorBase, ColorAdvance, RzlNextProgressBarProps } from "../types/types";
+import { isValidEasingValue } from "../utils/rzlProgress";
+import type { UseCssTopLoader } from "../types/types";
 import { isNonEmptyString, isUndefined } from "@rzl-zone/utils-js/predicates";
-import { defaultPropsInitInitRzlNextProgressBar } from "../constants";
+import { DATA_RZL_PROGRESS, defaultPropsInitRzlNextProgressBar } from "../constants";
 
-type UseCssTopLoader = Prettify<
-  {
-    color: string;
-    height: string;
-    zIndex: number;
-    spinnerSize: string;
-    spinnerSpeed: number;
-    showAtBottom: boolean;
-    spinnerEase: RzlProgressEasing;
-    colorSpinner: ColorBase | ColorAdvance | undefined;
-  } & Pick<
-    RzlNextProgressBarProps,
-    "id" | "name" | "nonce" | "style" | "classNameIfLoading"
-  >
->;
+const { MAIN_IDENTITY, KEY_DATA } = DATA_RZL_PROGRESS.STYLE_ELEMENT;
 
 export const useCssTopLoader = ({
   id,
@@ -39,7 +23,7 @@ export const useCssTopLoader = ({
   spinnerSize,
   spinnerSpeed,
   showAtBottom,
-  classNameIfLoading = defaultPropsInitInitRzlNextProgressBar["classNameIfLoading"]
+  classNameIfLoading = defaultPropsInitRzlNextProgressBar["classNameIfLoading"]
 }: UseCssTopLoader) => {
   const positionStyle = showAtBottom ? "bottom: 0;" : "top: 0;";
   const spinnerPositionStyle = showAtBottom ? "bottom: 15px;" : "top: 15px;";
@@ -60,7 +44,7 @@ export const useCssTopLoader = ({
       : undefined;
 
   if (!isUndefined(classNameIfLoading) && !isNonEmptyString(classNameIfLoading))
-    classNameIfLoading = defaultPropsInitInitRzlNextProgressBar["classNameIfLoading"];
+    classNameIfLoading = defaultPropsInitRzlNextProgressBar["classNameIfLoading"];
 
   const validationOfColorSpinner = React.useCallback(() => {
     if (typeColorBase && typeColorHex) {
@@ -173,7 +157,7 @@ export const useCssTopLoader = ({
     const styleElement = document.createElement("style");
 
     styleElement.setAttribute("type", "text/css");
-    styleElement.setAttribute("data-style", "rzlzone-progress_bar");
+    styleElement.setAttribute(MAIN_IDENTITY.KEY, MAIN_IDENTITY.VALUE);
 
     // Set the 'id' only if it's provided, otherwise it will be undefined
     if (id) styleElement.id = id;
@@ -186,7 +170,7 @@ export const useCssTopLoader = ({
 
     // Force set
     if (classNameIfLoading)
-      styleElement.setAttribute("data-classname-loading", classNameIfLoading);
+      styleElement.setAttribute(KEY_DATA.CLASS_NAME_LOADING, classNameIfLoading);
 
     // Set the CSS content inside the <style> element
     styleElement.innerHTML = styles;

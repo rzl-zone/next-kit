@@ -64,14 +64,14 @@ export function minifyInnerHTMLScript<T>(script: T): string {
 export const validateAttributeProps = (attr: Attribute | Attribute[]): void | never => {
   if (!isNonEmptyString(attr)) {
     throw new TypeError(
-      `Props \`attribute\` for 'RzlThemeProvider' must be of type \`string\` or \`undefined\` and value can't be empty-string as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+      `Props \`attribute\` must be of type \`string\` or \`undefined\` and value can't be empty-string, but received: \`${getPreciseType(
         attr
       )}\`.`
     );
   }
   if (attr !== "class" && !attr.startsWith("data-")) {
     throw new TypeError(
-      `Props \`attribute\` for 'RzlThemeProvider' must be \`"class"\` or start with \`"data-"\`, but received value: \`${safeStableStringify(
+      `Props \`attribute\` must be \`"class"\` or start with \`"data-"\`, but received value: \`${safeStableStringify(
         attr,
         { keepUndefined: true }
       )}\`.`
@@ -80,7 +80,7 @@ export const validateAttributeProps = (attr: Attribute | Attribute[]): void | ne
 };
 
 export const validateProps = <EnablingSystem extends boolean = true>(
-  props: RzlThemeProviderProps<EnablingSystem>
+  props: RzlThemeProviderProps<EnablingSystem> & { dir: "app" | "pages" }
 ) => {
   const {
     forcedTheme,
@@ -100,10 +100,13 @@ export const validateProps = <EnablingSystem extends boolean = true>(
 
   let { metaColorSchemeValue = defaultMetaColorSchemeValue } = props;
 
+  const providerName =
+    props.dir === "app" ? "RzlThemeAppProvider" : "RzlThemePagesProvider";
+
   if (!isUndefined(nonce)) {
     assertIsString(nonce, {
       message({ currentType, validType }) {
-        return `Props \`nonce\` for 'RzlThemeProvider' must be of type \`${validType}\` as types from 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+        return `Props \`nonce\` at '${providerName}', must be of type \`${validType}\`, but received: \`${currentType}\`.`;
       }
     });
   }
@@ -111,14 +114,14 @@ export const validateProps = <EnablingSystem extends boolean = true>(
   if (!isUndefined(value)) {
     assertIsPlainObject(value, {
       message({ currentType, validType }) {
-        return `Props \`value\` for 'RzlThemeProvider' must be a \`${validType}\`, but received: \`${currentType}\`.`;
+        return `Props \`value\` must be a \`${validType}\`, but received: \`${currentType}\`.`;
       }
     });
 
     for (const [themeName, themeValue] of Object.entries(value)) {
       if (!isNonEmptyString(themeName)) {
         throw new TypeError(
-          `Props \`value\` at 'RzlThemeProvider', the key name theme "${themeName}" must be of type a \`string\` and \`non-empty string\`, but received: \`${getPreciseType(
+          `Props \`value\` at '${providerName}', the key name theme "${themeName}" must be of type a \`string\` and \`non-empty string\`, but received: \`${getPreciseType(
             themeName
           )}\`, with current value: \`${safeStableStringify(themeName, {
             keepUndefined: true
@@ -127,7 +130,7 @@ export const validateProps = <EnablingSystem extends boolean = true>(
       }
       if (!isNonEmptyString(themeValue)) {
         throw new TypeError(
-          `Props \`value\` at 'RzlThemeProvider', the value for theme key "${themeName}" must be of type a \`string\` and \`non-empty string\`, but received: \`${getPreciseType(
+          `Props \`value\` at '${providerName}', the value for theme key "${themeName}" must be of type a \`string\` and \`non-empty string\`, but received: \`${getPreciseType(
             themeValue
           )}\`, with current value: \`${safeStableStringify(themeValue, {
             keepUndefined: true
@@ -147,14 +150,14 @@ export const validateProps = <EnablingSystem extends boolean = true>(
 
   if (!isUndefined(_defaultTheme) && !isNonEmptyString(_defaultTheme)) {
     throw new TypeError(
-      `Props \`defaultTheme\` for 'RzlThemeProvider' must be of type a \`string\` and \`non-empty string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+      `Props \`defaultTheme\` at '${providerName}', must be of type a \`string\` and \`non-empty string\`, but received: \`${getPreciseType(
         _defaultTheme
       )}\`.`
     );
   }
   if (!isUndefined(storageKey) && !isNonEmptyString(storageKey)) {
     throw new TypeError(
-      `Props \`storageKey\` for 'RzlThemeProvider' must be of type \`string\` and value cant be \`empty-string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+      `Props \`storageKey\` at '${providerName}', must be of type \`string\` and value cant be \`empty-string\`, but received: \`${getPreciseType(
         storageKey
       )}\`.`
     );
@@ -165,7 +168,7 @@ export const validateProps = <EnablingSystem extends boolean = true>(
     (isString(enableColorScheme) && !["html", "body"].includes(enableColorScheme))
   ) {
     throw new TypeError(
-      `Props \`enableColorScheme\` for 'RzlThemeProvider' must be of type \`string\`, \`boolean\` and if value is a string must one of ("body" or "html") if \`boolean\` valid value only \`false\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+      `Props \`enableColorScheme\` at '${providerName}', must be of type \`string\`, \`boolean\` and if value is a string must one of ("body" or "html") if \`boolean\` valid value only \`false\`, but received: \`${getPreciseType(
         enableColorScheme
       )}\`, with current value: \`${safeStableStringify(enableColorScheme, {
         keepUndefined: true
@@ -175,7 +178,7 @@ export const validateProps = <EnablingSystem extends boolean = true>(
 
   if (!isUndefined(forcedTheme) && !isString(forcedTheme)) {
     throw new TypeError(
-      `Props \`forcedTheme\` for 'RzlThemeProvider' must be of type \`string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+      `Props \`forcedTheme\` at '${providerName}', must be of type \`string\`, but received: \`${getPreciseType(
         forcedTheme
       )}\`.`
     );
@@ -184,7 +187,7 @@ export const validateProps = <EnablingSystem extends boolean = true>(
   if (!isUndefined(metaColorSchemeValue)) {
     assertIsPlainObject(metaColorSchemeValue, {
       message({ currentType, validType }) {
-        return `Props \`metaColorSchemeValue\` for 'RzlThemeProvider' must be a \`${validType}\`, but received: \`${currentType}\`.`;
+        return `Props \`metaColorSchemeValue\` at '${providerName}', must be a \`${validType}\`, but received: \`${currentType}\`.`;
       }
     });
 
@@ -192,7 +195,7 @@ export const validateProps = <EnablingSystem extends boolean = true>(
 
     if (!isNonEmptyString(metaColorSchemeValue.light)) {
       throw new TypeError(
-        `Props \`metaColorSchemeValue.light\` for 'RzlThemeProvider' must be of type \`string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+        `Props \`metaColorSchemeValue.light\` at '${providerName}', must be of type \`string\`, but received: \`${getPreciseType(
           metaColorSchemeValue.light
         )}\`.`
       );
@@ -200,7 +203,7 @@ export const validateProps = <EnablingSystem extends boolean = true>(
 
     if (!isNonEmptyString(metaColorSchemeValue.dark)) {
       throw new TypeError(
-        `Props \`metaColorSchemeValue.dark\` for 'RzlThemeProvider' must be of type \`string\` as types from 'RzlThemeProviderProps', but received: \`${getPreciseType(
+        `Props \`metaColorSchemeValue.dark\` at '${providerName}', must be of type \`string\`, but received: \`${getPreciseType(
           metaColorSchemeValue.dark
         )}\`.`
       );
@@ -209,17 +212,17 @@ export const validateProps = <EnablingSystem extends boolean = true>(
 
   assertIsBoolean(enableSystem, {
     message({ currentType, validType }) {
-      return `Props \`enableSystem\` for 'RzlThemeProvider' must be of type \`${validType}\` as types from 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+      return `Props \`enableSystem\` at '${providerName}', must be of type \`${validType}\`, but received: \`${currentType}\`.`;
     }
   });
   assertIsBoolean(enableMetaColorScheme, {
     message({ currentType, validType }) {
-      return `Props \`enableMetaColorScheme\` for 'RzlThemeProvider' must be of type \`${validType}\` as types from 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+      return `Props \`enableMetaColorScheme\` at '${providerName}', must be of type \`${validType}\`, but received: \`${currentType}\`.`;
     }
   });
   assertIsBoolean(disableTransitionOnChange, {
     message({ currentType, validType }) {
-      return `Props \`disableTransitionOnChange\` for 'RzlThemeProvider' must be of type \`${validType}\` as types from 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+      return `Props \`disableTransitionOnChange\` at '${providerName}', must be of type \`${validType}\`, but received: \`${currentType}\`.`;
     }
   });
 

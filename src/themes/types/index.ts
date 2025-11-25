@@ -8,7 +8,7 @@ import type {
 
 import type { AnyString as AnyThemeAsString } from "@rzl-zone/ts-types-plus";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { useTheme } from "..";
+import type { useTheme } from "../index";
 import { defaultThemes } from "../configs";
 
 /** * The default themes fetched from the main config. */
@@ -98,7 +98,7 @@ type ThemesMode = ThemeOverrideConfig extends { themes: infer T }
 export type ThemeMode = ThemesMode extends readonly (infer T)[] ? T : undefined;
 
 /** ------------------------------------------------------------
- * * ***Props accepted by `<RzlThemeProvider />`, used to configure how theming behaves on the page.***
+ * * ***Props accepted by `<RzlThemeAppProvider />` and `<RzlThemePagesProvider />`, used to configure how theming behaves on the page.***
  * ------------------------------------------------------------
  * **You usually place this provider at the root of your application (e.g. in `app/layout.tsx`, or in `pages/_app.tsx`).**
  */

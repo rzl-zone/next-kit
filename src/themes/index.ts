@@ -5,6 +5,5 @@ export type {
   ThemeOverrideConfig
 } from "./types";
 
-export { useTheme } from "./hooks";
+export { useTheme } from "./hooks/index";
 export { ThemeContext } from "./contexts/ThemeContext";
-export { ProvidersThemesApp, RzlThemeProvider } from "./providers/RzlThemeProvider";

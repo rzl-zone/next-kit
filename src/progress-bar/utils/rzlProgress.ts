@@ -1,19 +1,23 @@
 /* eslint-disable quotes */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { AnyFunction } from "@rzl-zone/ts-types-plus";
 import {
   isBoolean,
   isFunction,
   isInteger,
+  isNil,
+  isNonEmptyString,
   isNumber,
   isPlainObject,
   isServer,
   isString,
   isUndefined
 } from "@rzl-zone/utils-js/predicates";
-import { DATA_RZL_PROGRESS, defaultPropsInitInitRzlNextProgressBar } from "../constants";
-import { RzlNextProgressBarProps } from "../types/types";
+
+import { DATA_RZL_PROGRESS, defaultPropsInitRzlNextProgressBar } from "../constants";
+import type { RzlProgressEasing, RzlProgressOptions } from "../types/types";
+
+const { MAIN_IDENTITY, KEY_DATA } = DATA_RZL_PROGRESS.STYLE_ELEMENT;
 
 export function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(n, max));
@@ -24,20 +28,21 @@ export function toBarPercent(n: number, direction: "ltr" | "rtl"): number {
 }
 
 export function css(
-  element: HTMLElement | null | undefined,
+  element: HTMLElement,
   properties: string | Partial<CSSStyleDeclaration>,
   value?: string
 ): void {
-  if (typeof properties === "string") {
-    if (value !== undefined && element) {
+  if (isNonEmptyString(properties)) {
+    if (!isUndefined(value)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       element.style[properties as any] = value;
     }
   } else {
     for (const prop in properties) {
       if (Object.prototype.hasOwnProperty.call(properties, prop)) {
         const val = properties[prop];
-        if (val !== void 0 && element) {
-          (element.style as any)[prop] = val;
+        if (!isUndefined(val)) {
+          element.style[prop] = val;
         }
       }
     }
@@ -71,114 +76,10 @@ export function isValidParentValue(value: unknown): value is HTMLElement | strin
   return false;
 }
 
-export type RzlProgressDirection = "ltr" | "rtl";
-export type RzlProgressEasing =
-  | "linear"
-  | "ease"
-  | "ease-in"
-  | "ease-out"
-  | "ease-in-out";
-
-export type RzlProgressOptions = Pick<RzlNextProgressBarProps, "classNameIfLoading"> & {
-  /** * ***The initial position for the Progress Bar Loader in percentage, 0.08 is 8%.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type number, otherwise will return default value.
-   * @default 0.08
-   */
-  minimum?: number;
-  /** * ***The the maximum percentage used upon finishing, 1 is 100%.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type number, otherwise will return default value.
-   * @default 1
-   */
-  maximum?: number;
-  /** * ***Defines a template for the Progress Bar Loader.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
-   * @default
-   * ```jsx
-   * `<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`
-   * ```
-   */
-  template?: string;
-  /** * ***Animation settings using easing (a CSS easing string).***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type {@link RzlProgressEasing | *`RzlProgressEasing`*}, otherwise will return default value.
-   * @default "linear"
-   */
-  easing?: RzlProgressEasing;
-  /** * ***Animation speed in ms for the Progress Bar Loader.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type integer number, otherwise will return default value.
-   * @default 200
-   */
-  speed?: number;
-  /** * ***Auto incrementing behavior for the Progress Bar Loader.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type boolean, otherwise will return default value.
-   * @default true
-   */
-  trickle?: boolean;
-  /** * ***The increment delay speed in milliseconds.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type integer number, otherwise will return default value.
-   * @default 200
-   */
-  trickleSpeed?: number;
-  /** * ***To show spinner or not.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type boolean, otherwise will return default value.
-   * @default true
-   */
-  showSpinner?: boolean;
-  /** * ***Specify this to change the parent container.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type {@link HTMLElement | *`HTMLElement`*} or string, otherwise will return default value.
-   * @default "body"
-   */
-  parent?: HTMLElement | string;
-  /**
-   * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
-   * @default ""
-   */
-  positionUsing?: string;
-  /** * ***The selector attribute position.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
-   * @default '[role="bar"]'
-   */
-  barSelector?: string;
-  /** * ***The selector attribute spinner.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type string, otherwise will return default value.
-   * @default '[role="spinner"]'
-   */
-  spinnerSelector?: string;
-  /** * ***The direction bar.***
-   *
-   * - **⚠️ Warning:**
-   *    - The value must be of type {@link RzlProgressDirection | *`RzlProgressDirection`*}, otherwise will return default value.
-   * @default 'ltr'
-   */
-  direction?: RzlProgressDirection;
-};
-
 export class RzlProgress {
   /** * ***Default options settings.*** */
   static settings: Required<RzlProgressOptions> = {
-    classNameIfLoading: defaultPropsInitInitRzlNextProgressBar["classNameIfLoading"],
+    classNameIfLoading: defaultPropsInitRzlNextProgressBar["classNameIfLoading"],
     minimum: 0.08,
     maximum: 1,
     template: `<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`,
@@ -293,15 +194,17 @@ export class RzlProgress {
       const speed = this.settings.speed;
       const ease = this.settings.easing;
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       progress.offsetWidth;
 
       this.queue((next) => {
         if (this.settings.positionUsing === "") {
           this.settings.positionUsing = this.getPositioningCSS();
         }
-        css(bar, this.barPositionCSS(n, speed, ease));
+        if (bar) css(bar, this.barPositionCSS(n, speed, ease));
         if (n === this.settings.maximum) {
           css(progress, { transition: "none", opacity: "1" });
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           progress.offsetWidth;
           setTimeout(() => {
             css(progress, {
@@ -351,7 +254,7 @@ export class RzlProgress {
   static inc(amount?: number): typeof RzlProgress {
     if (this.isPaused) return this;
     let n = this.status;
-    if (!n) {
+    if (isNil(n)) {
       return this.start();
     } else if (n > 1) {
       return this;
@@ -426,28 +329,31 @@ export class RzlProgress {
     progress.id = DATA_RZL_PROGRESS.MAIN_ID;
     progress.innerHTML = this.settings.template;
 
-    const bar = progress.querySelector<HTMLElement>(this.settings.barSelector)!;
+    const bar = progress.querySelector<HTMLElement>(this.settings.barSelector);
     const percent = fromStart
       ? toBarPercent(0, this.settings.direction)
       : toBarPercent(this.status || 0, this.settings.direction);
     const parent =
       typeof this.settings.parent === "string"
-        ? document.querySelector<HTMLElement>(this.settings.parent)!
+        ? document.querySelector<HTMLElement>(this.settings.parent)
         : this.settings.parent;
 
-    css(bar, {
-      transition: "all 0 linear",
-      transform: `translate3d(${percent}%,0,0)`
-    });
+    if (bar) {
+      css(bar, {
+        transition: "all 0 linear",
+        transform: `translate3d(${percent}%,0,0)`
+      });
+    }
 
     if (!this.settings.showSpinner) {
       const spinner = progress.querySelector<HTMLElement>(this.settings.spinnerSelector);
-      spinner && removeElement(spinner);
+      if (spinner) removeElement(spinner);
     }
 
-    if (parent !== document.body) addClass(parent, DATA_RZL_PROGRESS.CUSTOM_PARENT);
+    if (parent && parent !== document.body)
+      addClass(parent, DATA_RZL_PROGRESS.CUSTOM_PARENT);
 
-    parent.appendChild(progress);
+    parent?.appendChild(progress);
 
     return progress;
   }
@@ -464,7 +370,7 @@ export class RzlProgress {
 
     if (parent) removeClass(parent, DATA_RZL_PROGRESS.CUSTOM_PARENT);
     const progress = document.getElementById(DATA_RZL_PROGRESS.MAIN_ID);
-    progress && removeElement(progress);
+    if (progress) removeElement(progress);
   }
 
   /** * ***Pause the `RzlProgress`.*** */
@@ -522,13 +428,15 @@ export class RzlProgress {
 
   /** @internal */
   static getClassNameIfLoading() {
-    const { MAIN_IDENTITY, KEY_DATA } = DATA_RZL_PROGRESS.STYLE_ELEMENT;
     if (isServer()) return null;
+
     const styleElement = document.querySelector<HTMLStyleElement>(
       `style[${MAIN_IDENTITY.KEY}="${MAIN_IDENTITY.VALUE}"]`
     );
 
-    return styleElement?.getAttribute(KEY_DATA.CLASS_NAME_LOADING) || null;
+    if (isNil(styleElement)) return null;
+
+    return styleElement.getAttribute(KEY_DATA.CLASS_NAME_LOADING);
   }
 
   /** @internal */

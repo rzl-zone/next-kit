@@ -1,6 +1,6 @@
 <h1 align="center">
 <sup>Rzl Next.JS Utils EXTRA</sup>
-<br>
+<br />
 </h1>
 
 (Forked from [next-extra](https://github.com/shahradelahi/next-extra) by [Shahrad Elahi](https://github.com/shahradelahi)).
@@ -16,13 +16,17 @@ This version includes improvements such as:
 
 ---
 
-- [Usage](#-usage)
-  - [`@rzl-zone/next-kit/extra/action`](#@rzl-zone/next-kitextraaction)
-  - [`@rzl-zone/next-kit/extra/context`](#@rzl-zone/next-kitextracontext)
-  - [`@rzl-zone/next-kit/extra/pathname`](#@rzl-zone/next-kitextrapathname)
-- [Contributing](#-contributing)
-- [Relevant](#relevant)
-- [License](#license)
+- [📖 Usage](#-usage)
+  - [`@rzl-zone/next-kit/extra/action`](#rzl-zonenext-kitextraaction)
+        - [API](#api)
+        - [Example](#example)
+  - [`@rzl-zone/next-kit/extra/context`](#rzl-zonenext-kitextracontext)
+        - [API](#api-1)
+        - [Example](#example-1)
+  - [`@rzl-zone/next-kit/extra/pathname`](#rzl-zonenext-kitextrapathname)
+        - [API](#api-2)
+        - [Example](#example-2)
+- [🤝 Contributing](#-contributing)
 
 ## 📖 Usage
 

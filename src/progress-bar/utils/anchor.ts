@@ -55,3 +55,15 @@ export function getAnchorProperty<
 
   return prop as P extends SVGAnimatedString ? string : P;
 }
+
+/** * Find the closest anchor to trigger
+ *
+ * @param element {HTMLElement | null}
+ * @returns element {Element}
+ */
+export function findClosestAnchor(element: HTMLElement | null): HTMLAnchorElement | null {
+  while (element && element.tagName.toLowerCase() !== "a") {
+    element = element.parentElement;
+  }
+  return element as HTMLAnchorElement;
+}

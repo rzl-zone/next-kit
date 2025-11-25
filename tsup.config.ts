@@ -2,7 +2,7 @@ import fs from "fs";
 import chalk from "chalk";
 import glob from "fast-glob";
 import { defineConfig, type Options } from "tsup";
-import { isBoolean, isString } from "@rzl-zone/utils-js/predicates";
+import { isArray, isBoolean, isString } from "@rzl-zone/utils-js/predicates";
 
 const externalDefault: ExtendedOptions["external"] = [
   "next",
@@ -23,7 +23,7 @@ interface ExtendedOptions extends Options {
 }
 
 const injectUseClient = async (pattern: string | string[]) => {
-  const patterns = Array.isArray(pattern) ? pattern : [pattern];
+  const patterns = isArray(pattern) ? pattern : [pattern];
 
   const files: string[] = [];
   for (const p of patterns) {
@@ -35,6 +35,7 @@ const injectUseClient = async (pattern: string | string[]) => {
     if (
       !filePath.endsWith(".js") &&
       !filePath.endsWith(".cjs") &&
+      !filePath.endsWith(".esm") &&
       !filePath.endsWith(".mjs")
     )
       continue;
@@ -128,9 +129,12 @@ export default defineConfig((options) => [
       "src/hoc/*.{ts,tsx}",
       // themes
       "src/themes/index.{ts,tsx}",
-      "src/themes/pages-dir.{ts,tsx}",
+      "src/themes/app.{ts,tsx}",
+      "src/themes/pages.{ts,tsx}",
       // progress-bar
       "src/progress-bar/index.{ts,tsx}",
+      "src/progress-bar/app.{ts,tsx}",
+      "src/progress-bar/pages.{ts,tsx}",
       // utils
       "src/utils/index.ts",
       // types
@@ -139,12 +143,15 @@ export default defineConfig((options) => [
     preserveUseClient: true,
     clientFilesPattern: [
       // extra
-      "dist/extra/context.*(js|cjs|mjs)",
+      "dist/extra/context.*",
       //themes
-      "dist/themes/index.*(js|cjs|mjs)",
-      "dist/themes/pages-dir.*(js|cjs|mjs)",
+      "dist/themes/index.*",
+      "dist/themes/app.*",
+      "dist/themes/pages.*",
       // progress-bar
-      "dist/progress-bar/index.*(js|cjs|mjs)"
+      "dist/progress-bar/index.*",
+      "dist/progress-bar/app.*",
+      "dist/progress-bar/pages.*"
     ]
   })
 ]);

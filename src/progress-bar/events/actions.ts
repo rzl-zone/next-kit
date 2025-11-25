@@ -14,13 +14,10 @@ import {
 import { RzlProgress } from "../utils/rzlProgress";
 import {
   defaultOptionsProgressBar,
-  defaultPropsInitInitRzlNextProgressBar
+  defaultPropsInitRzlNextProgressBar
 } from "../constants";
 
 import type { RzlNextProgressBarProps, RzlProgressType } from "../types/types";
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { RzlNextTopLoader } from "@/progress-bar";
 
 type ClassNameIfLoading = Pick<RzlNextProgressBarProps, "classNameIfLoading">;
 
@@ -59,7 +56,10 @@ const defaultWithStopDelay = {
  * ----------------------------------------------------------
  * **Starts the `RzlProgress` (bar-loader) with optional configurations.**
  *
- * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
+ * - **⚠️ Important Usage Requirement:**
+ *    - This utility **only works if your Next.js layout has one of the Rzl progress bar components mounted**:
+ *      - **App Router** ➔ Must include `RzlNextAppProgressBar` in your root layout.
+ *      - **Pages Router** ➔ Must include `RzlNextPagesProgressBar` in `_app.tsx`.
  *
  * - **Features**:
  *    - Automatically disables user interaction and removes focus from elements if enabled.
@@ -99,7 +99,7 @@ export const startRzlProgress = (
   let { classNameIfLoading, withStopDelay = defaultWithStopDelay } = props;
 
   if (!isUndefined(classNameIfLoading) && !isNonEmptyString(classNameIfLoading))
-    classNameIfLoading = defaultPropsInitInitRzlNextProgressBar["classNameIfLoading"];
+    classNameIfLoading = defaultPropsInitRzlNextProgressBar["classNameIfLoading"];
 
   if (!isPlainObject(props)) withStopDelay = defaultWithStopDelay;
   let { delayStop, enable } = withStopDelay;
@@ -146,7 +146,10 @@ export const startRzlProgress = (
  * ----------------------------------------------------------
  * **Stops the `RzlProgress` (bar-loader) and re-enables user interactions.**
  *
- * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
+ * - **⚠️ Important Usage Requirement:**
+ *    - This utility **only works if your Next.js layout has one of the Rzl progress bar components mounted**:
+ *      - **App Router** ➔ Must include `RzlNextAppProgressBar` in your root layout.
+ *      - **Pages Router** ➔ Must include `RzlNextPagesProgressBar` in `_app.tsx`.
  *
  * - **Features**:
  *    - Stops the progress bar immediately or with force.
@@ -171,8 +174,7 @@ export const stopRzlProgress = (props: StopRzlProgressProps = {}): void => {
     !isUndefined(props.classNameIfLoading) &&
     !isNonEmptyString(props.classNameIfLoading)
   ) {
-    props.classNameIfLoading =
-      defaultPropsInitInitRzlNextProgressBar["classNameIfLoading"];
+    props.classNameIfLoading = defaultPropsInitRzlNextProgressBar["classNameIfLoading"];
   }
 
   enableUserInteraction(
@@ -185,7 +187,10 @@ export const stopRzlProgress = (props: StopRzlProgressProps = {}): void => {
  * ----------------------------------------------------------
  * **Checks if the `RzlProgress` is currently started.**
  *
- * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
+ * - **⚠️ Important Usage Requirement:**
+ *    - This utility **only works if your Next.js layout has one of the Rzl progress bar components mounted**:
+ *      - **App Router** ➔ Must include `RzlNextAppProgressBar` in your root layout.
+ *      - **Pages Router** ➔ Must include `RzlNextPagesProgressBar` in `_app.tsx`.
  *
  * @returns {boolean} `true` if progress bar is started, `false` otherwise.
  * @example
@@ -200,7 +205,10 @@ export const isStartedRzlProgress = (): boolean => {
  * ----------------------------------------------------------
  * **Checks if the `RzlProgress` is rendered in the DOM.**
  *
- * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
+ * - **⚠️ Important Usage Requirement:**
+ *    - This utility **only works if your Next.js layout has one of the Rzl progress bar components mounted**:
+ *      - **App Router** ➔ Must include `RzlNextAppProgressBar` in your root layout.
+ *      - **Pages Router** ➔ Must include `RzlNextPagesProgressBar` in `_app.tsx`.
  *
  * @returns {boolean} `true` if progress bar exists in the DOM, `false` otherwise.
  * @example
@@ -217,7 +225,10 @@ export const isRenderedRzlProgress = (): boolean => {
  *
  * Can be resumed later using `resumeRzlProgress`.
  *
- * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
+ * - **⚠️ Important Usage Requirement:**
+ *    - This utility **only works if your Next.js layout has one of the Rzl progress bar components mounted**:
+ *      - **App Router** ➔ Must include `RzlNextAppProgressBar` in your root layout.
+ *      - **Pages Router** ➔ Must include `RzlNextPagesProgressBar` in `_app.tsx`.
  *
  * @returns {void} Does not return anything.
  * @example
@@ -232,7 +243,10 @@ export const pauseRzlProgress = (): void => {
  * ----------------------------------------------------------
  * **Resumes the `RzlProgress` bar if it was paused.**
  *
- * **⚠️ Note:** This utility only work if your layout already uses {@link RzlNextTopLoader | `RzlNextTopLoader`}.
+ * - **⚠️ Important Usage Requirement:**
+ *    - This utility **only works if your Next.js layout has one of the Rzl progress bar components mounted**:
+ *      - **App Router** ➔ Must include `RzlNextAppProgressBar` in your root layout.
+ *      - **Pages Router** ➔ Must include `RzlNextPagesProgressBar` in `_app.tsx`.
  *
  * @returns {void} Does not return anything.
  * @example

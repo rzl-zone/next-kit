@@ -45,15 +45,30 @@
       "import": "./dist/themes/index.js",
       "require": "./dist/themes/index.cjs"
     },
-    "./themes/pages-dir": {
-      "types": "./dist/themes/pages-dir.d.ts",
-      "import": "./dist/themes/pages-dir.js",
-      "require": "./dist/themes/pages-dir.cjs"
+    "./themes/app": {
+      "types": "./dist/themes/app.d.ts",
+      "import": "./dist/themes/app.js",
+      "require": "./dist/themes/app.cjs"
+    },
+    "./themes/pages": {
+      "types": "./dist/themes/pages.d.ts",
+      "import": "./dist/themes/pages.js",
+      "require": "./dist/themes/pages.cjs"
     },
     "./progress-bar": {
       "types": "./dist/progress-bar/index.d.ts",
       "import": "./dist/progress-bar/index.js",
       "require": "./dist/progress-bar/index.cjs"
+    },
+    "./progress-bar/app": {
+      "types": "./dist/progress-bar/app.d.ts",
+      "import": "./dist/progress-bar/app.js",
+      "require": "./dist/progress-bar/app.cjs"
+    },
+    "./progress-bar/pages": {
+      "types": "./dist/progress-bar/pages.d.ts",
+      "import": "./dist/progress-bar/pages.js",
+      "require": "./dist/progress-bar/pages.cjs"
     },
     "./progress-bar/default.css": "./dist/progress-bar/default.css",
     "./utils": {
@@ -88,11 +103,20 @@
       "themes": [
         "dist/themes/index.d.ts"
       ],
-      "themes/pages-dir": [
-        "dist/themes/pages-dir.d.ts"
+      "themes/app": [
+        "dist/themes/app.d.ts"
+      ],
+      "themes/pages": [
+        "dist/themes/pages.d.ts"
       ],
       "progress-bar": [
         "dist/progress-bar/index.d.ts"
+      ],
+      "progress-bar/app": [
+        "dist/progress-bar/app.d.ts"
+      ],
+      "progress-bar/pages": [
+        "dist/progress-bar/pages.d.ts"
       ],
       "utils": [
         "dist/utils/index.d.ts"

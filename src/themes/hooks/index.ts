@@ -1,51 +1,27 @@
 "use client";
 
 import { useContext } from "react";
-import { ThemeContext, ThemePagesDirContext } from "../contexts/ThemeContext";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 import type { ThemeCtx } from "../types";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { RzlThemeProvider } from "../providers/RzlThemeProvider";
-import {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  RzlThemePagesDirProvider
-} from "../providers/RzlThemePagesDirProvider";
 
 /** ------------------------------------------------------------
- * * ***React hook for accessing the theme context (App Dir).***
+ * * ***React hook for accessing the theme context (`App Router` or `Pages Router`).***
  * ------------------------------------------------------------
  * **Provides information about the currently active theme and utilities for
  * switching themes, including system-level theme support.**
  *
- * ⚠️ ***Must be used inside `<RzlThemeProvider>` for (`App Dir`), or it will throw.***
- * @throws If the hook is called outside of the **`<RzlThemeProvider>`** component, will throw {@link Error | **`Error`**} .
+ * ⚠️ ***Must be used inside `<RzlThemeAppProvider>` for (`App Router`) or `<RzlThemeAppProvider>` for (`Pages Router`), or it will throw.***
+ * @throws If the hook is called outside of the **`<RzlThemeAppProvider>`** or **`<RzlThemePagesProvider>`** component, will throw {@link Error | **`Error`**} .
  * @returns {ThemeCtx} Object containing current theme data and setter.
  */
 export const useTheme = (): ThemeCtx => {
   const themeContext = useContext(ThemeContext);
 
   if (!themeContext) {
-    throw new Error("useTheme must be wrapped by RzlThemeProvider");
-  }
-
-  return themeContext;
-};
-
-/** ------------------------------------------------------------
- * * ***React hook for accessing the theme context (Pages Dir).***
- * ------------------------------------------------------------
- * **Provides information about the currently active theme and utilities for
- * switching themes, including system-level theme support.**
- *
- * ⚠️ ***Must be used inside `<RzlThemePagesDirProvider>` for (`Pages Dir`), otherwise will throw.***
- * @throws If the hook is called outside of the **`<RzlThemePagesDirProvider>`** component, will throw {@link Error | **`Error`**} .
- * @returns {ThemeCtx} Object containing current theme data and setter.
- */
-export const useThemePagesDir = (): ThemeCtx => {
-  const themeContext = useContext(ThemePagesDirContext);
-
-  if (!themeContext) {
-    throw new Error("useTheme must be wrapped by RzlThemeProvider");
+    throw new Error(
+      "useTheme must be wrapped by `RzlThemeAppProvider` or `RzlThemePagesProvider`."
+    );
   }
 
   return themeContext;

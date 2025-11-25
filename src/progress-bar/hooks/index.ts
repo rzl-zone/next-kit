@@ -10,28 +10,22 @@ import { enableUserInteraction, disableUserInteraction } from "@rzl-zone/utils-j
 
 import { RzlProgress } from "../utils/rzlProgress";
 import { defaultOptionsProgressBar } from "../constants";
-import { useProgressBarRouterEnhanced } from "./useProgressBarRouterEnhanced";
 
 import type {
   OptionsUseRouter,
-  UseAppRouterInstance,
+  AppRouterInstance,
   NavigateOptionsUseRouter,
   NavigateFwdOptionsUseRouter
 } from "../types/types";
 
 /** ------------------------------------------------------------------
- * * ***Custom useRouter hook to work with NextTopLoader, Compatible with app router only***.
+ * * ***Custom useRouter hook to work with NextTopLoader, Compatible with app router only.***
  * ------------------------------------------------------------------
- * @param {boolean} withEnhanced - **Enhanced memory of useRouter() hook, defaultValue: `true`.**
  */
-export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance => {
-  assertIsBoolean(withEnhanced, {
-    message: ({ currentType, validType }) => {
-      return `Props \`withEnhanced\` expected ${validType} but received (${currentType}).`;
-    }
-  });
-
-  const router = useNextRouter();
+export const useRouter = <CustomRouter extends AppRouterInstance = AppRouterInstance>(
+  customRouter?: () => CustomRouter
+): AppRouterInstance => {
+  const router = customRouter ? customRouter() : useNextRouter();
 
   const startProgress = React.useCallback(
     ({
@@ -45,12 +39,12 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
 
       assertIsBoolean(disableProgressBar, {
         message: ({ currentType, validType }) => {
-          return `Props \`disableProgressBar\` expected ${validType} but received (${currentType}).`;
+          return `Props \`disableProgressBar\` expected \`${validType}\`, but received: \`${currentType}\`.`;
         }
       });
       assertIsBoolean(disablePreventAnyAction, {
         message: ({ currentType, validType }) => {
-          return `Props \`disablePreventAnyAction\` expected ${validType} but received (${currentType}).`;
+          return `Props \`disablePreventAnyAction\` expected \`${validType}\`, but received: \`${currentType}\`.`;
         }
       });
 
@@ -83,7 +77,7 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
     (href: string, options?: NavigateOptionsUseRouter) => {
       assertIsString(href, {
         message: ({ currentType, validType }) => {
-          return `Props \`href\` expected ${validType} but received (${currentType}).`;
+          return `Props \`href\` expected \`${validType}\`, but received: \`${currentType}\`.`;
         }
       });
 
@@ -102,7 +96,7 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
     (href: string, options?: NavigateOptionsUseRouter) => {
       assertIsString(href, {
         message: ({ currentType, validType }) => {
-          return `Props \`href\` expected ${validType} but received (${currentType}).`;
+          return `Props \`href\` expected \`${validType}\`, but received: \`${currentType}\`.`;
         }
       });
 
@@ -162,17 +156,6 @@ export const useRouter = (withEnhanced: boolean = true): UseAppRouterInstance =>
     },
     [router]
   );
-
-  if (withEnhanced) {
-    return useProgressBarRouterEnhanced({
-      ...router,
-      push,
-      replace,
-      back,
-      refresh,
-      forward
-    });
-  }
 
   return { ...router, push, replace, back, refresh, forward };
 };

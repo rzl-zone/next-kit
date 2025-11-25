@@ -30,7 +30,7 @@ import {
   setMetaColorSchemeValue,
   updateMetaThemeColor
 } from "../../utils/internal";
-import { ThemePagesDirContext } from "../../contexts/ThemeContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { defaultMetaColorSchemeValue, MEDIA_SCHEME_THEME } from "../../configs";
 
 import { initialScriptTheme } from "../initial-script-theme";
@@ -41,7 +41,7 @@ export const ContainerPagesDirTheme = <EnablingSystem extends boolean = true>(
 ) => {
   assertIsPlainObject(props, {
     message({ currentType, validType }) {
-      return `Props 'RzlThemeProvider' must be of type \`${validType}\` as types 'RzlThemeProviderProps', but received: \`${currentType}\`.`;
+      return `Props 'RzlThemePagesProvider' must be of type \`${validType}\`, but received: \`${currentType}\`.`;
     }
   });
 
@@ -51,7 +51,7 @@ export const ContainerPagesDirTheme = <EnablingSystem extends boolean = true>(
     throw new Error("Props children is required as ReactNode type!!!");
   }
 
-  const context = useContext(ThemePagesDirContext);
+  const context = useContext(ThemeContext);
 
   // Ignore nested context providers, just passthrough children
   if (context) return children;
@@ -81,7 +81,7 @@ const InternalPagesDirTheme = <EnablingSystem extends boolean = true>(
     nonce,
     scriptProps,
     metaColorSchemeValue
-  } = validateProps(props);
+  } = validateProps({ ...props, dir: "pages" });
 
   const themes = normalizeThemes(_themes, enableSystem);
 
@@ -258,7 +258,7 @@ const InternalPagesDirTheme = <EnablingSystem extends boolean = true>(
   );
 
   return (
-    <ThemePagesDirContext.Provider value={providerValue}>
+    <ThemeContext.Provider value={providerValue}>
       <ThemeScriptPagesDir
         {...{
           forcedTheme,
@@ -286,7 +286,7 @@ const InternalPagesDirTheme = <EnablingSystem extends boolean = true>(
       />
 
       {children}
-    </ThemePagesDirContext.Provider>
+    </ThemeContext.Provider>
   );
 };
 
