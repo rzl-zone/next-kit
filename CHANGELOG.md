@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.1](https://github.com/rzl-zone/next-kit/compare/v0.9.0...v0.9.1) (2025-11-25)
+
+
+### Bug Fixes
+
+* **`tsDoc`:** Fixing typo tsDoc at `progress-bar`. ([d83e032](https://github.com/rzl-zone/next-kit/commit/d83e0326414e10f07f38906fd0b301efdc6a642c))
+* **`tsDoc`:** Fixing typo tsDoc at `themes`. ([ffe6be0](https://github.com/rzl-zone/next-kit/commit/ffe6be094b6d07976c7323d4b618d729fbc81049))
+
 ## [0.9.0](https://github.com/rzl-zone/next-kit/compare/v0.8.0...v0.9.0) (2025-11-25)
 
 
