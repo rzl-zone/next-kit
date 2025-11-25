@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/rzl-zone/next-kit/compare/v0.8.0...v0.9.0) (2025-11-25)
+
+
+### Features
+
+* Add **Pages Router** support for `progress-bar` and `themes`; add new APIs `compareProps` and `withMemo`; improve `withSuspense`; refactor imports and API names, see details: ([ce40521](https://github.com/rzl-zone/next-kit/commit/ce40521d0ac9785dfb3dce0d037d42222f4a2bf2))
+
 ## [0.8.0](https://github.com/rzl-zone/next-kit/compare/v0.7.0...v0.8.0) (2025-11-22)
 
 
