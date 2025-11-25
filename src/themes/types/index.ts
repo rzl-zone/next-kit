@@ -410,7 +410,7 @@ export type RzlThemeProviderProps<EnabledSystem extends boolean = true> = {
 };
 
 /** ------------------------------------------------------------
- * * ***Value returned by {@link useTheme | `useTheme`}.***
+ * * ***Value returned by `useTheme` hook.***
  * ------------------------------------------------------------
  * **Contains the current theme information and helper utilities for manually
  * updating the active theme, including support for system-based themes.**

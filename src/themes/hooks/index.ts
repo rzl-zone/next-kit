@@ -11,7 +11,7 @@ import type { ThemeCtx } from "../types";
  * **Provides information about the currently active theme and utilities for
  * switching themes, including system-level theme support.**
  *
- * ⚠️ ***Must be used inside `<RzlThemeAppProvider>` for (`App Router`) or `<RzlThemeAppProvider>` for (`Pages Router`), or it will throw.***
+ * ⚠️ ***Must be used inside `<RzlThemeAppProvider>` for (`App Router`) or `<RzlThemePagesProvider>` for (`Pages Router`), or it will throw.***
  * @throws If the hook is called outside of the **`<RzlThemeAppProvider>`** or **`<RzlThemePagesProvider>`** component, will throw {@link Error | **`Error`**} .
  * @returns {ThemeCtx} Object containing current theme data and setter.
  */
