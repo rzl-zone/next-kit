@@ -5,7 +5,7 @@ import InitNextAppProgressBar from "./components";
 /** ------------------------------------------------------------------
  * * ***Component: `RzlNextAppProgressBar`.***
  * ------------------------------------------------------------------
- * **A customizable progress bar loader for Next.js applications.**
+ * **A lightweight progress bar optimized for the Next.js `App Router`.**
  *
  * This component is compatible **with the App Router only** and is not
  * intended for use inside the Pages Router.

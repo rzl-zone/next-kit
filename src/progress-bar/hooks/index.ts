@@ -19,7 +19,7 @@ import type {
 } from "../types/types";
 
 /** ------------------------------------------------------------------
- * * ***Custom useRouter hook to work with NextTopLoader, Compatible with app router only.***
+ * * ***Custom useRouter hook to work with `RzlNextAppProgressBar`, compatible with `App Router` only.***
  * ------------------------------------------------------------------
  */
 export const useRouter = <CustomRouter extends AppRouterInstance = AppRouterInstance>(

@@ -146,13 +146,13 @@ const ProgressBarPagesComponent = (
 /** ------------------------------------------------------------------
  * * ***Component: `RzlNextPagesProgressBar`.***
  * ------------------------------------------------------------------
- * **A lightweight top progress bar optimized for the Next.js *Pages Router*.**
+ * **A lightweight progress bar optimized for the Next.js `Pages Router`.**
  *
  * This component memoizes using `React.memo` to prevent unnecessary re-renders and
  * improve performance during client-side navigation events.
  *
  * - **Features**:
- *    - Provides a smooth top progress bar for **Pages Directory** apps.
+ *    - Provides a smooth progress bar for **Pages Directory** apps.
  *    - Automatically reacts to route changes via the Pages Router.
  *    - Improved performance thanks to `React.memo` optimization.
  *    - Works seamlessly with dynamic routes, `next/link`, and `router.push`.
