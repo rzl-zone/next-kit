@@ -133,8 +133,11 @@
     "next",
     "nextjs",
     "next-kit",
+    "next kit",
     "nextjs-kit",
+    "nextjs kit",
     "next-utils",
+    "next utils",
     "react",
     "typescript",
     "javascript",
@@ -144,7 +147,14 @@
     "utility",
     "kit",
     "kits",
-    "@rzl-zone/next-kit"
+    "next kit rzl",
+    "rzl next kit",
+    "rzl next",
+    "@rzl-zone",
+    "@rzl-zone/next-kit",
+    "rzl",
+    "rzl-zone",
+    "rzl zone"
   ],
   "engines": {
     "node": ">=20.9.0"
